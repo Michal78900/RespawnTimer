@@ -8,10 +8,10 @@
 | ShowTickets | bool | Should the NTF and CI respawn tickets be shown? | true
 | translations | List<string> | All of the texts in this plugin. If you need to translate them, you can easily do this: (The dashed line is just a interspace. Things in { } are numeric variables, you can for example bold them. DO NOT CHANGE NAMES IN { }! | English
 
-#Translations
-Feel free to send me your translation and I can add it to the list
+# Translations
+Feel free to send me your translation so I can add it to the list
 
-#Polish (by me):
+Polish (by me):
 translations:
   - '<color=orange>Zrespawnujesz się za: </color>'
   - 'Pojawisz się jako: '
