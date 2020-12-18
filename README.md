@@ -12,6 +12,7 @@
 Feel free to send me your translation so I can add it to the list
 
 Polish (by me):
+```yml
 translations:
   - '<color=orange>Zrespawnujesz się za: </color>'
   - 'Pojawisz się jako: '
@@ -23,3 +24,4 @@ translations:
   - <b>{seconds} s</b>
   - '{ntf_tickets_num}'
   - '{ci_tickets_num}'
+  ```
