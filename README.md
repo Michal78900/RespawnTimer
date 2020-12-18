@@ -11,6 +11,21 @@
 # Translations
 Feel free to send me your translation so I can add it to the list
 
+English (by me):
+```yml
+translations:
+  - '<color=orange>You will respawn in: </color>'
+  - 'You will spawn as: '
+  - <color=blue>Nine-Tailed Fox</color>
+  - <color=green>Chaos Insurgency</color>
+  - '<color=blue>NTF Tickets: </color>'
+  - '<color=green>CI Tickets: </color>'
+  - '-------------------------------------'
+  - <b>{seconds} s</b>
+  - '{ntf_tickets_num}'
+  - '{ci_tickets_num}'
+```
+
 Polish (by me):
 ```yml
 translations:
