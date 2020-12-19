@@ -4,6 +4,7 @@
 | Name | Type | Description | Default |
 | --- | --- | --- | --- |
 | IsEnabled | bool | Is the plugin enabled | true |
+| TextLowering | byte | Should a timer be lower or higher on the screen (values from 0 to 14) | 8 |
 | ShowTimerOnlyOnSpawn | bool | Should a timer be only shown, when a spawnning sequence has begun? (NTF Helicopter / Chaos Car arrives) Good, if you want to keep ghosting to minimum or something | false |
 | ShowTickets | bool | Should the NTF and CI respawn tickets be shown? | true
 | translations | List<string> | All of the texts in this plugin. If you need to translate them, you can easily do this: (The dashed line is just a interspace. Things in { } are numeric variables, you can for example bold them. DO NOT CHANGE NAMES IN { }! | English
