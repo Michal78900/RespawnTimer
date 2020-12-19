@@ -8,6 +8,9 @@ namespace RespawnTimer
     {
         public bool IsEnabled { get; set; } = true;
 
+        [Description("Should a timer be lower or higher on the screen (values from 0 to 14)")]
+        public byte TextLowering { get; set; } = 8;
+
         [Description("Should a timer be only shown, when a spawnning sequence has begun? (NTF Helicopter / Chaos Car arrives)")]
         public bool ShowTimerOnlyOnSpawn { get; set; } = false;
 

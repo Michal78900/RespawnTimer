@@ -41,6 +41,7 @@ namespace RespawnTimer
 
                 int i = Mathf.RoundToInt(RespawnManager.Singleton._timeForNextSequence - (float)RespawnManager.Singleton._stopwatch.Elapsed.TotalSeconds);
 
+                for (int n = RespawnTimer.Instance.Config.TextLowering; n > 0; n--) text.Append("\n");
                 text.Append(RespawnTimer.Instance.Config.translations[0] + "\n");
                 text.Append(RespawnTimer.Instance.Config.translations[7] + "\n");
                 text.Replace("{seconds}", i.ToString());
@@ -58,7 +59,8 @@ namespace RespawnTimer
 
                 if(RespawnTimer.Instance.Config.ShowTickets)
                 {
-                    text.Append($"\n\n\n\n\n\n\n\n\n\n\n\n\n\n<align=right>{RespawnTimer.Instance.Config.translations[4]} {RespawnTimer.Instance.Config.translations[8]}</align>" +
+                    for (int n = 14 - RespawnTimer.Instance.Config.TextLowering; n > 0; n--) text.Append("\n");
+                    text.Append($"<align=right>{RespawnTimer.Instance.Config.translations[4]} {RespawnTimer.Instance.Config.translations[8]}</align>" +
                                 $"\n<align=right>{RespawnTimer.Instance.Config.translations[5]} {Respawning.RespawnTickets.Singleton.GetAvailableTickets(Respawning.SpawnableTeamType.ChaosInsurgency)}</align>");
 
                     text.Replace("{ntf_tickets_num}", Respawning.RespawnTickets.Singleton.GetAvailableTickets(Respawning.SpawnableTeamType.NineTailedFox).ToString());
@@ -72,7 +74,8 @@ namespace RespawnTimer
                         ply.ShowHint(text.ToString(), 1f);
                     }
                 }
-            }
+            } //3 - 11
+              //0 - 14
         }
     }
 }
