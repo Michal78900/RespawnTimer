@@ -14,7 +14,7 @@ namespace RespawnTimer
         public override PluginPriority Priority => PluginPriority.Medium;
 
         public override string Author => "Michal78900";
-        public override Version Version => new Version(1, 0, 0);
+        public override Version Version => new Version(1, 0, 1);
 
         private RespawnTimer() { }
 
