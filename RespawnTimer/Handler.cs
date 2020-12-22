@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using MEC;
 using UnityEngine;
 using Respawning;
+using SerpentsHand;
 
 using EPlayer = Exiled.API.Features.Player;
 
@@ -16,7 +17,7 @@ namespace RespawnTimer
     {
         public List<CoroutineHandle> coroutines = new List<CoroutineHandle>();
 
-        StringBuilder text = new StringBuilder();
+        static StringBuilder text = new StringBuilder();
 
         public void OnRoundStart()
         {
@@ -24,16 +25,17 @@ namespace RespawnTimer
             {
                 Timing.KillCoroutines(coroutine);
             }
+            coroutines.Clear();
 
             coroutines.Add(Timing.RunCoroutine(Timer()));
-            Log.Info("RespawnTimer coroutine started successfully!");
+            Log.Info($"RespawnTimer coroutine started successfully! The timer will be refreshed every {RespawnTimer.Instance.Config.Interval} second/s!");
         }
 
         private IEnumerator<float> Timer()
         {
             while (Round.IsStarted)
             {
-                yield return Timing.WaitForSeconds(1f);
+                yield return Timing.WaitForSeconds(RespawnTimer.Instance.Config.Interval);
 
                 if (RespawnManager.Singleton.NextKnownTeam == SpawnableTeamType.None && RespawnTimer.Instance.Config.ShowTimerOnlyOnSpawn) continue;
 
@@ -42,26 +44,38 @@ namespace RespawnTimer
                 int i = Mathf.RoundToInt(RespawnManager.Singleton._timeForNextSequence - (float)RespawnManager.Singleton._stopwatch.Elapsed.TotalSeconds);
 
                 for (int n = RespawnTimer.Instance.Config.TextLowering; n > 0; n--) text.Append("\n");
-                text.Append(RespawnTimer.Instance.Config.translations[0] + "\n");
-                text.Append(RespawnTimer.Instance.Config.translations[7] + "\n");
+                text.Append(RespawnTimer.Instance.Config.YouWillRespawnIn + "\n");
+                text.Append(RespawnTimer.Instance.Config.Seconds + "\n");
                 text.Replace("{seconds}", i.ToString());
+
 
                 if (RespawnManager.Singleton.NextKnownTeam != SpawnableTeamType.None)
                 {
-                    text.Append(RespawnTimer.Instance.Config.translations[1]);
+                    text.Append(RespawnTimer.Instance.Config.YouWillSpawnAs);
 
-                    switch (RespawnManager.Singleton.NextKnownTeam)
+                    //SH Support
+                    if (RespawnTimer.ThereIsSH)
                     {
-                        case SpawnableTeamType.NineTailedFox: text.Append(RespawnTimer.Instance.Config.translations[2]); break;
-                        case SpawnableTeamType.ChaosInsurgency: text.Append(RespawnTimer.Instance.Config.translations[3]); break;
+                        SerpentsHandTeam();
+                    }
+                    //
+                    else
+                    {
+                        switch (RespawnManager.Singleton.NextKnownTeam)
+                        {
+                            case SpawnableTeamType.NineTailedFox: text.Append(RespawnTimer.Instance.Config.Ntf); break;
+                            case SpawnableTeamType.ChaosInsurgency: text.Append(RespawnTimer.Instance.Config.Ci); break;
+                        }
                     }
                 }
 
-                if(RespawnTimer.Instance.Config.ShowTickets)
+
+
+                if (RespawnTimer.Instance.Config.ShowTickets)
                 {
                     for (int n = 14 - RespawnTimer.Instance.Config.TextLowering; n > 0; n--) text.Append("\n");
-                    text.Append($"<align=right>{RespawnTimer.Instance.Config.translations[4]} {RespawnTimer.Instance.Config.translations[8]}</align>" +
-                                $"\n<align=right>{RespawnTimer.Instance.Config.translations[5]} {Respawning.RespawnTickets.Singleton.GetAvailableTickets(Respawning.SpawnableTeamType.ChaosInsurgency)}</align>");
+                    text.Append($"<align=right>{RespawnTimer.Instance.Config.NtfTickets} {RespawnTimer.Instance.Config.NtfTicketsNum}</align>" +
+                                $"\n<align=right>{RespawnTimer.Instance.Config.CiTickets} {RespawnTimer.Instance.Config.CiTicketsNum}</align>");
 
                     text.Replace("{ntf_tickets_num}", Respawning.RespawnTickets.Singleton.GetAvailableTickets(Respawning.SpawnableTeamType.NineTailedFox).ToString());
                     text.Replace("{ci_tickets_num}", Respawning.RespawnTickets.Singleton.GetAvailableTickets(Respawning.SpawnableTeamType.ChaosInsurgency).ToString());
@@ -71,11 +85,25 @@ namespace RespawnTimer
                 {
                     if (ply.Team == Team.RIP)
                     {
-                        ply.ShowHint(text.ToString(), 1f);
+                        ply.ShowHint(text.ToString(), RespawnTimer.Instance.Config.Interval);
                     }
                 }
-            } //3 - 11
-              //0 - 14
+            }
+        }
+
+        //SH Support
+        public static void SerpentsHandTeam()
+        {
+            switch (RespawnManager.Singleton.NextKnownTeam)
+            {
+                case SpawnableTeamType.NineTailedFox: text.Append(RespawnTimer.Instance.Config.Ntf); break;
+                case SpawnableTeamType.ChaosInsurgency:
+                    {
+                        if (SerpentsHand.EventHandlers.isSpawnable) text.Append(RespawnTimer.Instance.Config.Sh);
+                        else text.Append(RespawnTimer.Instance.Config.Ci);
+                        break;
+                    }
+            }
         }
     }
 }
