@@ -4,6 +4,7 @@
 | Name | Type | Description | Default |
 | --- | --- | --- | --- |
 | IsEnabled | bool | Is the plugin enabled | true |
+| Interval | float | How often (in seconds) should timer be refreshed? | 1 |
 | TextLowering | byte | Should a timer be lower or higher on the screen (values from 0 to 14) | 8 |
 | ShowTimerOnlyOnSpawn | bool | Should a timer be only shown, when a spawnning sequence has begun? (NTF Helicopter / Chaos Car arrives) Good, if you want to keep ghosting to minimum or something | false |
 | ShowTickets | bool | Should the NTF and CI respawn tickets be shown? | true
@@ -14,30 +15,30 @@ Feel free to send me your translation so I can add it to the list
 
 English (by me):
 ```yml
-translations:
-  - '<color=orange>You will respawn in: </color>'
-  - 'You will spawn as: '
-  - <color=blue>Nine-Tailed Fox</color>
-  - <color=green>Chaos Insurgency</color>
-  - '<color=blue>NTF Tickets: </color>'
-  - '<color=green>CI Tickets: </color>'
-  - '-------------------------------------'
-  - <b>{seconds} s</b>
-  - '{ntf_tickets_num}'
-  - '{ci_tickets_num}'
+# Translations: (do NOT change text in { }, you can for example bold them)
+  you_will_respawn_in: '<color=orange>You will respawn in: </color>'
+  you_will_spawn_as: 'You will spawn as: '
+  ntf: <color=blue>Nine-Tailed Fox</color>
+  ci: <color=green>Chaos Insurgency</color>
+  sh: <color=red>Serpent's Hand</color>
+  ntf_tickets: '<color=blue>NTF Tickets: </color>'
+  ci_tickets: '<color=green>CI Tickets: </color>'
+  seconds: <b>{seconds} s</b>
+  ntf_tickets_num: '{ntf_tickets_num}'
+  ci_tickets_num: '{ci_tickets_num}'
 ```
 
 Polish (by me):
 ```yml
-translations:
-  - '<color=orange>Zrespawnujesz się za: </color>'
-  - 'Pojawisz się jako: '
-  - <color=blue>Nine-Tailed Fox</color>
-  - <color=green>Rebelia Chaosu</color>
-  - '<color=blue>Bilety NTF: </color>'
-  - '<color=green>Bilety Rebelli: </color>'
-  - '-------------------------------------'
-  - <b>{seconds} s</b>
-  - '{ntf_tickets_num}'
-  - '{ci_tickets_num}'
+# Translations: (do NOT change text in { }, you can for example bold them)
+  you_will_respawn_in: '<color=orange>Zrespawnujesz się za: </color>'
+  you_will_spawn_as: 'Pojawisz się jako: '
+  ntf: <color=blue>Nine-Tailed Fox</color>
+  ci: <color=green>Rebelia Chaosu</color>
+  sh: <color=red>Ręka Węża</color>
+  ntf_tickets: '<color=blue>Bilety NTF: </color>'
+  ci_tickets: '<color=green>Bilety CI: </color>'
+  seconds: <b>{seconds} s</b>
+  ntf_tickets_num: '{ntf_tickets_num}'
+  ci_tickets_num: '{ci_tickets_num}'
   ```
