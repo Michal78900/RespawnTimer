@@ -22,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,6 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
@@ -67,6 +69,10 @@
     </Reference>
     <Reference Include="NorthwoodLib">
       <HintPath>..\..\..\..\Exiled dll\NorthwoodLib.dll</HintPath>
+    </Reference>
+    <Reference Include="SerpentsHand, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\AppData\Roaming\EXILED\Plugins\SerpentsHand.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
