@@ -1,6 +1,6 @@
 # RespawnTimer
 
-This plugin supports the Cyanox62/SerpentsHand plugin. You need to download the modified version of this plugin (see Releases) to make it work with RespawnTimer.
+This plugin supports the Cyanox62/SerpentsHand plugin. You need to download the modified version of this plugin (see Releases) to make it work with the RespawnTimer.
 
 # Config
 | Name | Type | Description | Default |
