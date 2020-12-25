@@ -37,17 +37,20 @@ namespace RespawnTimer
             {
                 yield return Timing.WaitForSeconds(RespawnTimer.Instance.Config.Interval);
 
-                if (RespawnManager.Singleton.NextKnownTeam == SpawnableTeamType.None && RespawnTimer.Instance.Config.ShowTimerOnlyOnSpawn) continue;
+                if (!Respawn.IsSpawning && RespawnTimer.Instance.Config.ShowTimerOnlyOnSpawn) continue;
 
                 text.Clear();
-
-                int i = Mathf.RoundToInt(RespawnManager.Singleton._timeForNextSequence - (float)RespawnManager.Singleton._stopwatch.Elapsed.TotalSeconds);
-
+                
                 for (int n = RespawnTimer.Instance.Config.TextLowering; n > 0; n--) text.Append("\n");
                 text.Append(RespawnTimer.Instance.Config.YouWillRespawnIn + "\n");
                 text.Append(RespawnTimer.Instance.Config.Seconds + "\n");
-                text.Replace("{seconds}", i.ToString());
 
+                if (Respawn.IsSpawning)
+                {
+                    text.Replace("{seconds}", (Respawn.TimeUntilRespawn).ToString());
+                }
+                else
+                    text.Replace("{seconds}", (Respawn.TimeUntilRespawn + 15).ToString());
 
                 if (RespawnManager.Singleton.NextKnownTeam != SpawnableTeamType.None)
                 {
@@ -70,15 +73,15 @@ namespace RespawnTimer
                 }
 
 
-
                 if (RespawnTimer.Instance.Config.ShowTickets)
                 {
                     for (int n = 14 - RespawnTimer.Instance.Config.TextLowering; n > 0; n--) text.Append("\n");
                     text.Append($"<align=right>{RespawnTimer.Instance.Config.NtfTickets} {RespawnTimer.Instance.Config.NtfTicketsNum}</align>" +
                                 $"\n<align=right>{RespawnTimer.Instance.Config.CiTickets} {RespawnTimer.Instance.Config.CiTicketsNum}</align>");
 
-                    text.Replace("{ntf_tickets_num}", Respawning.RespawnTickets.Singleton.GetAvailableTickets(Respawning.SpawnableTeamType.NineTailedFox).ToString());
-                    text.Replace("{ci_tickets_num}", Respawning.RespawnTickets.Singleton.GetAvailableTickets(Respawning.SpawnableTeamType.ChaosInsurgency).ToString());
+                    text.Replace("{ntf_tickets_num}", Respawn.NtfTickets.ToString());
+                    text.Replace("{ci_tickets_num}", Respawn.ChaosTickets.ToString());
+
                 }
 
                 foreach (EPlayer ply in EPlayer.List)
