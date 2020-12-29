@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Text;
 using Exiled.API.Features;
-using Exiled.Events.EventArgs;
 using System.Collections.Generic;
 using MEC;
-using UnityEngine;
 using Respawning;
-using SerpentsHand;
 
 using EPlayer = Exiled.API.Features.Player;
 
@@ -40,7 +37,7 @@ namespace RespawnTimer
                 if (!Respawn.IsSpawning && RespawnTimer.Instance.Config.ShowTimerOnlyOnSpawn) continue;
 
                 text.Clear();
-                
+
                 for (int n = RespawnTimer.Instance.Config.TextLowering; n > 0; n--) text.Append("\n");
                 text.Append(RespawnTimer.Instance.Config.YouWillRespawnIn + "\n");
                 text.Append(RespawnTimer.Instance.Config.Seconds + "\n");
@@ -56,12 +53,11 @@ namespace RespawnTimer
                 {
                     text.Append(RespawnTimer.Instance.Config.YouWillSpawnAs);
 
-                    //SH Support
-                    if (RespawnTimer.ThereIsSH)
-                    {
-                        SerpentsHandTeam();
-                    }
-                    //
+
+                    if (RespawnTimer.ThereIsSH && RespawnManager.Singleton.NextKnownTeam == SpawnableTeamType.ChaosInsurgency) SerpentsHandTeam();
+                    else
+                    if (RespawnTimer.ThereIsUIU && RespawnManager.Singleton.NextKnownTeam == SpawnableTeamType.NineTailedFox) UIUTeam();
+
                     else
                     {
                         switch (RespawnManager.Singleton.NextKnownTeam)
@@ -97,16 +93,15 @@ namespace RespawnTimer
         //SH Support
         public static void SerpentsHandTeam()
         {
-            switch (RespawnManager.Singleton.NextKnownTeam)
-            {
-                case SpawnableTeamType.NineTailedFox: text.Append(RespawnTimer.Instance.Config.Ntf); break;
-                case SpawnableTeamType.ChaosInsurgency:
-                    {
-                        if (SerpentsHand.EventHandlers.isSpawnable) text.Append(RespawnTimer.Instance.Config.Sh);
-                        else text.Append(RespawnTimer.Instance.Config.Ci);
-                        break;
-                    }
-            }
+            if (SerpentsHand.EventHandlers.isSpawnable) text.Append(RespawnTimer.Instance.Config.Sh);
+            else text.Append(RespawnTimer.Instance.Config.Ci);
+        }
+
+        //UIU Support
+        public static void UIUTeam()
+        {
+            if (UIURescueSquad.Handlers.EventHandlers.isSpawnable) text.Append(RespawnTimer.Instance.Config.Uiu);
+            else text.Append(RespawnTimer.Instance.Config.Ntf);
         }
     }
 }

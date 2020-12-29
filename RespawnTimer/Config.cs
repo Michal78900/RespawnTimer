@@ -25,6 +25,7 @@ namespace RespawnTimer
         public string Ntf { get; set; } = "<color=blue>Nine-Tailed Fox</color>";
         public string Ci { get; set; } = "<color=green>Chaos Insurgency</color>";
         public string Sh { get; set; } = "<color=red>Serpent's Hand</color>";
+        public string Uiu { get; set; } = "<color=#1078e0>Unusual Incidents Unit</color>";
         public string NtfTickets { get; set; } = "<color=blue>NTF Tickets: </color>";
         public string CiTickets { get; set; } = "<color=green>CI Tickets: </color>";
         public string Seconds { get; set; } = "<b>{seconds} s</b>";
