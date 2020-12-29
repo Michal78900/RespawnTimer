@@ -1,6 +1,6 @@
 # RespawnTimer
 
-This plugin supports the Cyanox62/SerpentsHand plugin. You need to download the modified version of this plugin (see Releases) to make it work with the RespawnTimer.
+This plugin supports the Cyanox62/SerpentsHand plugin and Jesus-QC/UIURescueSquad. You need to download the modified version of these plugins (see Releases) to make them work with the RespawnTimer.
 
 # Config
 | Name | Type | Description | Default |
