@@ -17,11 +17,13 @@ Feel free to send me your translation so I can add it to the list
 English (by me):
 ```yml
 # Translations: (do NOT change text in { }, you can for example bold them)
+  # Translations: (do NOT change text in { }, you can for example bold them)
   you_will_respawn_in: '<color=orange>You will respawn in: </color>'
   you_will_spawn_as: 'You will spawn as: '
   ntf: <color=blue>Nine-Tailed Fox</color>
   ci: <color=green>Chaos Insurgency</color>
   sh: <color=red>Serpent's Hand</color>
+  uiu: <color=#1078e0>Unusual Incidents Unit</color>
   ntf_tickets: '<color=blue>NTF Tickets: </color>'
   ci_tickets: '<color=green>CI Tickets: </color>'
   seconds: <b>{seconds} s</b>
@@ -37,6 +39,7 @@ Polish (by me):
   ntf: <color=blue>Nine-Tailed Fox</color>
   ci: <color=green>Rebelia Chaosu</color>
   sh: <color=red>Ręka Węża</color>
+  uiu: <color=#1078e0>Jednostka Incydentów Nadzwyczajnych</color>
   ntf_tickets: '<color=blue>Bilety NTF: </color>'
   ci_tickets: '<color=green>Bilety CI: </color>'
   seconds: <b>{seconds} s</b>
