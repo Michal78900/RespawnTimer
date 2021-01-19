@@ -8,6 +8,8 @@ This plugin supports the Cyanox62/SerpentsHand plugin and Jesus-QC/UIURescueSqua
 | IsEnabled | bool | Is the plugin enabled | true |
 | Interval | float | How often (in seconds) should timer be refreshed? | 1 |
 | TextLowering | byte | Should a timer be lower or higher on the screen (values from 0 to 14) | 8 |
+| ShowMinutes | bool | Should a timer show an exact number of minutes? | true |
+| ShowSeconds | bool | Should a timer show an exact number of seconds? | true |
 | ShowTimerOnlyOnSpawn | bool | Should a timer be only shown, when a spawnning sequence has begun? (NTF Helicopter / Chaos Car arrives) Good, if you want to keep ghosting to minimum or something | false |
 | ShowTickets | bool | Should the NTF and CI respawn tickets be shown? | true
 
