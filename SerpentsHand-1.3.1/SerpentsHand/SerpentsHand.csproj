@@ -33,59 +33,73 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Harmony">
-      <HintPath>..\..\..\..\..\..\Exiled Stuff\Exiled dll\0Harmony.dll</HintPath>
+    <Reference Include="0Harmony, Version=2.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Exiled Stuff\Exiled dll\0Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>..\..\..\..\..\..\Exiled Stuff\Exiled dll\Assembly-CSharp-firstpass.dll</HintPath>
+    <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Exiled Stuff\Exiled dll\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp_publicized">
-      <HintPath>..\..\..\..\..\..\Exiled Stuff\Exiled dll\Assembly-CSharp_publicized.dll</HintPath>
+    <Reference Include="Assembly-CSharp-Publicized">
+      <HintPath>..\..\..\Exiled Stuff\Exiled dll\Assembly-CSharp-Publicized.dll</HintPath>
     </Reference>
-    <Reference Include="CommandSystem.Core">
-      <HintPath>..\..\..\..\..\..\Exiled Stuff\Exiled dll\CommandSystem.Core.dll</HintPath>
+    <Reference Include="CommandSystem.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Exiled Stuff\Exiled dll\CommandSystem.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.API">
-      <HintPath>..\..\..\..\..\..\Exiled Stuff\Exiled dll\Exiled.API.dll</HintPath>
+    <Reference Include="Exiled.API, Version=2.1.21.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Exiled Stuff\Exiled dll\Exiled.API.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Events">
-      <HintPath>..\..\..\..\..\..\Exiled Stuff\Exiled dll\Exiled.Events.dll</HintPath>
+    <Reference Include="Exiled.Events, Version=2.1.21.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Exiled Stuff\Exiled dll\Exiled.Events.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Loader">
-      <HintPath>..\..\..\..\..\..\Exiled Stuff\Exiled dll\Exiled.Loader.dll</HintPath>
+    <Reference Include="Exiled.Loader, Version=2.1.21.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Exiled Stuff\Exiled dll\Exiled.Loader.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Permissions">
-      <HintPath>..\..\..\..\..\..\Exiled Stuff\Exiled dll\Exiled.Permissions.dll</HintPath>
+    <Reference Include="Exiled.Permissions, Version=2.1.21.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Exiled Stuff\Exiled dll\Exiled.Permissions.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Updater">
-      <HintPath>..\..\..\..\..\..\Exiled Stuff\Exiled dll\Exiled.Updater.dll</HintPath>
+    <Reference Include="Exiled.Updater, Version=3.0.3.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Exiled Stuff\Exiled dll\Exiled.Updater.dll</HintPath>
     </Reference>
-    <Reference Include="Mirror">
-      <HintPath>..\..\..\..\..\..\Exiled Stuff\Exiled dll\Mirror.dll</HintPath>
+    <Reference Include="Mirror, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Exiled Stuff\Exiled dll\Mirror.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\..\..\..\Exiled Stuff\Exiled dll\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Exiled Stuff\Exiled dll\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NorthwoodLib">
-      <HintPath>..\..\..\..\..\..\Exiled Stuff\Exiled dll\NorthwoodLib.dll</HintPath>
+    <Reference Include="NorthwoodLib, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Exiled Stuff\Exiled dll\NorthwoodLib.dll</HintPath>
     </Reference>
     <Reference Include="scp035">
       <HintPath>..\..\..\..\..\..\..\Downloads\scp035.dll</HintPath>
     </Reference>
-    <Reference Include="Smod2">
-      <HintPath>..\References\Smod2.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="UnityEngine">
-      <HintPath>..\References\UnityEngine.dll</HintPath>
+    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Exiled Stuff\Exiled dll\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\References\UnityEngine.CoreModule.dll</HintPath>
+    <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Exiled Stuff\Exiled dll\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Networking">
       <HintPath>..\References\UnityEngine.Networking.dll</HintPath>
+    </Reference>
+    <Reference Include="YamlDotNet, Version=8.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Exiled Stuff\Exiled dll\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

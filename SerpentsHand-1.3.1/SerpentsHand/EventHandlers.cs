@@ -74,15 +74,6 @@ namespace SerpentsHand
             }
         }
 
-        public void OnSpawn(SpawningEventArgs ev)
-        {
-            if (shPlayers.Contains(ev.Player.Id))
-            {
-                ev.Player.CustomPlayerInfo = "<color=#00FF58>Serpents Hand</color>";
-                ev.Player.PlayerInfoArea &= ~PlayerInfoArea.Role;
-            }
-        }
-
         public void OnPocketDimensionDie(FailingEscapePocketDimensionEventArgs ev)
         {
             if (shPlayers.Contains(ev.Player.Id))
@@ -149,8 +140,8 @@ namespace SerpentsHand
         {
             if (shPlayers.Contains(ev.Target.Id))
             {
-                ev.Target.CustomPlayerInfo = string.Empty;
-                ev.Target.PlayerInfoArea |= PlayerInfoArea.Role;
+                ev.Target.CustomInfo = string.Empty;
+                ev.Target.ReferenceHub.nicknameSync.ShownPlayerInfo |= PlayerInfoArea.Role;
                 shPlayers.Remove(ev.Target.Id);
             }
 
@@ -231,8 +222,8 @@ namespace SerpentsHand
                 if (GetTeam(ev.NewRole) != Team.TUT)
                 {
                     shPlayers.Remove(ev.Player.Id);
-                    ev.Player.CustomPlayerInfo = string.Empty;
-                    ev.Player.PlayerInfoArea |= PlayerInfoArea.Role;
+                    ev.Player.CustomInfo = string.Empty;
+                    ev.Player.ReferenceHub.nicknameSync.ShownPlayerInfo |= PlayerInfoArea.Role;
                 }
             }
         }
@@ -251,8 +242,8 @@ namespace SerpentsHand
             if (shPlayers.Contains(ev.Player.Id))
             {
                 shPlayers.Remove(ev.Player.Id);
-                ev.Player.CustomPlayerInfo = string.Empty;
-                ev.Player.PlayerInfoArea |= PlayerInfoArea.Role;
+                ev.Player.CustomInfo = string.Empty;
+                ev.Player.ReferenceHub.nicknameSync.ShownPlayerInfo |= PlayerInfoArea.Role;
             }
         }
 

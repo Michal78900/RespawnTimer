@@ -13,6 +13,10 @@ namespace SerpentsHand
         {
             shPlayers.Add(player.Id);
             player.SetRole(RoleType.Tutorial, true);
+
+            player.InfoArea &= ~PlayerInfoArea.Role;
+            player.CustomInfo = "<color=#00FF58>Serpent's Hand</color>";
+
             player.Position = shSpawnPos;
             player.Broadcast(10, SerpentsHand.instance.Config.SpawnBroadcast);
             if (full)
