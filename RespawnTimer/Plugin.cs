@@ -18,7 +18,7 @@ namespace RespawnTimer
 
         public override string Author => "Michal78900";
         public override string Name => "RespawnTimer";
-        public override Version Version => new Version(1, 2, 1);
+        public override Version Version => new Version(1, 3, 0);
 
         private RespawnTimer() { }
 

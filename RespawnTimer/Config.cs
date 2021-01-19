@@ -13,6 +13,14 @@ namespace RespawnTimer
         [Description("Should a timer be lower or higher on the screen? (values from 0 to 14, 0 - very high, 14 - very low)")]
         public byte TextLowering { get; set; } = 8;
 
+
+        [Description("Should a timer show an exact number of minutes?")]
+        public bool ShowMinutes { get; set; } = true;
+
+        [Description("Should a timer show an exact number of seconds?")]
+        public bool ShowSeconds { get; set; } = true;
+
+
         [Description("Should a timer be only shown, when a spawnning sequence has begun? (NTF Helicopter / Chaos Car arrives)")]
         public bool ShowTimerOnlyOnSpawn { get; set; } = false;
 
@@ -28,7 +36,8 @@ namespace RespawnTimer
         public string Uiu { get; set; } = "<color=#1078e0>Unusual Incidents Unit</color>";
         public string NtfTickets { get; set; } = "<color=blue>NTF Tickets: </color>";
         public string CiTickets { get; set; } = "<color=green>CI Tickets: </color>";
-        public string Seconds { get; set; } = "<b>{seconds} s</b>";
+        public string Seconds { get; set; } = " <b>{seconds} s</b>";
+        public string Minutes { get; set; } = "<b>{minutes} min.</b>";
         public string NtfTicketsNum { get; set; } = "{ntf_tickets_num}";
         public string CiTicketsNum { get; set; } = "{ci_tickets_num}";
     }

@@ -16,6 +16,9 @@ namespace RespawnTimer
 
         static StringBuilder text = new StringBuilder();
 
+
+
+
         public void OnRoundStart()
         {
             foreach (CoroutineHandle coroutine in coroutines)
@@ -40,17 +43,37 @@ namespace RespawnTimer
 
                 for (int n = RespawnTimer.Instance.Config.TextLowering; n > 0; n--) text.Append("\n");
                 text.Append(RespawnTimer.Instance.Config.YouWillRespawnIn + "\n");
-                text.Append(RespawnTimer.Instance.Config.Seconds + "\n");
+
+                if (RespawnTimer.Instance.Config.ShowMinutes) text.Append(RespawnTimer.Instance.Config.Minutes);
+                if (RespawnTimer.Instance.Config.ShowSeconds) text.Append(RespawnTimer.Instance.Config.Seconds);
 
                 if (Respawn.IsSpawning)
                 {
-                    text.Replace("{seconds}", (Respawn.TimeUntilRespawn).ToString());
+                    if (RespawnTimer.Instance.Config.ShowMinutes) text.Replace("{minutes}", (Respawn.TimeUntilRespawn / 60).ToString());
+
+                    if (RespawnTimer.Instance.Config.ShowSeconds)
+                    {
+                        if (RespawnTimer.Instance.Config.ShowMinutes) text.Replace("{seconds}", ((Respawn.TimeUntilRespawn % 60)).ToString());
+
+                        else text.Replace("{seconds}", (Respawn.TimeUntilRespawn.ToString()));
+                    }
                 }
                 else
-                    text.Replace("{seconds}", (Respawn.TimeUntilRespawn + 15).ToString());
+                {
+                    if (RespawnTimer.Instance.Config.ShowMinutes) text.Replace("{minutes}", ((Respawn.TimeUntilRespawn + 15) / 60).ToString());
+
+                    if (RespawnTimer.Instance.Config.ShowSeconds)
+                    {
+                        if (RespawnTimer.Instance.Config.ShowMinutes) text.Replace("{seconds}", ((Respawn.TimeUntilRespawn + 15) % 60).ToString());
+
+                        else text.Replace("{seconds}", (Respawn.TimeUntilRespawn + 15).ToString());
+                    }
+                }
+
 
                 if (RespawnManager.Singleton.NextKnownTeam != SpawnableTeamType.None)
                 {
+                    text.Append("\n");
                     text.Append(RespawnTimer.Instance.Config.YouWillSpawnAs);
 
 
