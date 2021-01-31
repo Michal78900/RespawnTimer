@@ -11,47 +11,57 @@ namespace RespawnTimer
 {
     public class RespawnTimer : Plugin<Config>
     {
-        private static readonly Lazy<RespawnTimer> LazyInstance = new Lazy<RespawnTimer>(() => new RespawnTimer());
-        public static RespawnTimer Instance => LazyInstance.Value;
+        public static RespawnTimer Singleton;
 
         public override PluginPriority Priority => PluginPriority.Low;
 
         public override string Author => "Michal78900";
         public override string Name => "RespawnTimer";
-        public override Version Version => new Version(1, 3, 0);
-
-        private RespawnTimer() { }
+        public override Version Version => new Version(2, 0, 0);
+        public override Version RequiredExiledVersion => new Version(2, 1, 29);
 
         private Handler handler;
 
-        public static bool ThereIsSH;
-        public static bool ThereIsUIU;
+        public static Assembly assemblySH;
+        public static Assembly assemblyUIU;
 
         public override void OnEnabled()
         {
             base.OnEnabled();
 
-            handler = new Handler();
+            Singleton = this;
+
+            handler = new Handler(this);
 
             ServerEvent.RoundStarted += handler.OnRoundStart;
 
-            //SH Support
-            if (IsSH())
-            {
-                ThereIsSH = true;
-                Log.Debug("SerpentsHand plugin detected!");
-            }
-            else ThereIsSH = false;
-            //
 
-            //UIU Support
-            if ((IsUIU()))
+            Log.Debug("Checking for SerpentsHand...", Config.ShowDebugMessages);
+            try
             {
-                ThereIsUIU = true;
-                Log.Debug("UIU Rescue Squad plugin detected!");
+                assemblySH = Loader.Plugins.FirstOrDefault(pl => pl.Name == "SerpentsHand")?.Assembly;
+                Log.Debug("SerpentsHand plugin detected!", Config.ShowDebugMessages);
+
             }
-            else ThereIsUIU = false;
-            //
+            catch(Exception)
+            {
+                Log.Debug("SerpentsHand plugin is not installed", Config.ShowDebugMessages);
+            }
+
+
+            Log.Debug("Checking for UIURescueSquad...", Config.ShowDebugMessages);
+            try
+            {
+                assemblyUIU = Loader.Plugins.FirstOrDefault(pl => pl.Name == "UIU Rescue Squad")?.Assembly;
+                Log.Debug("UIURescueSquad plugin detected!", Config.ShowDebugMessages);
+
+            }
+            catch (Exception)
+            {
+                Log.Debug("UIURescueSquad plugin is not installed", Config.ShowDebugMessages);
+            }
+
+
         }
 
         public override void OnDisabled()
@@ -62,23 +72,5 @@ namespace RespawnTimer
 
             handler = null;
         }
-
-        //SH Support
-        private static bool IsSH()
-        {
-            Assembly assembly = Loader.Plugins.FirstOrDefault(pl => pl.Name == "SerpentsHand")?.Assembly;
-            if (assembly == null) return false;
-            else return true;
-        }
-        //
-
-        //UIU Support
-        private static bool IsUIU()
-        {
-            Assembly assembly = Loader.Plugins.FirstOrDefault(pl => pl.Name == "UIU Rescue Squad")?.Assembly;
-            if (assembly == null) return false;
-            else return true;
-        }
-        //
     }
 }

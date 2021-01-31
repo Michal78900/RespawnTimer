@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Text;
+using System.Linq;
 using Exiled.API.Features;
 using System.Collections.Generic;
 using MEC;
 using Respawning;
-
-using EPlayer = Exiled.API.Features.Player;
 
 
 namespace RespawnTimer
 {
     class Handler
     {
+        private readonly RespawnTimer plugin;
+        public Handler(RespawnTimer plugin) => this.plugin = plugin;
+
         public List<CoroutineHandle> coroutines = new List<CoroutineHandle>();
 
         static StringBuilder text = new StringBuilder();
-
-
 
 
         public void OnRoundStart()
@@ -28,103 +28,108 @@ namespace RespawnTimer
             coroutines.Clear();
 
             coroutines.Add(Timing.RunCoroutine(Timer()));
-            Log.Info($"RespawnTimer coroutine started successfully! The timer will be refreshed every {RespawnTimer.Instance.Config.Interval} second/s!");
+            Log.Debug($"RespawnTimer coroutine started successfully! The timer will be refreshed every {plugin.Config.Interval} second/s!", plugin.Config.ShowDebugMessages);
         }
 
         private IEnumerator<float> Timer()
         {
             while (Round.IsStarted)
             {
-                yield return Timing.WaitForSeconds(RespawnTimer.Instance.Config.Interval);
+                yield return Timing.WaitForSeconds(plugin.Config.Interval);
 
-                if (!Respawn.IsSpawning && RespawnTimer.Instance.Config.ShowTimerOnlyOnSpawn) continue;
+                if (!Player.Get(Team.RIP).Any()) continue;
+
+                if (!Respawn.IsSpawning && plugin.Config.ShowTimerOnlyOnSpawn) continue;
 
                 text.Clear();
 
-                for (int n = RespawnTimer.Instance.Config.TextLowering; n > 0; n--) text.Append("\n");
-                text.Append(RespawnTimer.Instance.Config.YouWillRespawnIn + "\n");
+                for (int n = plugin.Config.TextLowering; n > 0; n--) text.Append("\n");
+                text.Append(plugin.Config.YouWillRespawnIn + "\n");
 
-                if (RespawnTimer.Instance.Config.ShowMinutes) text.Append(RespawnTimer.Instance.Config.Minutes);
-                if (RespawnTimer.Instance.Config.ShowSeconds) text.Append(RespawnTimer.Instance.Config.Seconds);
+                if (plugin.Config.ShowMinutes) text.Append(plugin.Config.Minutes);
+                if (plugin.Config.ShowSeconds) text.Append(plugin.Config.Seconds);
 
                 if (Respawn.IsSpawning)
                 {
-                    if (RespawnTimer.Instance.Config.ShowMinutes) text.Replace("{minutes}", (Respawn.TimeUntilRespawn / 60).ToString());
+                    if (plugin.Config.ShowMinutes) text.Replace("{minutes}", (Respawn.TimeUntilRespawn / 60).ToString());
 
-                    if (RespawnTimer.Instance.Config.ShowSeconds)
+                    if (plugin.Config.ShowSeconds)
                     {
-                        if (RespawnTimer.Instance.Config.ShowMinutes) text.Replace("{seconds}", ((Respawn.TimeUntilRespawn % 60)).ToString());
+                        if (plugin.Config.ShowMinutes) text.Replace("{seconds}", ((Respawn.TimeUntilRespawn % 60)).ToString());
 
                         else text.Replace("{seconds}", (Respawn.TimeUntilRespawn.ToString()));
                     }
                 }
                 else
                 {
-                    if (RespawnTimer.Instance.Config.ShowMinutes) text.Replace("{minutes}", ((Respawn.TimeUntilRespawn + 15) / 60).ToString());
+                    if (plugin.Config.ShowMinutes) text.Replace("{minutes}", ((Respawn.TimeUntilRespawn + 15) / 60).ToString());
 
-                    if (RespawnTimer.Instance.Config.ShowSeconds)
+                    if (plugin.Config.ShowSeconds)
                     {
-                        if (RespawnTimer.Instance.Config.ShowMinutes) text.Replace("{seconds}", ((Respawn.TimeUntilRespawn + 15) % 60).ToString());
+                        if (plugin.Config.ShowMinutes) text.Replace("{seconds}", ((Respawn.TimeUntilRespawn + 15) % 60).ToString());
 
                         else text.Replace("{seconds}", (Respawn.TimeUntilRespawn + 15).ToString());
                     }
                 }
 
+                text.Append("\n");
 
                 if (RespawnManager.Singleton.NextKnownTeam != SpawnableTeamType.None)
                 {
-                    text.Append("\n");
-                    text.Append(RespawnTimer.Instance.Config.YouWillSpawnAs);
+                    text.Append(plugin.Config.YouWillSpawnAs);
 
+                    if (RespawnManager.Singleton.NextKnownTeam == SpawnableTeamType.NineTailedFox)
+                    {
+                        text.Append(plugin.Config.Ntf);
 
-                    if (RespawnTimer.ThereIsSH && RespawnManager.Singleton.NextKnownTeam == SpawnableTeamType.ChaosInsurgency) SerpentsHandTeam();
-                    else
-                    if (RespawnTimer.ThereIsUIU && RespawnManager.Singleton.NextKnownTeam == SpawnableTeamType.NineTailedFox) UIUTeam();
+                        UIUTeam();
+                    }
 
                     else
                     {
-                        switch (RespawnManager.Singleton.NextKnownTeam)
-                        {
-                            case SpawnableTeamType.NineTailedFox: text.Append(RespawnTimer.Instance.Config.Ntf); break;
-                            case SpawnableTeamType.ChaosInsurgency: text.Append(RespawnTimer.Instance.Config.Ci); break;
-                        }
+                        text.Append(plugin.Config.Ci);
+
+                        SerpentsHandTeam();
                     }
                 }
 
 
-                if (RespawnTimer.Instance.Config.ShowTickets)
+                if (plugin.Config.ShowTickets)
                 {
-                    for (int n = 14 - RespawnTimer.Instance.Config.TextLowering; n > 0; n--) text.Append("\n");
-                    text.Append($"<align=right>{RespawnTimer.Instance.Config.NtfTickets} {RespawnTimer.Instance.Config.NtfTicketsNum}</align>" +
-                                $"\n<align=right>{RespawnTimer.Instance.Config.CiTickets} {RespawnTimer.Instance.Config.CiTicketsNum}</align>");
+                    for (int n = 14 - plugin.Config.TextLowering; n > 0; n--) text.Append("\n");
+                    text.Append($"<align=right>{plugin.Config.NtfTickets} {plugin.Config.NtfTicketsNum}</align>" +
+                                $"\n<align=right>{plugin.Config.CiTickets} {plugin.Config.CiTicketsNum}</align>");
 
                     text.Replace("{ntf_tickets_num}", Respawn.NtfTickets.ToString());
                     text.Replace("{ci_tickets_num}", Respawn.ChaosTickets.ToString());
 
                 }
 
-                foreach (EPlayer ply in EPlayer.List)
+                foreach (Player ply in Player.List.Where(p => p.Team == Team.RIP))
                 {
-                    if (ply.Team == Team.RIP)
-                    {
-                        ply.ShowHint(text.ToString(), RespawnTimer.Instance.Config.Interval);
-                    }
+                    ply.ShowHint(text.ToString(), plugin.Config.Interval);
                 }
             }
         }
 
-        //SH Support
-        public static void SerpentsHandTeam()
+
+        public void SerpentsHandTeam()
         {
-            if (SerpentsHand.EventHandlers.isSpawnable) text.Append(RespawnTimer.Instance.Config.Sh);
-            else text.Append(RespawnTimer.Instance.Config.Ci);
+            try
+            {
+                if (SerpentsHand.EventHandlers.isSpawnable) text.Replace(plugin.Config.Ci, plugin.Config.Sh);
+            }
+            catch (Exception) { }
         }
 
-        //UIU Support
-        public static void UIUTeam()
+
+        public void UIUTeam()
         {
-            if (UIURescueSquad.Handlers.EventHandlers.isSpawnable) text.Append(RespawnTimer.Instance.Config.Uiu);
-            else text.Append(RespawnTimer.Instance.Config.Ntf);
+            try
+            {
+                if (UIURescueSquad.Handlers.EventHandlers.isSpawnable) text.Replace(plugin.Config.Ntf, plugin.Config.Uiu);
+            }
+            catch (Exception) { }
         }
     }
 }
