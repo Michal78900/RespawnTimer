@@ -19,7 +19,6 @@ Feel free to send me your translation so I can add it to the list
 English (by me):
 ```yml
 # Translations: (do NOT change text in { }, you can for example bold them)
-  # Translations: (do NOT change text in { }, you can for example bold them)
   you_will_respawn_in: '<color=orange>You will respawn in: </color>'
   you_will_spawn_as: 'You will spawn as: '
   ntf: <color=blue>Nine-Tailed Fox</color>
