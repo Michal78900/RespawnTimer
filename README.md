@@ -17,7 +17,7 @@ This plugin supports the ~~Cyanox62/SerpentsHand plugin and~~ Jesus-QC/UIURescue
 # Translations
 Feel free to send me your translation so I can add it to the list
 
-Test stuff:
+Text stuff:
 ```yml
 # Translations: (do NOT change text in { }, you can for example bold them)
   you_will_respawn_in: '<color=orange>You will respawn in: </color>'
