@@ -17,12 +17,12 @@ namespace RespawnTimer
 
         public override string Author => "Michal78900";
         public override string Name => "RespawnTimer";
-        public override Version Version => new Version(2, 0, 0);
-        public override Version RequiredExiledVersion => new Version(2, 1, 29);
+        public override Version Version => new Version(1, 4, 0);
+        public override Version RequiredExiledVersion => new Version(2, 1, 30);
 
         private Handler handler;
 
-        public static Assembly assemblySH;
+        //public static Assembly assemblySH;
         public static Assembly assemblyUIU;
 
         public override void OnEnabled()
@@ -35,7 +35,7 @@ namespace RespawnTimer
 
             ServerEvent.RoundStarted += handler.OnRoundStart;
 
-
+            /*
             Log.Debug("Checking for SerpentsHand...", Config.ShowDebugMessages);
             try
             {
@@ -47,7 +47,7 @@ namespace RespawnTimer
             {
                 Log.Debug("SerpentsHand plugin is not installed", Config.ShowDebugMessages);
             }
-
+            */
 
             Log.Debug("Checking for UIURescueSquad...", Config.ShowDebugMessages);
             try

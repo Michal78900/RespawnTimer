@@ -26,6 +26,9 @@ namespace RespawnTimer
         [Description("Should a timer be only shown, when a spawnning sequence has begun? (NTF Helicopter / Chaos Car arrives)")]
         public bool ShowTimerOnlyOnSpawn { get; set; } = false;
 
+        [Description("Should number of spectators be shown?")]
+        public bool ShowNumberOfSpectators { get; set; } = true;
+
         [Description("Should the NTF and CI respawn tickets be shown?")]
         public bool ShowTickets { get; set; } = true;
 
@@ -36,10 +39,12 @@ namespace RespawnTimer
         public string Ci { get; set; } = "<color=green>Chaos Insurgency</color>";
         public string Sh { get; set; } = "<color=red>Serpent's Hand</color>";
         public string Uiu { get; set; } = "<color=#1078e0>Unusual Incidents Unit</color>";
+        public string Spectators { get; set; } = "<color=#B3B6B7>Spectators: </color>";
         public string NtfTickets { get; set; } = "<color=blue>NTF Tickets: </color>";
         public string CiTickets { get; set; } = "<color=green>CI Tickets: </color>";
         public string Seconds { get; set; } = " <b>{seconds} s</b>";
         public string Minutes { get; set; } = "<b>{minutes} min.</b>";
+        public string SpectatorsNum { get; set; } = "{spectators_num}";
         public string NtfTicketsNum { get; set; } = "{ntf_tickets_num}";
         public string CiTicketsNum { get; set; } = "{ci_tickets_num}";
     }

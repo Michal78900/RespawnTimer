@@ -89,20 +89,27 @@ namespace RespawnTimer
                     {
                         text.Append(plugin.Config.Ci);
 
-                        SerpentsHandTeam();
+                        //SerpentsHandTeam();
                     }
                 }
 
+                for (int n = 14 - plugin.Config.TextLowering; n > 0; n--) text.Append("\n");
+
+                if (plugin.Config.ShowTickets && plugin.Config.ShowNumberOfSpectators) text.Remove(text.Length-2, 2);
+
+                if (plugin.Config.ShowNumberOfSpectators)
+                {
+                    text.Append($"<align=right>{plugin.Config.Spectators} {plugin.Config.SpectatorsNum}\n</align>");
+                    text.Replace("{spectators_num}", Player.List.Where(d => d.Team == Team.RIP).Count().ToString());
+                }
 
                 if (plugin.Config.ShowTickets)
                 {
-                    for (int n = 14 - plugin.Config.TextLowering; n > 0; n--) text.Append("\n");
                     text.Append($"<align=right>{plugin.Config.NtfTickets} {plugin.Config.NtfTicketsNum}</align>" +
                                 $"\n<align=right>{plugin.Config.CiTickets} {plugin.Config.CiTicketsNum}</align>");
 
                     text.Replace("{ntf_tickets_num}", Respawn.NtfTickets.ToString());
                     text.Replace("{ci_tickets_num}", Respawn.ChaosTickets.ToString());
-
                 }
 
                 foreach (Player ply in Player.List.Where(p => p.Team == Team.RIP))
@@ -112,7 +119,7 @@ namespace RespawnTimer
             }
         }
 
-
+        /*
         public void SerpentsHandTeam()
         {
             try
@@ -121,6 +128,7 @@ namespace RespawnTimer
             }
             catch (Exception) { }
         }
+        */
 
 
         public void UIUTeam()
