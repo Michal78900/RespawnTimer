@@ -11,6 +11,7 @@ This plugin supports the ~~Cyanox62/SerpentsHand plugin and~~ Jesus-QC/UIURescue
 | ShowMinutes | bool | Should a timer show an exact number of minutes? | true |
 | ShowSeconds | bool | Should a timer show an exact number of seconds? | true |
 | ShowTimerOnlyOnSpawn | bool | Should a timer be only shown, when a spawnning sequence has begun? (NTF Helicopter / Chaos Car arrives) Good, if you want to keep ghosting to minimum or something | false |
+| ShowNumberOfSpectators | bool | Should number of spectators be shown? | true |
 | ShowTickets | bool | Should the NTF and CI respawn tickets be shown? | true
 
 # Translations
