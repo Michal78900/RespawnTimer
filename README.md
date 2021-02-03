@@ -17,7 +17,7 @@ This plugin supports the ~~Cyanox62/SerpentsHand plugin and~~ Jesus-QC/UIURescue
 # Translations
 Feel free to send me your translation so I can add it to the list
 
-English (by me):
+Test stuff:
 ```yml
 # Translations: (do NOT change text in { }, you can for example bold them)
   you_will_respawn_in: '<color=orange>You will respawn in: </color>'
@@ -32,19 +32,3 @@ English (by me):
   ntf_tickets_num: '{ntf_tickets_num}'
   ci_tickets_num: '{ci_tickets_num}'
 ```
-
-Polish (by me):
-```yml
-# Translations: (do NOT change text in { }, you can for example bold them)
-  you_will_respawn_in: '<color=orange>Zrespawnujesz się za: </color>'
-  you_will_spawn_as: 'Pojawisz się jako: '
-  ntf: <color=blue>Nine-Tailed Fox</color>
-  ci: <color=green>Rebelia Chaosu</color>
-  sh: <color=red>Ręka Węża</color>
-  uiu: <color=#1078e0>Jednostka Incydentów Nadzwyczajnych</color>
-  ntf_tickets: '<color=blue>Bilety NTF: </color>'
-  ci_tickets: '<color=green>Bilety CI: </color>'
-  seconds: <b>{seconds} s</b>
-  ntf_tickets_num: '{ntf_tickets_num}'
-  ci_tickets_num: '{ci_tickets_num}'
-  ```
