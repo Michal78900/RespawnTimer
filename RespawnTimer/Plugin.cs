@@ -6,6 +6,7 @@ using Exiled.Loader;
 using System.Reflection;
 
 using ServerEvent = Exiled.Events.Handlers.Server;
+using Exiled.API.Interfaces;
 
 namespace RespawnTimer
 {
@@ -17,7 +18,7 @@ namespace RespawnTimer
 
         public override string Author => "Michal78900";
         public override string Name => "RespawnTimer";
-        public override Version Version => new Version(1, 5, 0);
+        public override Version Version => new Version(2, 0, 0);
         public override Version RequiredExiledVersion => new Version(2, 1, 30);
 
         private Handler handler;
@@ -27,48 +28,39 @@ namespace RespawnTimer
 
         public override void OnEnabled()
         {
-            base.OnEnabled();
-
             Singleton = this;
 
             handler = new Handler(this);
 
             ServerEvent.RoundStarted += handler.OnRoundStart;
 
-            
-            Log.Debug("Checking for SerpentsHand...", Config.ShowDebugMessages);
-            try
-            {
-                assemblySH = Loader.Plugins.FirstOrDefault(pl => pl.Name == "SerpentsHand").Assembly;
-                Log.Debug("SerpentsHand plugin detected!", Config.ShowDebugMessages);
 
-            }
-            catch(Exception)
+            foreach (IPlugin<IConfig> plugin in Loader.Plugins)
             {
-                Log.Debug("SerpentsHand plugin is not installed", Config.ShowDebugMessages);
-            }
-            
+                if (plugin.Name == "SerpentsHand")
+                {
+                    assemblySH = plugin.Assembly;
+                    Log.Debug("SerpentsHand plugin detected!", Config.ShowDebugMessages);
+                }
 
-            Log.Debug("Checking for UIURescueSquad...", Config.ShowDebugMessages);
-            try
-            {
-                assemblyUIU = Loader.Plugins.FirstOrDefault(pl => pl.Name == "UIU Rescue Squad").Assembly;
-                Log.Debug("UIURescueSquad plugin detected!", Config.ShowDebugMessages);
+                if (plugin.Name == "UIU Rescue Squad")
+                {
+                    assemblyUIU = plugin.Assembly;
+                    Log.Debug("UIU Rescue Sqad plugin detected!", Config.ShowDebugMessages);
+                }
+            }
 
-            }
-            catch (Exception)
-            {
-                Log.Debug("UIURescueSquad plugin is not installed", Config.ShowDebugMessages);
-            }
+            base.OnEnabled();
         }
 
         public override void OnDisabled()
         {
-            base.OnDisabled();
-
             ServerEvent.RoundStarted -= handler.OnRoundStart;
 
             handler = null;
+            Singleton = null;
+
+            base.OnDisabled();
         }
     }
 }
