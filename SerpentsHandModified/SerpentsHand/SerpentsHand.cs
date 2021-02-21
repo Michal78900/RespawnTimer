@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features;
+﻿using System;
+using Exiled.API.Features;
 using Exiled.Loader;
 using HarmonyLib;
 using System.Reflection;
@@ -20,7 +21,7 @@ namespace SerpentsHand
 
             if (!Config.IsEnabled) return;
 
-            hInstance = new Harmony("cyanox.serpentshand");
+            hInstance = new Harmony($"cyanox.serpentshand-{DateTime.Now.Ticks}");
             hInstance.PatchAll();
 
             instance = this;

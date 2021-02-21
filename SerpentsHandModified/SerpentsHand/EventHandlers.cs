@@ -4,6 +4,7 @@ using MEC;
 using UnityEngine;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs;
+using System.Text;
 
 namespace SerpentsHand
 {
@@ -237,7 +238,7 @@ namespace SerpentsHand
                 }
                 else
                 {
-                    ev.Player.CustomInfo = $"<color=#00FF58>{ev.Player.Nickname}\nSerpents Hand</color>";
+                    ev.Player.CustomInfo = $"<color=#00FF58>{ev.Player.Nickname}\n{SerpentsHand.instance.Config.RoleName}</color>";
                     ev.Player.ReferenceHub.nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.Nickname;
                     ev.Player.ReferenceHub.nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.Role;
                 }

@@ -29,6 +29,8 @@ namespace SerpentsHand
 		public string CiEntryAnnouncement { get; set; } = "";
 		[Description("The broadcast sent to Serpents Hand when they spawn.")]
 		public string SpawnBroadcast { get; set; } = "<size=60>You are <color=#03F555><b>Serpents Hand</b></color></size>\n<i>Help the <color=\"red\">SCPs</color> by killing all other classes!</i>";
+		[Description("Determines role name seen in game:")]
+		public string RoleName { get; set; } = "Serpent's Hand";
 
 		[Description("Determines if friendly fire between Serpents Hand and SCPs is enabled.")]
 		public bool FriendlyFire { get; set; } = false;
