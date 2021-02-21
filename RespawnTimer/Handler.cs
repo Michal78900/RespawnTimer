@@ -116,7 +116,7 @@ namespace RespawnTimer
                     }
                     
 
-                    foreach (Player ply in Player.Get(Team.RIP))
+                    foreach (Player ply in Spectators)
                     {
                         ply.ShowHint(text, 0.01f + plugin.Config.Interval); //Adeed this extra 0.01 seconds to fix the flickering hints if your ping is higher than 0 ms
                     }
