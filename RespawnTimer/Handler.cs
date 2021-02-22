@@ -70,7 +70,7 @@ namespace RespawnTimer
                         {
                             if (plugin.Config.ShowMinutes) text = text.Replace("{seconds}", ((Respawn.TimeUntilRespawn + 15) % 60).ToString());
 
-                            else text.Replace("{seconds}", Respawn.TimeUntilRespawn.ToString());
+                            else text = text.Replace("{seconds}", Respawn.TimeUntilRespawn.ToString());
                         }
                     }
                     
@@ -113,7 +113,7 @@ namespace RespawnTimer
 
                         text = text.Replace("{ntf_tickets_num}", Respawn.NtfTickets.ToString());
                         text = text.Replace("{ci_tickets_num}", Respawn.ChaosTickets.ToString());
-                    }
+                    }   
                     
 
                     foreach (Player ply in Spectators)
