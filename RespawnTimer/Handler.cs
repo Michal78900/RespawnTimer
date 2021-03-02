@@ -84,14 +84,16 @@ namespace RespawnTimer
                         {
                             text += plugin.Config.translations.Ntf;
 
-                            if (RespawnTimer.assemblyUIU != null) UIUTeam();
+                            if (RespawnTimer.assemblyUIU)
+                                UIUTeam();
                         }
                         else
                         {
                             text += plugin.Config.translations.Ci;
                         }
 
-                        if (RespawnTimer.assemblySH != null) SerpentsHandTeam();
+                        if (RespawnTimer.assemblySH)
+                            SerpentsHandTeam();
                     }
 
 
