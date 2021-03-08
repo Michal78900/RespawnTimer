@@ -16,13 +16,14 @@ namespace RespawnTimer
 
         public override string Author => "Michal78900";
         public override string Name => "RespawnTimer";
-        public override Version Version => new Version(2, 1, 0);
+        public override Version Version => new Version(2, 2, 0);
         public override Version RequiredExiledVersion => new Version(2, 1, 30);
 
         private Handler handler;
 
         public static bool assemblySH = false;
         public static bool assemblyUIU = false;
+        public static bool assemblyGS = false;
 
         public override void OnEnabled()
         {
@@ -45,6 +46,12 @@ namespace RespawnTimer
                 {
                     assemblyUIU = true;
                     Log.Debug("UIU Rescue Sqad plugin detected!", Config.ShowDebugMessages);
+                }
+
+                if (plugin.Name == "GhostSpectator" && plugin.Config.IsEnabled)
+                {
+                    assemblyGS = true;
+                    Log.Debug("GhostSpectator plugin detected!", Config.ShowDebugMessages);
                 }
             }
 

@@ -16,7 +16,9 @@ namespace RespawnTimer
 
         CoroutineHandle timerCoroutine = new CoroutineHandle();
 
-        static string text;
+        string text;
+
+        List<Player> Spectators = new List<Player>();
 
 
         public void OnRoundStart()
@@ -39,7 +41,7 @@ namespace RespawnTimer
 
                 try
                 {
-                    if (Player.Get(Team.RIP).Count() == 0 || (!Respawn.IsSpawning && plugin.Config.ShowTimerOnlyOnSpawn)) continue;
+                    if (!Respawn.IsSpawning && plugin.Config.ShowTimerOnlyOnSpawn) continue;
 
                     text = string.Empty;
 
@@ -70,7 +72,7 @@ namespace RespawnTimer
                         {
                             if (plugin.Config.ShowMinutes) text = text.Replace("{seconds}", ((Respawn.TimeUntilRespawn + 15) % 60).ToString());
 
-                            else text = text.Replace("{seconds}", Respawn.TimeUntilRespawn.ToString());
+                            else text = text.Replace("{seconds}", ((Respawn.TimeUntilRespawn + 15) % 60).ToString());
                         }
                     }
                     
@@ -96,11 +98,14 @@ namespace RespawnTimer
                             SerpentsHandTeam();
                     }
 
-
                     text += new string('\n', 14 - plugin.Config.TextLowering - Convert.ToInt32(plugin.Config.ShowNumberOfSpectators));
 
-     
-                    var Spectators = Player.Get(Team.RIP);
+
+                    Spectators = Player.Get(Team.RIP).ToList();
+
+                    if (RespawnTimer.assemblyGS)
+                        GhostSpectatorPlayers();
+
                     if (plugin.Config.ShowNumberOfSpectators)
                     {
                         text += $"<align=right>{plugin.Config.translations.Spectators} {plugin.Config.translations.SpectatorsNum}\n</align>";
@@ -153,6 +158,11 @@ namespace RespawnTimer
                 if (UIURescueSquad.Handlers.EventHandlers.isSpawnable) text = text.Replace(plugin.Config.translations.Ntf, plugin.Config.translations.Uiu);
             }
             catch (Exception) { }
+        }
+
+        public void GhostSpectatorPlayers()
+        {
+            Spectators.AddRange(GhostSpectator.GhostSpectator.Ghosts);
         }
     }
 }

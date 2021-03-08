@@ -67,6 +67,9 @@
     <Reference Include="Exiled.Updater, Version=3.1.1.0, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>..\packages\EXILED.2.3.4\lib\net472\Exiled.Updater.dll</HintPath>
     </Reference>
+    <Reference Include="GhostSpectator">
+      <HintPath>..\..\..\..\AppData\Roaming\EXILED\Plugins\GhostSpectator.dll</HintPath>
+    </Reference>
     <Reference Include="Mirror">
       <HintPath>..\..\..\C#\Stuff\Pluginy EXILED\Exiled Stuff\Exiled dll\Mirror.dll</HintPath>
     </Reference>
