@@ -17,13 +17,13 @@ namespace RespawnTimer
         public override string Author => "Michal78900";
         public override string Name => "RespawnTimer";
         public override Version Version => new Version(2, 2, 0);
-        public override Version RequiredExiledVersion => new Version(2, 1, 30);
+        public override Version RequiredExiledVersion => new Version(2, 8, 0);
 
         private Handler handler;
 
-        public static bool assemblySH = false;
-        public static bool assemblyUIU = false;
-        public static bool assemblyGS = false;
+        public static bool IsSH = false;
+        public static bool IsyUIU = false;
+        public static bool IsGS = false;
 
         public override void OnEnabled()
         {
@@ -38,19 +38,19 @@ namespace RespawnTimer
             {
                 if (plugin.Name == "SerpentsHand" && plugin.Config.IsEnabled)
                 {
-                    assemblySH = true;
+                    IsSH = true;
                     Log.Debug("SerpentsHand plugin detected!", Config.ShowDebugMessages);
                 }
 
                 if (plugin.Name == "UIU Rescue Squad" && plugin.Config.IsEnabled)
                 {
-                    assemblyUIU = true;
+                    IsyUIU = true;
                     Log.Debug("UIU Rescue Sqad plugin detected!", Config.ShowDebugMessages);
                 }
 
                 if (plugin.Name == "GhostSpectator" && plugin.Config.IsEnabled)
                 {
-                    assemblyGS = true;
+                    IsGS = true;
                     Log.Debug("GhostSpectator plugin detected!", Config.ShowDebugMessages);
                 }
             }

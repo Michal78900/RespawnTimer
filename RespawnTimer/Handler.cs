@@ -84,7 +84,7 @@ namespace RespawnTimer
                         {
                             text += plugin.Config.translations.Ntf;
 
-                            if (RespawnTimer.assemblyUIU)
+                            if (RespawnTimer.IsyUIU)
                                 UIUTeam();
                         }
                         else
@@ -92,7 +92,7 @@ namespace RespawnTimer
                             text += plugin.Config.translations.Ci;
                         }
 
-                        if (RespawnTimer.assemblySH)
+                        if (RespawnTimer.IsSH)
                             SerpentsHandTeam();
                     }
 
@@ -101,7 +101,7 @@ namespace RespawnTimer
 
                     Spectators = Player.Get(Team.RIP).ToList();
 
-                    if (RespawnTimer.assemblyGS)
+                    if (RespawnTimer.IsGS)
                         GhostSpectatorPlayers();
 
                     if (plugin.Config.ShowNumberOfSpectators)
