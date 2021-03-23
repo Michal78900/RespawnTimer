@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Text;
 using System.Linq;
 using Exiled.API.Features;
 using System.Collections.Generic;
 using MEC;
 using Respawning;
-using UnityEngine.Playables;
 
 namespace RespawnTimer
 {
@@ -23,7 +21,7 @@ namespace RespawnTimer
 
         public void OnRoundStart()
         {
-            if(timerCoroutine.IsRunning)
+            if (timerCoroutine.IsRunning)
             {
                 Timing.KillCoroutines(timerCoroutine);
             }
@@ -55,7 +53,7 @@ namespace RespawnTimer
 
                     if (Respawn.IsSpawning)
                     {
-                        if (plugin.Config.ShowMinutes) text = text.Replace("{minutes}", (Respawn.TimeUntilRespawn / 60).ToString());;
+                        if (plugin.Config.ShowMinutes) text = text.Replace("{minutes}", (Respawn.TimeUntilRespawn / 60).ToString()); ;
 
                         if (plugin.Config.ShowSeconds)
                         {
@@ -75,7 +73,7 @@ namespace RespawnTimer
                             else text = text.Replace("{seconds}", ((Respawn.TimeUntilRespawn + 15) % 60).ToString());
                         }
                     }
-                    
+
                     text += "\n";
 
                     if (RespawnManager.Singleton.NextKnownTeam != SpawnableTeamType.None)
@@ -120,8 +118,8 @@ namespace RespawnTimer
 
                         text = text.Replace("{ntf_tickets_num}", Respawn.NtfTickets.ToString());
                         text = text.Replace("{ci_tickets_num}", Respawn.ChaosTickets.ToString());
-                    }   
-                    
+                    }
+
 
                     foreach (Player ply in Spectators)
                     {
@@ -141,11 +139,8 @@ namespace RespawnTimer
         {
             try
             {
-                if (SerpentsHand.EventHandlers.isSpawnable)
-                {
-                    if (RespawnManager.Singleton.NextKnownTeam == SpawnableTeamType.ChaosInsurgency) text = text.Replace(plugin.Config.translations.Ci, plugin.Config.translations.Sh);
-                    else text = text.Replace(plugin.Config.translations.Ntf, plugin.Config.translations.Sh);
-                }
+                if (SerpentsHand.EventHandlers.IsSpawnable)
+                    text = text.Replace(plugin.Config.translations.Ci, plugin.Config.translations.Sh);
             }
             catch (Exception) { }
         }
@@ -155,14 +150,19 @@ namespace RespawnTimer
         {
             try
             {
-                if (UIURescueSquad.Handlers.EventHandlers.isSpawnable) text = text.Replace(plugin.Config.translations.Ntf, plugin.Config.translations.Uiu);
+                if (UIURescueSquad.EventHandlers.IsSpawnable)
+                    text = text.Replace(plugin.Config.translations.Ntf, plugin.Config.translations.Uiu);
             }
             catch (Exception) { }
         }
 
         public void GhostSpectatorPlayers()
         {
-            Spectators.AddRange(GhostSpectator.GhostSpectator.Ghosts);
+            try
+            {
+                Spectators.AddRange(GhostSpectator.GhostSpectator.Ghosts);
+            }
+            catch (Exception) { }
         }
     }
 }
