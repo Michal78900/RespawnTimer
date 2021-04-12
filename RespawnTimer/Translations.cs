@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RespawnTimer
+﻿namespace RespawnTimer
 {
     public class Translations
     {
-        [Description("Translations: (do NOT change text in { }, you can for example bold them)")]
         public string YouWillRespawnIn { get; set; } = "<color=orange>You will respawn in: </color>";
         public string YouWillSpawnAs { get; set; } = "You will spawn as: ";
         public string Ntf { get; set; } = "<color=blue>Nine-Tailed Fox</color>";

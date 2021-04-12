@@ -1,5 +1,4 @@
 ﻿using Exiled.API.Interfaces;
-using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace RespawnTimer
@@ -32,6 +31,8 @@ namespace RespawnTimer
         [Description("Should the NTF and CI respawn tickets be shown?")]
         public bool ShowTickets { get; set; } = true;
 
-        public Translations translations { get; set; } = new Translations();
+
+        [Description("Translations: (do NOT change text in { }, you can for example bold them)")]
+        public Translations Translations { get; set; } = new Translations();
     }
 }

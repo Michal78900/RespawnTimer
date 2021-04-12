@@ -1,25 +1,23 @@
-﻿using System;
-using System.Linq;
-using Exiled.API.Features;
-using System.Collections.Generic;
-using MEC;
-using Respawning;
-
-namespace RespawnTimer
+﻿namespace RespawnTimer
 {
-    class Handler
+    using System;
+    using System.Linq;
+    using Exiled.API.Features;
+    using System.Collections.Generic;
+    using MEC;
+    using Respawning;
+
+    public class Handler
     {
-        private readonly RespawnTimer plugin;
-        public Handler(RespawnTimer plugin) => this.plugin = plugin;
+        private readonly Config Config = RespawnTimer.Singleton.Config;
 
-        CoroutineHandle timerCoroutine = new CoroutineHandle();
+        private CoroutineHandle timerCoroutine = new CoroutineHandle();
 
-        string text;
+        private string text;
 
-        List<Player> Spectators = new List<Player>();
+        private List<Player> Spectators = new List<Player>();
 
-
-        public void OnRoundStart()
+        internal void OnRoundStart()
         {
             if (timerCoroutine.IsRunning)
             {
@@ -28,49 +26,58 @@ namespace RespawnTimer
 
             timerCoroutine = Timing.RunCoroutine(Timer());
 
-            Log.Debug($"RespawnTimer coroutine started successfully! The timer will be refreshed every {plugin.Config.Interval} second/s!", plugin.Config.ShowDebugMessages);
+            Log.Debug($"RespawnTimer coroutine started successfully! The timer will be refreshed every {Config.Interval} second/s!", Config.ShowDebugMessages);
         }
 
         private IEnumerator<float> Timer()
         {
             while (Round.IsStarted)
             {
-                yield return Timing.WaitForSeconds(plugin.Config.Interval);
+                yield return Timing.WaitForSeconds(Config.Interval);
 
                 try
                 {
-                    if (!Respawn.IsSpawning && plugin.Config.ShowTimerOnlyOnSpawn) continue;
+                    if (!Respawn.IsSpawning && Config.ShowTimerOnlyOnSpawn)
+                        continue;
 
                     text = string.Empty;
 
-                    text += new string('\n', plugin.Config.TextLowering);
+                    text += new string('\n', Config.TextLowering);
 
-                    text += $"{plugin.Config.translations.YouWillRespawnIn}\n";
+                    text += $"{Config.Translations.YouWillRespawnIn}\n";
 
+                    if (Config.ShowMinutes)
+                        text += Config.Translations.Minutes;
 
-                    if (plugin.Config.ShowMinutes) text += plugin.Config.translations.Minutes;
-                    if (plugin.Config.ShowSeconds) text += plugin.Config.translations.Seconds;
+                    if (Config.ShowSeconds)
+                        text += Config.Translations.Seconds;
 
                     if (Respawn.IsSpawning)
                     {
-                        if (plugin.Config.ShowMinutes) text = text.Replace("{minutes}", (Respawn.TimeUntilRespawn / 60).ToString()); ;
+                        if (Config.ShowMinutes)
+                            text = text.Replace("{minutes}", (Respawn.TimeUntilRespawn / 60).ToString()); ;
 
-                        if (plugin.Config.ShowSeconds)
+                        if (Config.ShowSeconds)
                         {
-                            if (plugin.Config.ShowMinutes) text = text.Replace("{seconds}", (Respawn.TimeUntilRespawn % 60).ToString());
+                            if (Config.ShowMinutes)
+                                text = text.Replace("{seconds}", (Respawn.TimeUntilRespawn % 60).ToString());
 
-                            else text = text.Replace("{seconds}", Respawn.TimeUntilRespawn.ToString());
+                            else
+                                text = text.Replace("{seconds}", Respawn.TimeUntilRespawn.ToString());
                         }
                     }
                     else
                     {
-                        if (plugin.Config.ShowMinutes) text = text.Replace("{minutes}", ((Respawn.TimeUntilRespawn + 15) / 60).ToString());
+                        if (Config.ShowMinutes)
+                            text = text.Replace("{minutes}", ((Respawn.TimeUntilRespawn + 15) / 60).ToString());
 
-                        if (plugin.Config.ShowSeconds)
+                        if (Config.ShowSeconds)
                         {
-                            if (plugin.Config.ShowMinutes) text = text.Replace("{seconds}", ((Respawn.TimeUntilRespawn + 15) % 60).ToString());
+                            if (Config.ShowMinutes)
+                                text = text.Replace("{seconds}", ((Respawn.TimeUntilRespawn + 15) % 60).ToString());
 
-                            else text = text.Replace("{seconds}", ((Respawn.TimeUntilRespawn + 15) % 60).ToString());
+                            else 
+                                text = text.Replace("{seconds}", (Respawn.TimeUntilRespawn + 15).ToString());
                         }
                     }
 
@@ -78,52 +85,50 @@ namespace RespawnTimer
 
                     if (RespawnManager.Singleton.NextKnownTeam != SpawnableTeamType.None)
                     {
-                        text += plugin.Config.translations.YouWillSpawnAs;
+                        text += Config.Translations.YouWillSpawnAs;
 
                         if (RespawnManager.Singleton.NextKnownTeam == SpawnableTeamType.NineTailedFox)
                         {
-                            text += plugin.Config.translations.Ntf;
+                            text += Config.Translations.Ntf;
 
                             if (RespawnTimer.IsyUIU)
                                 UIUTeam();
                         }
                         else
                         {
-                            text += plugin.Config.translations.Ci;
-                        }
+                            text += Config.Translations.Ci;
 
-                        if (RespawnTimer.IsSH)
-                            SerpentsHandTeam();
+                            if (RespawnTimer.IsSH)
+                                SerpentsHandTeam();
+                        }
                     }
 
-                    text += new string('\n', 14 - plugin.Config.TextLowering - Convert.ToInt32(plugin.Config.ShowNumberOfSpectators));
-
+                    text += new string('\n', 14 - Config.TextLowering - Convert.ToInt32(Config.ShowNumberOfSpectators));
 
                     Spectators = Player.Get(Team.RIP).ToList();
 
                     if (RespawnTimer.IsGS)
                         GhostSpectatorPlayers();
 
-                    if (plugin.Config.ShowNumberOfSpectators)
+                    if (Config.ShowNumberOfSpectators)
                     {
-                        text += $"<align=right>{plugin.Config.translations.Spectators} {plugin.Config.translations.SpectatorsNum}\n</align>";
+                        text += $"<align=right>{Config.Translations.Spectators} {Config.Translations.SpectatorsNum}\n</align>";
                         text = text.Replace("{spectators_num}", Spectators.Count().ToString());
                     }
 
-                    if (plugin.Config.ShowTickets)
+                    if (Config.ShowTickets)
                     {
-                        text += $"<align=right>{plugin.Config.translations.NtfTickets} {plugin.Config.translations.NtfTicketsNum}</align>" +
-                                    $"\n<align=right>{plugin.Config.translations.CiTickets} {plugin.Config.translations.CiTicketsNum}</align>";
+                        text += $"<align=right>{Config.Translations.NtfTickets} {Config.Translations.NtfTicketsNum}</align>" +
+                                    $"\n<align=right>{Config.Translations.CiTickets} {Config.Translations.CiTicketsNum}</align>";
 
 
                         text = text.Replace("{ntf_tickets_num}", Respawn.NtfTickets.ToString());
                         text = text.Replace("{ci_tickets_num}", Respawn.ChaosTickets.ToString());
                     }
 
-
                     foreach (Player ply in Spectators)
                     {
-                        ply.ShowHint(text, 0.01f + plugin.Config.Interval); //Adeed this extra 0.01 seconds to fix the flickering hints if your ping is higher than 0 ms
+                        ply.ShowHint(text, 0.01f + Config.Interval);
                     }
                 }
                 catch (Exception)
@@ -133,30 +138,27 @@ namespace RespawnTimer
             }
         }
 
-
-
-        public void SerpentsHandTeam()
+        private void SerpentsHandTeam()
         {
             try
             {
                 if (SerpentsHand.EventHandlers.IsSpawnable)
-                    text = text.Replace(plugin.Config.translations.Ci, plugin.Config.translations.Sh);
+                    text = text.Replace(Config.Translations.Ci, Config.Translations.Sh);
             }
             catch (Exception) { }
         }
 
-
-        public void UIUTeam()
+        private void UIUTeam()
         {
             try
             {
                 if (UIURescueSquad.EventHandlers.IsSpawnable)
-                    text = text.Replace(plugin.Config.translations.Ntf, plugin.Config.translations.Uiu);
+                    text = text.Replace(Config.Translations.Ntf, Config.Translations.Uiu);
             }
             catch (Exception) { }
         }
 
-        public void GhostSpectatorPlayers()
+        private void GhostSpectatorPlayers()
         {
             try
             {
