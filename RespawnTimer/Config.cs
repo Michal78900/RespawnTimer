@@ -1,8 +1,8 @@
-﻿using Exiled.API.Interfaces;
-using System.ComponentModel;
-
-namespace RespawnTimer
+﻿namespace RespawnTimer
 {
+    using Exiled.API.Interfaces;
+    using System.ComponentModel;
+
     public class Config : IConfig
     {
         public bool IsEnabled { get; set; } = true;
@@ -14,13 +14,11 @@ namespace RespawnTimer
         [Description("Should a timer be lower or higher on the screen? (values from 0 to 14, 0 - very high, 14 - very low)")]
         public byte TextLowering { get; set; } = 8;
 
-
         [Description("Should a timer show an exact number of minutes?")]
         public bool ShowMinutes { get; set; } = true;
 
         [Description("Should a timer show an exact number of seconds?")]
         public bool ShowSeconds { get; set; } = true;
-
 
         [Description("Should a timer be only shown, when a spawnning sequence has begun? (NTF Helicopter / Chaos Car arrives)")]
         public bool ShowTimerOnlyOnSpawn { get; set; } = false;
@@ -30,7 +28,6 @@ namespace RespawnTimer
 
         [Description("Should the NTF and CI respawn tickets be shown?")]
         public bool ShowTickets { get; set; } = true;
-
 
         [Description("Translations: (do NOT change text in { }, you can for example bold them)")]
         public Translations Translations { get; set; } = new Translations();

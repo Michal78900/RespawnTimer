@@ -83,11 +83,11 @@
 
                     text += "\n";
 
-                    if (RespawnManager.Singleton.NextKnownTeam != SpawnableTeamType.None)
+                    if (Respawn.NextKnownTeam != SpawnableTeamType.None)
                     {
                         text += Config.Translations.YouWillSpawnAs;
 
-                        if (RespawnManager.Singleton.NextKnownTeam == SpawnableTeamType.NineTailedFox)
+                        if (Respawn.NextKnownTeam == SpawnableTeamType.NineTailedFox)
                         {
                             text += Config.Translations.Ntf;
 
