@@ -2,7 +2,7 @@
 
 This plugin supports the [SerpentsHand](https://github.com/Exiled-Team/SerpentsHand), [UIURescueSquad](https://github.com/Jesus-QC/UIURescueSquad) and [GhostSpectator](https://github.com/Thundermaker300/GhostSpectator) plugins.
 
-# Default config
+# Default
 ```yml
 respawn_timer:
   is_enabled: true
@@ -38,3 +38,22 @@ respawn_timer:
   ntf_tickets_num: '{ntf_tickets_num}'
   ci_tickets_num: '{ci_tickets_num}'
   ```
+# Translations
+```yml
+  # Translations: (do NOT change text in { }, you can for example bold them)
+  translations:
+    you_will_respawn_in: '<color=orange>You will respawn in: </color>'
+    you_will_spawn_as: 'You will spawn as: '
+    ntf: <color=blue>Nine-Tailed Fox</color>
+    ci: <color=green>Chaos Insurgency</color>
+    sh: <color=red>Serpent's Hand</color>
+    uiu: <color=yellow>Unusual Incidents Unit</color>
+    spectators: '<color=#B3B6B7>Spectators: </color>'
+    ntf_tickets: '<color=blue>NTF Tickets: </color>'
+    ci_tickets: '<color=green>CI Tickets: </color>'
+    seconds: ' <b>{seconds} s</b>'
+    minutes: <b>{minutes} min.</b>
+    spectators_num: '{spectators_num}'
+    ntf_tickets_num: '{ntf_tickets_num}'
+    ci_tickets_num: '{ci_tickets_num}'
+```
