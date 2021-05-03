@@ -13,13 +13,13 @@
 
         public override string Author => "Michal78900";
         public override string Name => "RespawnTimer";
-        public override Version Version => new Version(2, 4, 0);
+        public override Version Version => new Version(2, 4, 1);
         public override Version RequiredExiledVersion => new Version(2, 10, 0);
 
         private Handler handler;
 
         public static bool IsSH = false;
-        public static bool IsyUIU = false;
+        public static bool IsUIU = false;
         public static bool IsGS = false;
 
         public override void OnEnabled()
@@ -32,19 +32,19 @@
 
             foreach (IPlugin<IConfig> plugin in Loader.Plugins)
             {
-                if (Name == "SerpentsHand" && Config.IsEnabled)
+                if (plugin.Name == "SerpentsHand" && plugin.Config.IsEnabled)
                 {
                     IsSH = true;
                     Log.Debug("SerpentsHand plugin detected!", Config.ShowDebugMessages);
                 }
 
-                if (Name == "UIU Rescue Squad" && Config.IsEnabled)
+                if (plugin.Name == "UIURescueSquad" && plugin.Config.IsEnabled)
                 {
-                    IsyUIU = true;
-                    Log.Debug("UIU Rescue Sqad plugin detected!", Config.ShowDebugMessages);
+                    IsUIU = true;
+                    Log.Debug("UIURescueSquad plugin detected!", Config.ShowDebugMessages);
                 }
 
-                if (Name == "GhostSpectator" && Config.IsEnabled)
+                if (plugin.Name == "GhostSpectator" && plugin.Config.IsEnabled)
                 {
                     IsGS = true;
                     Log.Debug("GhostSpectator plugin detected!", Config.ShowDebugMessages);

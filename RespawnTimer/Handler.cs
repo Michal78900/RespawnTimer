@@ -11,11 +11,13 @@
     {
         private readonly Config Config = RespawnTimer.Singleton.Config;
 
+        private List<Player> Spectators = new List<Player>();
+
+        public static List<string> TimerHidden = new List<string>();
+
         private CoroutineHandle timerCoroutine = new CoroutineHandle();
 
         private string text;
-
-        private List<Player> Spectators = new List<Player>();
 
         internal void OnRoundStart()
         {
@@ -91,7 +93,7 @@
                         {
                             text += Config.Translations.Ntf;
 
-                            if (RespawnTimer.IsyUIU)
+                            if (RespawnTimer.IsUIU)
                                 UIUTeam();
                         }
                         else
@@ -126,7 +128,7 @@
                         text = text.Replace("{ci_tickets_num}", Respawn.ChaosTickets.ToString());
                     }
 
-                    foreach (Player ply in Spectators)
+                    foreach (Player ply in Spectators.Where(x => !TimerHidden.Contains(x.UserId)))
                     {
                         ply.ShowHint(text, 0.01f + Config.Interval);
                     }
