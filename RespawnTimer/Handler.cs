@@ -9,15 +9,13 @@
 
     public class Handler
     {
-        private readonly Config Config = RespawnTimer.Singleton.Config;
+        public static List<string> TimerHidden = new List<string>();
+
+        public static string Text;
 
         private List<Player> Spectators = new List<Player>();
 
-        public static List<string> TimerHidden = new List<string>();
-
         private CoroutineHandle timerCoroutine = new CoroutineHandle();
-
-        private string text;
 
         internal void OnRoundStart()
         {
@@ -42,95 +40,92 @@
                     if (!Respawn.IsSpawning && Config.ShowTimerOnlyOnSpawn)
                         continue;
 
-                    text = string.Empty;
+                    Text = string.Empty;
 
-                    text += new string('\n', Config.TextLowering);
+                    Text += new string('\n', Config.TextLowering);
 
-                    text += $"{Config.Translations.YouWillRespawnIn}\n";
+                    Text += $"{Config.Translations.YouWillRespawnIn}\n";
 
                     if (Config.ShowMinutes)
-                        text += Config.Translations.Minutes;
+                        Text += Config.Translations.Minutes;
 
                     if (Config.ShowSeconds)
-                        text += Config.Translations.Seconds;
+                        Text += Config.Translations.Seconds;
 
                     if (Respawn.IsSpawning)
                     {
                         if (Config.ShowMinutes)
-                            text = text.Replace("{minutes}", (Respawn.TimeUntilRespawn / 60).ToString()); ;
+                            Text = Text.Replace("{minutes}", (Respawn.TimeUntilRespawn / 60).ToString()); ;
 
                         if (Config.ShowSeconds)
                         {
                             if (Config.ShowMinutes)
-                                text = text.Replace("{seconds}", (Respawn.TimeUntilRespawn % 60).ToString());
+                                Text = Text.Replace("{seconds}", (Respawn.TimeUntilRespawn % 60).ToString());
 
                             else
-                                text = text.Replace("{seconds}", Respawn.TimeUntilRespawn.ToString());
+                                Text = Text.Replace("{seconds}", Respawn.TimeUntilRespawn.ToString());
                         }
                     }
                     else
                     {
                         if (Config.ShowMinutes)
-                            text = text.Replace("{minutes}", ((Respawn.TimeUntilRespawn + 15) / 60).ToString());
+                            Text = Text.Replace("{minutes}", ((Respawn.TimeUntilRespawn + 15) / 60).ToString());
 
                         if (Config.ShowSeconds)
                         {
                             if (Config.ShowMinutes)
-                                text = text.Replace("{seconds}", ((Respawn.TimeUntilRespawn + 15) % 60).ToString());
+                                Text = Text.Replace("{seconds}", ((Respawn.TimeUntilRespawn + 15) % 60).ToString());
 
                             else 
-                                text = text.Replace("{seconds}", (Respawn.TimeUntilRespawn + 15).ToString());
+                                Text = Text.Replace("{seconds}", (Respawn.TimeUntilRespawn + 15).ToString());
                         }
                     }
 
-                    text += "\n";
+                    Text += "\n";
 
                     if (Respawn.NextKnownTeam != SpawnableTeamType.None)
                     {
-                        text += Config.Translations.YouWillSpawnAs;
+                        Text += Config.Translations.YouWillSpawnAs;
 
                         if (Respawn.NextKnownTeam == SpawnableTeamType.NineTailedFox)
                         {
-                            text += Config.Translations.Ntf;
+                            Text += Config.Translations.Ntf;
 
-                            if (RespawnTimer.IsUIU)
-                                UIUTeam();
+                            if (IsUIUTeamSpawnable())
+                                Text = Text.Replace(Config.Translations.Ntf, Config.Translations.Uiu);
                         }
                         else
                         {
-                            text += Config.Translations.Ci;
+                            Text += Config.Translations.Ci;
 
-                            if (RespawnTimer.IsSH)
-                                SerpentsHandTeam();
+                            if (IsSerpentsHandTeamSpawnable())
+                                Text = Text.Replace(Config.Translations.Ci, Config.Translations.Sh);
                         }
                     }
 
-                    text += new string('\n', 14 - Config.TextLowering - Convert.ToInt32(Config.ShowNumberOfSpectators));
+                    Text += new string('\n', 14 - Config.TextLowering - Convert.ToInt32(Config.ShowNumberOfSpectators));
 
                     Spectators = Player.Get(Team.RIP).ToList();
 
-                    if (RespawnTimer.IsGS)
-                        GhostSpectatorPlayers();
-
                     if (Config.ShowNumberOfSpectators)
                     {
-                        text += $"<align=right>{Config.Translations.Spectators} {Config.Translations.SpectatorsNum}\n</align>";
-                        text = text.Replace("{spectators_num}", Spectators.Count().ToString());
+                        Text += $"<align=right>{Config.Translations.Spectators} {Config.Translations.SpectatorsNum}\n</align>";
+                        Text = Text.Replace("{spectators_num}", Spectators.Count().ToString());
                     }
 
                     if (Config.ShowTickets)
                     {
-                        text += $"<align=right>{Config.Translations.NtfTickets} {Config.Translations.NtfTicketsNum}</align>" +
+                        Text += $"<align=right>{Config.Translations.NtfTickets} {Config.Translations.NtfTicketsNum}</align>" +
                                     $"\n<align=right>{Config.Translations.CiTickets} {Config.Translations.CiTicketsNum}</align>";
 
 
-                        text = text.Replace("{ntf_tickets_num}", Respawn.NtfTickets.ToString());
-                        text = text.Replace("{ci_tickets_num}", Respawn.ChaosTickets.ToString());
+                        Text = Text.Replace("{ntf_tickets_num}", Respawn.NtfTickets.ToString());
+                        Text = Text.Replace("{ci_tickets_num}", Respawn.ChaosTickets.ToString());
                     }
 
                     foreach (Player ply in Spectators.Where(x => !TimerHidden.Contains(x.UserId)))
                     {
-                        ply.ShowHint(text, 0.01f + Config.Interval);
+                        ply.ShowHint(Text, 0.01f + Config.Interval);
                     }
                 }
                 catch (Exception)
@@ -140,34 +135,23 @@
             }
         }
 
-        private void SerpentsHandTeam()
+        private bool IsSerpentsHandTeamSpawnable()
         {
-            try
-            {
-                if (SerpentsHand.EventHandlers.IsSpawnable)
-                    text = text.Replace(Config.Translations.Ci, Config.Translations.Sh);
-            }
-            catch (Exception) { }
+            if (RespawnTimer.SerpentsHandAssembly == null)
+                return false;
+
+            return (bool)RespawnTimer.SerpentsHandAssembly.GetType("SerpentsHand.EventHandlers")?.GetField("IsSpawnable").GetValue(null);
         }
 
-        private void UIUTeam()
+        private bool IsUIUTeamSpawnable()
         {
-            try
-            {
-                if (UIURescueSquad.EventHandlers.IsSpawnable)
-                    text = text.Replace(Config.Translations.Ntf, Config.Translations.Uiu);
-            }
-            catch (Exception) { }
+            if (RespawnTimer.UIURescueSquadAssembly == null)
+                return false;
+
+            return (bool)RespawnTimer.UIURescueSquadAssembly.GetType("UIURescueSquad.EventHandlers")?.GetField("IsSpawnable").GetValue(null);
         }
 
-        private void GhostSpectatorPlayers()
-        {
-            try
-            {
-                Spectators.AddRange(GhostSpectator.GhostSpectator.Ghosts);
-            }
-            catch (Exception) { }
-        }
+        private readonly Config Config = RespawnTimer.Singleton.Config;
     }
 }
 

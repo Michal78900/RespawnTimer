@@ -5,9 +5,12 @@
 
     public class Config : IConfig
     {
+        [Description("Is the plugin enabled.")]
         public bool IsEnabled { get; set; } = true;
+
         [Description("Should debug messages be shown in a server console?")]
         public bool ShowDebugMessages { get; set; } = false;
+
         [Description("How often (in seconds) should timer be refreshed?")]
         public float Interval { get; set; } = 1f;
 
