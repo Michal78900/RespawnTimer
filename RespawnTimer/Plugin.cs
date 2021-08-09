@@ -15,7 +15,7 @@
         public override string Author => "Michal78900";
         public override string Name => "RespawnTimer";
         public override Version Version => new Version(2, 5, 0);
-        public override Version RequiredExiledVersion => new Version(2, 11, 0);
+        public override Version RequiredExiledVersion => new Version(3, 0, 0);
 
         private Handler handler;
 
