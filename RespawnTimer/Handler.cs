@@ -26,14 +26,14 @@
 
             timerCoroutine = Timing.RunCoroutine(Timer());
 
-            Log.Debug($"RespawnTimer coroutine started successfully! The timer will be refreshed every {Config.Interval} second/s!", Config.ShowDebugMessages);
+            Log.Debug($"RespawnTimer coroutine started successfully!", Config.ShowDebugMessages);
         }
 
         private IEnumerator<float> Timer()
         {
             while (Round.IsStarted)
             {
-                yield return Timing.WaitForSeconds(Config.Interval);
+                yield return Timing.WaitForSeconds(1f);
 
                 try
                 {
@@ -44,13 +44,13 @@
 
                     Text += new string('\n', Config.TextLowering);
 
-                    Text += $"{Config.Translations.YouWillRespawnIn}\n";
+                    Text += $"{Translation.YouWillRespawnIn}\n";
 
                     if (Config.ShowMinutes)
-                        Text += Config.Translations.Minutes;
+                        Text += Translation.Minutes;
 
                     if (Config.ShowSeconds)
-                        Text += Config.Translations.Seconds;
+                        Text += Translation.Seconds;
 
                     if (Respawn.IsSpawning)
                     {
@@ -85,21 +85,21 @@
 
                     if (Respawn.NextKnownTeam != SpawnableTeamType.None)
                     {
-                        Text += Config.Translations.YouWillSpawnAs;
+                        Text += Translation.YouWillSpawnAs;
 
                         if (Respawn.NextKnownTeam == SpawnableTeamType.NineTailedFox)
                         {
-                            Text += Config.Translations.Ntf;
+                            Text += Translation.Ntf;
 
                             if (IsUIUTeamSpawnable())
-                                Text = Text.Replace(Config.Translations.Ntf, Config.Translations.Uiu);
+                                Text = Text.Replace(Translation.Ntf, Translation.Uiu);
                         }
                         else
                         {
-                            Text += Config.Translations.Ci;
+                            Text += Translation.Ci;
 
                             if (IsSerpentsHandTeamSpawnable())
-                                Text = Text.Replace(Config.Translations.Ci, Config.Translations.Sh);
+                                Text = Text.Replace(Translation.Ci, Translation.Sh);
                         }
                     }
 
@@ -109,23 +109,23 @@
 
                     if (Config.ShowNumberOfSpectators)
                     {
-                        Text += $"<align=right>{Config.Translations.Spectators} {Config.Translations.SpectatorsNum}\n</align>";
+                        Text += $"<align=right>{Translation.Spectators} {Translation.SpectatorsNum}\n</align>";
                         Text = Text.Replace("{spectators_num}", Spectators.Count().ToString());
                     }
 
                     if (Config.ShowTickets)
                     {
-                        Text += $"<align=right>{Config.Translations.NtfTickets} {Config.Translations.NtfTicketsNum}</align>" +
-                                    $"\n<align=right>{Config.Translations.CiTickets} {Config.Translations.CiTicketsNum}</align>";
+                        Text += $"<align=right>{Translation.NtfTickets} {Translation.NtfTicketsNum}</align>\n" +
+                                $"<align=right>{Translation.CiTickets} {Translation.CiTicketsNum}</align>";
 
 
                         Text = Text.Replace("{ntf_tickets_num}", Respawn.NtfTickets.ToString());
                         Text = Text.Replace("{ci_tickets_num}", Respawn.ChaosTickets.ToString());
                     }
 
-                    foreach (Player ply in Spectators.Where(x => !TimerHidden.Contains(x.UserId)))
+                    foreach (Player player in Spectators.Where(x => !TimerHidden.Contains(x.UserId)))
                     {
-                        ply.ShowHint(Text, 0.01f + Config.Interval);
+                        player.ShowHint(Text, Config.HintDuration);
                     }
                 }
                 catch (Exception)
@@ -151,7 +151,8 @@
             return (bool)RespawnTimer.UIURescueSquadAssembly.GetType("UIURescueSquad.EventHandlers")?.GetField("IsSpawnable").GetValue(null);
         }
 
-        private readonly Config Config = RespawnTimer.Singleton.Config;
+        private static readonly Translation Translation = RespawnTimer.Singleton.Translation;
+        private static readonly Config Config = RespawnTimer.Singleton.Config;
     }
 }
 

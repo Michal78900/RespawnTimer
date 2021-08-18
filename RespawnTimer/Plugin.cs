@@ -8,19 +8,14 @@
 
     using ServerEvent = Exiled.Events.Handlers.Server;
 
-    public class RespawnTimer : Plugin<Config>
+    public class RespawnTimer : Plugin<Config, Translation>
     {
         public static RespawnTimer Singleton;
 
-        public override string Author => "Michal78900";
-        public override string Name => "RespawnTimer";
-        public override Version Version => new Version(2, 5, 0);
-        public override Version RequiredExiledVersion => new Version(3, 0, 0);
-
-        private Handler handler;
-
         public static Assembly SerpentsHandAssembly;
         public static Assembly UIURescueSquadAssembly;
+
+        private Handler handler;
 
         public override void OnEnabled()
         {
@@ -57,5 +52,10 @@
 
             base.OnDisabled();
         }
+
+        public override string Name => "RespawnTimer";
+        public override string Author => "Michal78900";
+        public override Version Version => new Version(2, 5, 0);
+        public override Version RequiredExiledVersion => new Version(3, 0, 0);
     }
 }
