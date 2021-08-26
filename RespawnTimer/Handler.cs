@@ -9,14 +9,6 @@
 
     public class Handler
     {
-        public static List<string> TimerHidden = new List<string>();
-
-        public static string Text;
-
-        private List<Player> Spectators = new List<Player>();
-
-        private CoroutineHandle timerCoroutine = new CoroutineHandle();
-
         internal void OnRoundStart()
         {
             if (timerCoroutine.IsRunning)
@@ -76,7 +68,7 @@
                             if (Config.ShowMinutes)
                                 Text = Text.Replace("{seconds}", ((Respawn.TimeUntilRespawn + 15) % 60).ToString());
 
-                            else 
+                            else
                                 Text = Text.Replace("{seconds}", (Respawn.TimeUntilRespawn + 15).ToString());
                         }
                     }
@@ -125,7 +117,7 @@
 
                     foreach (Player player in Spectators.Where(x => !TimerHidden.Contains(x.UserId)))
                     {
-                        player.ShowHint(Text, Config.HintDuration);
+                        player.ShowHint(Text, 1.1f);
                     }
                 }
                 catch (Exception)
@@ -151,8 +143,20 @@
             return (bool)RespawnTimer.UIURescueSquadAssembly.GetType("UIURescueSquad.EventHandlers")?.GetField("IsSpawnable").GetValue(null);
         }
 
+        #region Variables
+
+        public static List<string> TimerHidden = new List<string>();
+
+        public static string Text;
+
+        private List<Player> Spectators = new List<Player>();
+
+        private CoroutineHandle timerCoroutine = new CoroutineHandle();
+
         private static readonly Translation Translation = RespawnTimer.Singleton.Translation;
         private static readonly Config Config = RespawnTimer.Singleton.Config;
+
+        #endregion
     }
 }
 

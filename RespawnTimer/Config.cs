@@ -11,9 +11,6 @@
         [Description("Should debug messages be shown in a server console.")]
         public bool ShowDebugMessages { get; private set; } = false;
 
-        [Description("How long the hint should be presented to the player. The hint will be refreshed every seconds anyways, but make this value higher if the hint \"blinks\"")]
-        public float HintDuration { get; private set; } = 1.1f;
-
         [Description("Should a timer be lower or higher on the screen. (values from 0 to 14, 0 - very high, 14 - very low)")]
         public byte TextLowering { get; private set; } = 8;
 

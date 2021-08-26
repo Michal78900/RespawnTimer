@@ -40,35 +40,36 @@
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>..\..\..\C#\Stuff\Pluginy EXILED\Exiled Stuff\Exiled dll\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp-Publicized">
-      <HintPath>..\..\..\C#\Stuff\Pluginy EXILED\Exiled Stuff\Exiled dll\Assembly-CSharp-Publicized.dll</HintPath>
+    <Reference Include="Assembly-CSharp-Publicized, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\C#\Stuff\Pluginy EXILED\Exiled Stuff\Refrences\Assembly-CSharp-Publicized.dll</HintPath>
     </Reference>
     <Reference Include="CommandSystem.Core">
       <HintPath>..\..\..\C#\Stuff\Pluginy EXILED\Exiled Stuff\Exiled dll\CommandSystem.Core.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.API, Version=3.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.3.0.0-ALPHA.34\lib\net472\Exiled.API.dll</HintPath>
+      <HintPath>..\packages\EXILED.3.0.0-ALPHA.48\lib\net472\Exiled.API.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Bootstrap, Version=3.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.3.0.0-ALPHA.34\lib\net472\Exiled.Bootstrap.dll</HintPath>
+      <HintPath>..\packages\EXILED.3.0.0-ALPHA.48\lib\net472\Exiled.Bootstrap.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.CreditTags, Version=3.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.3.0.0-ALPHA.34\lib\net472\Exiled.CreditTags.dll</HintPath>
+      <HintPath>..\packages\EXILED.3.0.0-ALPHA.48\lib\net472\Exiled.CreditTags.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.CustomItems, Version=3.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.3.0.0-ALPHA.34\lib\net472\Exiled.CustomItems.dll</HintPath>
+      <HintPath>..\packages\EXILED.3.0.0-ALPHA.48\lib\net472\Exiled.CustomItems.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Events, Version=3.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.3.0.0-ALPHA.34\lib\net472\Exiled.Events.dll</HintPath>
+      <HintPath>..\packages\EXILED.3.0.0-ALPHA.48\lib\net472\Exiled.Events.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Loader, Version=3.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.3.0.0-ALPHA.34\lib\net472\Exiled.Loader.dll</HintPath>
+      <HintPath>..\packages\EXILED.3.0.0-ALPHA.48\lib\net472\Exiled.Loader.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Permissions, Version=3.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.3.0.0-ALPHA.34\lib\net472\Exiled.Permissions.dll</HintPath>
+      <HintPath>..\packages\EXILED.3.0.0-ALPHA.48\lib\net472\Exiled.Permissions.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Updater, Version=3.1.1.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.3.0.0-ALPHA.34\lib\net472\Exiled.Updater.dll</HintPath>
+      <HintPath>..\packages\EXILED.3.0.0-ALPHA.48\lib\net472\Exiled.Updater.dll</HintPath>
     </Reference>
     <Reference Include="GhostSpectator">
       <HintPath>..\..\..\..\AppData\Roaming\EXILED\Plugins\GhostSpectator.dll</HintPath>
@@ -114,7 +115,7 @@
     <Compile Include="Handler.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Translations.cs" />
+    <Compile Include="Translation.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
