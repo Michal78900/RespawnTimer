@@ -15,15 +15,11 @@
         public static Assembly SerpentsHandAssembly;
         public static Assembly UIURescueSquadAssembly;
 
-        private Handler handler;
-
         public override void OnEnabled()
         {
             Singleton = this;
 
-            handler = new Handler();
-
-            ServerEvent.RoundStarted += handler.OnRoundStart;
+            ServerEvent.RoundStarted += EventHandler.OnRoundStart;
 
             foreach (IPlugin<IConfig> plugin in Loader.Plugins)
             {
@@ -45,9 +41,7 @@
 
         public override void OnDisabled()
         {
-            ServerEvent.RoundStarted -= handler.OnRoundStart;
-
-            handler = null;
+            ServerEvent.RoundStarted -= EventHandler.OnRoundStart;
             Singleton = null;
 
             base.OnDisabled();
@@ -55,7 +49,7 @@
 
         public override string Name => "RespawnTimer";
         public override string Author => "Michal78900";
-        public override Version Version => new Version(3, 0, 0);
+        public override Version Version => new Version(3, 1, 0);
         public override Version RequiredExiledVersion => new Version(3, 0, 5);
     }
 }

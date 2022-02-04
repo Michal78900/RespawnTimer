@@ -2,7 +2,7 @@
 {
     using Exiled.API.Interfaces;
 
-    public class Translation : ITranslation
+    public sealed class Translation : ITranslation
     {
         public string YouWillRespawnIn { get; private set; } = "<color=orange>You will respawn in: </color>";
         public string YouWillSpawnAs { get; private set; } = "You will spawn as: ";

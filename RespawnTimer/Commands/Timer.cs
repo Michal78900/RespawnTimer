@@ -2,8 +2,9 @@
 {
     using CommandSystem;
     using Exiled.API.Features;
-    using RemoteAdmin;
     using System;
+
+    using static API.API;
 
     [CommandHandler(typeof(ClientCommandHandler))]
     public class Timer : ICommand
@@ -16,22 +17,18 @@
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            string userId = Player.Get(sender as PlayerCommandSender).UserId;
+            string userId = Player.Get(sender).UserId;
 
-            if (!Handler.TimerHidden.Contains(userId))
+            if (!TimerHidden.Remove(userId))
             {
-                Handler.TimerHidden.Add(userId);
+                TimerHidden.Add(userId);
 
                 response = "<color=red>Respawn Timer has been hidden!</color>";
                 return true;
             }
-            else
-            {
-                Handler.TimerHidden.Remove(userId);
 
-                response = "<color=green>Respawn Timer has been shown!</color>";
-                return true;
-            }
+            response = "<color=green>Respawn Timer has been shown!</color>";
+            return true;
         }
     }
 }
