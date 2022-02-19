@@ -50,6 +50,6 @@
         public override string Name => "RespawnTimer";
         public override string Author => "Michal78900";
         public override Version Version => new Version(3, 1, 0);
-        public override Version RequiredExiledVersion => new Version(3, 0, 5);
+        public override Version RequiredExiledVersion => new Version(5, 0, 0);
     }
 }
