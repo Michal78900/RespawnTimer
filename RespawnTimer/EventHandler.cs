@@ -1,28 +1,50 @@
 ﻿namespace RespawnTimer
 {
-    using System;
-    using System.Linq;
+    using API.Extensions;
     using Exiled.API.Features;
     using System.Collections.Generic;
     using MEC;
-    using Respawning;
+    using System.Text;
+    using NorthwoodLib.Pools;
 
     using static API.API;
 
     public static class EventHandler
     {
+        private static CoroutineHandle _timerCoroutine;
+        
         internal static void OnRoundStart()
         {
-            if (timerCoroutine != null && timerCoroutine.IsRunning)
-            {
-                Timing.KillCoroutines(timerCoroutine);
-            }
+            if (_timerCoroutine.IsRunning)
+                Timing.KillCoroutines(_timerCoroutine);
+            
+            _timerCoroutine = Timing.RunCoroutine(TimerCoroutine());
 
-            timerCoroutine = Timing.RunCoroutine(Timer());
-
-            Log.Debug($"RespawnTimer coroutine started successfully!", Config.ShowDebugMessages);
+            Log.Debug($"RespawnTimer coroutine started successfully!", RespawnTimer.Singleton.Config.Debug);
         }
 
+        private static IEnumerator<float> TimerCoroutine()
+        {
+            while (Round.IsStarted)
+            {
+                yield return Timing.WaitForSeconds(1f);
+                
+                StringBuilder builder = StringBuilderPool.Shared.Rent(!Respawn.IsSpawning ? TimerView.BeforeRespawnString : TimerView.DuringRespawnString);
+                List<Player> spectators = ListPool<Player>.Shared.Rent(Player.Get(x => x.Role.Team == Team.RIP && !x.IsOverwatchEnabled));
+
+                foreach (Player player in spectators)
+                {
+                    if (TimerHidden.Contains(player.UserId))
+                        continue;
+
+                    player.ShowHint(StringBuilderPool.Shared.ToStringReturn(builder.SetAllProperties(spectators.Count)), 1.25f);
+                }
+                
+                ListPool<Player>.Shared.Return(spectators);
+            }
+        }
+
+        /*
         private static IEnumerator<float> Timer()
         {
             while (Round.IsStarted)
@@ -34,124 +56,85 @@
                     if (!Respawn.IsSpawning && Config.ShowTimerOnlyOnSpawn)
                         continue;
 
-                    string text = string.Empty;
+                    StringBuilder builder = StringBuilderPool.Shared.Rent();
 
-                    text += new string('\n', Config.TextLowering);
-
-                    text += $"{Translation.YouWillRespawnIn}\n";
+                    builder.AppendFormat("{0}\n", Translation.YouWillRespawnIn);
 
                     if (Config.ShowMinutes)
-                        text += Translation.Minutes;
+                        builder.Append(Translation.Minutes);
 
                     if (Config.ShowSeconds)
-                        text += Translation.Seconds;
+                        builder.Append(Translation.Seconds);
 
-                    if (Respawn.IsSpawning)
-                    {
-                        if (Config.ShowMinutes)
-                            text = text.Replace("{minutes}", (Respawn.TimeUntilRespawn / 60).ToString()); ;
-
-                        if (Config.ShowSeconds)
-                        {
-                            if (Config.ShowMinutes)
-                                text = text.Replace("{seconds}", (Respawn.TimeUntilRespawn % 60).ToString());
-
-                            else
-                                text = text.Replace("{seconds}", Respawn.TimeUntilRespawn.ToString());
-                        }
-                    }
-                    else
-                    {
-                        if (Config.ShowMinutes)
-                            text = text.Replace("{minutes}", ((Respawn.TimeUntilRespawn + 15) / 60).ToString());
-
-                        if (Config.ShowSeconds)
-                        {
-                            if (Config.ShowMinutes)
-                                text = text.Replace("{seconds}", ((Respawn.TimeUntilRespawn + 15) % 60).ToString());
-
-                            else
-                                text = text.Replace("{seconds}", (Respawn.TimeUntilRespawn + 15).ToString());
-                        }
-                    }
-
-                    text += "\n";
+                    builder.AppendLine();
 
                     if (Respawn.NextKnownTeam != SpawnableTeamType.None)
                     {
-                        text += Translation.YouWillSpawnAs;
+                        builder.Append(Translation.YouWillSpawnAs);
 
                         if (Respawn.NextKnownTeam == SpawnableTeamType.NineTailedFox)
                         {
-                            text += Translation.Ntf;
+                            builder.Append(Translation.Ntf);
 
-                            if (IsUIUTeamSpawnable())
-                                text = text.Replace(Translation.Ntf, Translation.Uiu);
+                            if (UiuSpawnable)
+                                builder.Replace(Translation.Ntf, Translation.Uiu);
                         }
                         else
                         {
-                            text += Translation.Ci;
+                            builder.Append(Translation.Ci);
 
-                            if (IsSerpentsHandTeamSpawnable())
-                                text = text.Replace(Translation.Ci, Translation.Sh);
+                            if (SerpentsHandSpawnable)
+                                builder.Replace(Translation.Ci, Translation.Sh);
                         }
                     }
 
-                    text += new string('\n', 14 - Config.TextLowering - Convert.ToInt32(Config.ShowNumberOfSpectators));
+                    // builder.Append('\n', 14 - Config.TextLowering - Convert.ToInt32(Config.ShowNumberOfSpectators));
+                    builder.Append("<size=75%>");
 
-                    List<Player> spectators = Player.Get(Team.RIP).ToList();
+                    if (Config.ShowWarheadStatus)
+                    {
+                        builder.AppendFormat("<align=left>{0} ", Translation.Warhead);
+                        builder.Append("{warhead_status}</align>\n");
+                    }
+
+                    List<Player> spectators = ListPool<Player>.Shared.Rent(Player.Get(x => x.Role.Team == Team.RIP && !x.IsOverwatchEnabled));
 
                     if (Config.ShowNumberOfSpectators)
                     {
-                        text += $"<align=right>{Translation.Spectators} {Translation.SpectatorsNum}\n</align>";
-                        text = text.Replace("{spectators_num}", spectators.Count.ToString());
+                        builder.AppendFormat("<align=right>{0} {1}\n</align>", Translation.Spectators, Translation.SpectatorsNum);
                     }
 
                     if (Config.ShowTickets)
                     {
-                        text += $"<align=right>{Translation.NtfTickets} {Translation.NtfTicketsNum}</align>\n" +
-                                $"<align=right>{Translation.CiTickets} {Translation.CiTicketsNum}</align>";
-
-
-                        text = text.Replace("{ntf_tickets_num}", Respawn.NtfTickets.ToString());
-                        text = text.Replace("{ci_tickets_num}", Respawn.ChaosTickets.ToString());
+                        builder.AppendFormat("<align=right>{0} {1}</align>\n", Translation.NtfTickets, Translation.NtfTicketsNum);
+                        builder.AppendFormat("<align=right>{0} {1}</align>", Translation.CiTickets, Translation.CiTicketsNum);
                     }
+
+                    builder.Append("</size>");
+                    builder.Replace(@"\n", "\n");
+
+                    string message = StringBuilderPool.Shared.ToStringReturn(builder.SetAllProperties(spectators.Count));
 
                     foreach (Player player in spectators)
                     {
                         if (TimerHidden.Contains(player.UserId))
                             continue;
 
-                        player.ShowHint(text, 1.1f);
+                        player.ShowHint(message, 1.1f);
                     }
+
+                    ListPool<Player>.Shared.Return(spectators);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    continue;
+                    Log.Error(e);
                 }
             }
         }
+        */
 
-        private static bool IsSerpentsHandTeamSpawnable()
-        {
-            if (RespawnTimer.SerpentsHandAssembly == null)
-                return false;
-
-            return (bool)RespawnTimer.SerpentsHandAssembly.GetType("SerpentsHand.EventHandlers")?.GetField("IsSpawnable").GetValue(null);
-        }
-
-        private static bool IsUIUTeamSpawnable()
-        {
-            if (RespawnTimer.UIURescueSquadAssembly == null)
-                return false;
-
-            return (bool)RespawnTimer.UIURescueSquadAssembly.GetType("UIURescueSquad.EventHandlers")?.GetField("IsSpawnable").GetValue(null);
-        }
-
-        private static CoroutineHandle timerCoroutine;
-
-        private static readonly Translation Translation = RespawnTimer.Singleton.Translation;
-        private static readonly Config Config = RespawnTimer.Singleton.Config;
+        // private static readonly Translation Translation = RespawnTimer.Singleton.Translation;
+        // private static readonly Config Config = RespawnTimer.Singleton.Config;
     }
 }
 
