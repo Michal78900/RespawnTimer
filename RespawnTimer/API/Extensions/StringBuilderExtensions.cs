@@ -14,6 +14,7 @@
     public static class StringBuilderExtensions
     {
         public static StringBuilder SetAllProperties(this StringBuilder builder, int? spectatorCount = null) => builder
+            .SetRoundTime()   
             .SetMinutesAndSeconds()
             .SetSpawnableTeam()
             .SetSpectatorCountAndTickets(spectatorCount)
@@ -21,29 +22,42 @@
             .SetGeneratorCount()
             .SetTpsAndTickrate();
 
-        public static StringBuilder SetMinutesAndSeconds(this StringBuilder builder)
+        private static StringBuilder SetRoundTime(this StringBuilder builder)
         {
-            if (Respawn.IsSpawning || TimerView.Properties.TimerOffset)
+            int minutes = Round.ElapsedTime.Minutes;
+            builder.Replace("{round_minutes}", $"{(TimerView.Properties.LeadingZeros && minutes < 10 ? "0" : string.Empty)}{minutes}");
+
+            int seconds = Round.ElapsedTime.Seconds;
+            builder.Replace("{round_seconds}", $"{(TimerView.Properties.LeadingZeros && seconds < 10 ? "0" : string.Empty)}{seconds}");
+            
+            return builder;
+        }
+
+        private static StringBuilder SetMinutesAndSeconds(this StringBuilder builder)
+        {
+            TimeSpan time = Respawn.TimeUntilSpawnWave;
+            
+            if (Respawn.IsSpawning || !TimerView.Properties.TimerOffset)
             {
-                int minutes = (int)Respawn.TimeUntilSpawnWave.TotalSeconds / 60;
+                int minutes = (int)time.TotalSeconds / 60;
                 builder.Replace("{minutes}", $"{(TimerView.Properties.LeadingZeros && minutes < 10 ? "0" : string.Empty)}{minutes}");
 
-                int seconds = (int)Math.Round(Respawn.TimeUntilSpawnWave.TotalSeconds % 60);
+                int seconds = (int)Math.Round(time.TotalSeconds % 60);
                 builder.Replace("{seconds}", $"{(TimerView.Properties.LeadingZeros && seconds < 10 ? "0" : string.Empty)}{seconds}");
             }
             else
             {
-                int minutes = (int)(Respawn.TimeUntilSpawnWave.TotalSeconds + 15) / 60;
+                int minutes = (int)(time.TotalSeconds + 15) / 60;
                 builder.Replace("{minutes}", $"{(TimerView.Properties.LeadingZeros && minutes < 10 ? "0" : string.Empty)}{minutes}");
 
-                int seconds = (int)Math.Round((Respawn.TimeUntilSpawnWave.TotalSeconds + 15) % 60);
+                int seconds = (int)Math.Round((time.TotalSeconds + 15) % 60);
                 builder.Replace("{seconds}", $"{(TimerView.Properties.LeadingZeros && seconds < 10 ? "0" : string.Empty)}{seconds}");
             }
 
             return builder;
         }
 
-        public static StringBuilder SetSpawnableTeam(this StringBuilder builder)
+        private static StringBuilder SetSpawnableTeam(this StringBuilder builder)
         {
             switch (Respawn.NextKnownTeam)
             {
@@ -51,18 +65,18 @@
                     return builder;
 
                 case SpawnableTeamType.NineTailedFox:
-                    builder.Replace("{team}", !API.UiuSpawnable ? TimerView.Properties.Ntf : TimerView.Properties.Uiu);
+                    builder.Replace("{team}", !UiuSpawnable ? TimerView.Properties.Ntf : TimerView.Properties.Uiu);
                     break;
 
                 case SpawnableTeamType.ChaosInsurgency:
-                    builder.Replace("{team}", !API.SerpentsHandSpawnable ? TimerView.Properties.Ci : TimerView.Properties.Sh);
+                    builder.Replace("{team}", !SerpentsHandSpawnable ? TimerView.Properties.Ci : TimerView.Properties.Sh);
                     break;
             }
 
             return builder;
         }
 
-        public static StringBuilder SetSpectatorCountAndTickets(this StringBuilder builder, int? spectatorCount = null)
+        private static StringBuilder SetSpectatorCountAndTickets(this StringBuilder builder, int? spectatorCount = null)
         {
             builder.Replace("{spectators_num}", spectatorCount?.ToString() ?? Player.List.Count(x => x.Role.Team == Team.RIP && !x.IsOverwatchEnabled).ToString());
             builder.Replace("{ntf_tickets_num}", Respawn.NtfTickets.ToString());
@@ -71,16 +85,16 @@
             return builder;
         }
 
-        public static StringBuilder SetWarheadStatus(this StringBuilder builder)
+        private static StringBuilder SetWarheadStatus(this StringBuilder builder)
         {
             WarheadStatus warheadStatus = Warhead.Status;
             builder.Replace("{warhead_status}", TimerView.Properties.WarheadStatus[warheadStatus]);
-            builder.Replace("{detonation_time}", warheadStatus == WarheadStatus.InProgress ? Mathf.Round(Warhead.DetonationTimer).ToString() : string.Empty);
+            builder.Replace("{detonation_time}", warheadStatus == WarheadStatus.InProgress ? Mathf.Round(Warhead.DetonationTimer).ToString(CultureInfo.InvariantCulture) : string.Empty);
 
             return builder;
         }
 
-        public static StringBuilder SetGeneratorCount(this StringBuilder builder)
+        private static StringBuilder SetGeneratorCount(this StringBuilder builder)
         {
             int generatorEngaged = 0;
             int generatorCount = 0;
@@ -99,7 +113,7 @@
             return builder;
         }
 
-        public static StringBuilder SetTpsAndTickrate(this StringBuilder builder)
+        private static StringBuilder SetTpsAndTickrate(this StringBuilder builder)
         {
             builder.Replace("{tps}", Server.Tps.ToString(CultureInfo.InvariantCulture));
             builder.Replace("{tickrate}", ServerStatic.ServerTickrate.ToString());

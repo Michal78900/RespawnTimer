@@ -6,7 +6,6 @@
     using Exiled.API.Features;
     using Exiled.API.Interfaces;
     using Exiled.Loader;
-    
     using Random = UnityEngine.Random;
     using ServerEvent = Exiled.Events.Handlers.Server;
 
@@ -36,6 +35,7 @@
                 File.WriteAllText(Path.Combine(template, "Properties.yml"), Loader.Serializer.Serialize(new Properties()));
             }
 
+            ServerEvent.WaitingForPlayers += EventHandler.OnWaitingForPlayers;
             ServerEvent.RoundStarted += EventHandler.OnRoundStart;
             ServerEvent.ReloadedConfigs += OnReloaded;
 
@@ -55,13 +55,15 @@
                 }
             }
 
-            OnReloaded();
+            if (!Config.ReloadTimerEachRound)
+                OnReloaded();
 
             base.OnEnabled();
         }
 
         public override void OnDisabled()
         {
+            ServerEvent.WaitingForPlayers -= EventHandler.OnWaitingForPlayers;
             ServerEvent.RoundStarted -= EventHandler.OnRoundStart;
             ServerEvent.ReloadedConfigs -= OnReloaded;
             Singleton = null;
@@ -82,7 +84,7 @@
             string directoryPath = Path.Combine(RespawnTimerDirectoryPath, chosenTimerName);
             if (!Directory.Exists(directoryPath))
             {
-                Log.Error($"{Path.GetFileNameWithoutExtension(directoryPath)} directory does not exist!");
+                Log.Error($"{chosenTimerName} directory does not exist!");
                 return;
             }
 
@@ -93,7 +95,7 @@
                 return;
             }
 
-            string timerDuringPath = Path.Combine(directoryPath, "TimerBeforeSpawn.txt");
+            string timerDuringPath = Path.Combine(directoryPath, "TimerDuringSpawn.txt");
             if (!File.Exists(timerDuringPath))
             {
                 Log.Error($"{Path.GetFileName(timerDuringPath)} file does not exist!");
@@ -111,6 +113,8 @@
                 File.ReadAllText(timerBeforePath),
                 File.ReadAllText(timerDuringPath),
                 Loader.Deserializer.Deserialize<Properties>(File.ReadAllText(propertiesPath)));
+
+            Log.Debug($"{chosenTimerName} has been successfully loaded!", Config.Debug);
         }
 
         public override string Name => "RespawnTimer";
