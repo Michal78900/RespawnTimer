@@ -1,12 +1,10 @@
 ﻿namespace RespawnTimer
 {
-    using API.Extensions;
     using Exiled.API.Features;
     using System.Collections.Generic;
     using MEC;
-    using System.Text;
+    using API.Features;
     using NorthwoodLib.Pools;
-    using static API.API;
 
     public static class EventHandler
     {
@@ -34,15 +32,15 @@
             {
                 yield return Timing.WaitForSeconds(1f);
 
-                StringBuilder builder = StringBuilderPool.Shared.Rent(!Respawn.IsSpawning ? TimerView.BeforeRespawnString : TimerView.DuringRespawnString);
-                List<Player> spectators = ListPool<Player>.Shared.Rent(Player.Get(x => x.Role.Team == Team.RIP && !x.IsOverwatchEnabled));
+                List<Player> spectators = ListPool<Player>.Shared.Rent(Player.Get(x => x.Role.Team == Team.RIP));
+                string text = TimerView.Current.GetText(spectators.Count);
 
                 foreach (Player player in spectators)
                 {
-                    if (TimerHidden.Contains(player.UserId))
+                    if ((player.IsOverwatchEnabled && RespawnTimer.Singleton.Config.HideTimerForOverwatch) || API.API.TimerHidden.Contains(player.UserId))
                         continue;
 
-                    player.ShowHint(StringBuilderPool.Shared.ToStringReturn(builder.SetAllProperties(spectators.Count)), 1.25f);
+                    player.ShowHint(text, 1.25f);
                 }
 
                 ListPool<Player>.Shared.Return(spectators);

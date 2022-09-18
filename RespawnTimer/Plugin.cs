@@ -2,20 +2,18 @@
 {
     using System;
     using System.IO;
-    using System.Reflection;
+    using API.Features;
+    using Configs;
     using Exiled.API.Features;
     using Exiled.API.Interfaces;
     using Exiled.Loader;
+    using Config = global::RespawnTimer.Configs.Config;
     using Random = UnityEngine.Random;
     using ServerEvent = Exiled.Events.Handlers.Server;
 
     public class RespawnTimer : Plugin<Config>
     {
         public static RespawnTimer Singleton;
-
-        public static Assembly SerpentsHandAssembly;
-        public static Assembly UIURescueSquadAssembly;
-
         public static string RespawnTimerDirectoryPath { get; } = Path.Combine(Paths.Configs, "RespawnTimer");
 
         public override void OnEnabled()
@@ -27,12 +25,16 @@
                 Log.Warn("RespawnTimer directory does not exist. Creating...");
                 Directory.CreateDirectory(RespawnTimerDirectoryPath);
 
-                string template = Path.Combine(RespawnTimerDirectoryPath, "Template");
-                Directory.CreateDirectory(template);
+                string templateDirectory = Path.Combine(RespawnTimerDirectoryPath, "Template");
+                Directory.CreateDirectory(templateDirectory);
 
-                File.Create(Path.Combine(template, "TimerBeforeSpawn.txt"));
-                File.Create(Path.Combine(template, "TimerDuringSpawn.txt"));
-                File.WriteAllText(Path.Combine(template, "Properties.yml"), Loader.Serializer.Serialize(new Properties()));
+                File.Create(Path.Combine(templateDirectory, "TimerBeforeSpawn.txt"));
+                File.Create(Path.Combine(templateDirectory, "TimerDuringSpawn.txt"));
+                File.WriteAllText(Path.Combine(templateDirectory, "Properties.yml"), Loader.Serializer.Serialize(new Properties()));
+
+                string hintsDirectory = Path.Combine(templateDirectory, "Hints");
+                Directory.CreateDirectory(hintsDirectory);
+                File.WriteAllText(Path.Combine(hintsDirectory, "ExampleHint"), "This is an example hint. You can add as much as you want.");
             }
 
             ServerEvent.WaitingForPlayers += EventHandler.OnWaitingForPlayers;
@@ -44,12 +46,12 @@
                 switch (plugin.Name)
                 {
                     case "SerpentsHand" when plugin.Config.IsEnabled:
-                        SerpentsHandAssembly = plugin.Assembly;
+                        API.API.SerpentsHandTeam.Init(plugin.Assembly);
                         Log.Debug("SerpentsHand plugin detected!", Config.Debug);
                         break;
 
                     case "UIURescueSquad" when plugin.Config.IsEnabled:
-                        UIURescueSquadAssembly = plugin.Assembly;
+                        API.API.UiuTeam.Init(plugin.Assembly);
                         Log.Debug("UIURescueSquad plugin detected!", Config.Debug);
                         break;
                 }
@@ -80,41 +82,7 @@
             }
 
             string chosenTimerName = Config.Timers[Random.Range(0, Config.Timers.Count)];
-
-            string directoryPath = Path.Combine(RespawnTimerDirectoryPath, chosenTimerName);
-            if (!Directory.Exists(directoryPath))
-            {
-                Log.Error($"{chosenTimerName} directory does not exist!");
-                return;
-            }
-
-            string timerBeforePath = Path.Combine(directoryPath, "TimerBeforeSpawn.txt");
-            if (!File.Exists(timerBeforePath))
-            {
-                Log.Error($"{Path.GetFileName(timerBeforePath)} file does not exist!");
-                return;
-            }
-
-            string timerDuringPath = Path.Combine(directoryPath, "TimerDuringSpawn.txt");
-            if (!File.Exists(timerDuringPath))
-            {
-                Log.Error($"{Path.GetFileName(timerDuringPath)} file does not exist!");
-                return;
-            }
-
-            string propertiesPath = Path.Combine(directoryPath, "Properties.yml");
-            if (!File.Exists(propertiesPath))
-            {
-                Log.Error($"{Path.GetFileName(propertiesPath)} file does not exist!");
-                return;
-            }
-
-            API.API.TimerView = new(
-                File.ReadAllText(timerBeforePath),
-                File.ReadAllText(timerDuringPath),
-                Loader.Deserializer.Deserialize<Properties>(File.ReadAllText(propertiesPath)));
-
-            Log.Debug($"{chosenTimerName} has been successfully loaded!", Config.Debug);
+            TimerView.GetNew(chosenTimerName);
         }
 
         public override string Name => "RespawnTimer";

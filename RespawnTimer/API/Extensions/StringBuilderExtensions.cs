@@ -10,6 +10,7 @@
     using UnityEngine;
     
     using static API;
+    using static Features.TimerView;
 
     public static class StringBuilderExtensions
     {
@@ -20,15 +21,16 @@
             .SetSpectatorCountAndTickets(spectatorCount)
             .SetWarheadStatus()
             .SetGeneratorCount()
-            .SetTpsAndTickrate();
+            .SetTpsAndTickrate()
+            .SetHint();
 
         private static StringBuilder SetRoundTime(this StringBuilder builder)
         {
             int minutes = Round.ElapsedTime.Minutes;
-            builder.Replace("{round_minutes}", $"{(TimerView.Properties.LeadingZeros && minutes < 10 ? "0" : string.Empty)}{minutes}");
+            builder.Replace("{round_minutes}", $"{(Current.Properties.LeadingZeros && minutes < 10 ? "0" : string.Empty)}{minutes}");
 
             int seconds = Round.ElapsedTime.Seconds;
-            builder.Replace("{round_seconds}", $"{(TimerView.Properties.LeadingZeros && seconds < 10 ? "0" : string.Empty)}{seconds}");
+            builder.Replace("{round_seconds}", $"{(Current.Properties.LeadingZeros && seconds < 10 ? "0" : string.Empty)}{seconds}");
             
             return builder;
         }
@@ -37,21 +39,21 @@
         {
             TimeSpan time = Respawn.TimeUntilSpawnWave;
             
-            if (Respawn.IsSpawning || !TimerView.Properties.TimerOffset)
+            if (Respawn.IsSpawning || !Current.Properties.TimerOffset)
             {
                 int minutes = (int)time.TotalSeconds / 60;
-                builder.Replace("{minutes}", $"{(TimerView.Properties.LeadingZeros && minutes < 10 ? "0" : string.Empty)}{minutes}");
+                builder.Replace("{minutes}", $"{(Current.Properties.LeadingZeros && minutes < 10 ? "0" : string.Empty)}{minutes}");
 
                 int seconds = (int)Math.Round(time.TotalSeconds % 60);
-                builder.Replace("{seconds}", $"{(TimerView.Properties.LeadingZeros && seconds < 10 ? "0" : string.Empty)}{seconds}");
+                builder.Replace("{seconds}", $"{(Current.Properties.LeadingZeros && seconds < 10 ? "0" : string.Empty)}{seconds}");
             }
             else
             {
                 int minutes = (int)(time.TotalSeconds + 15) / 60;
-                builder.Replace("{minutes}", $"{(TimerView.Properties.LeadingZeros && minutes < 10 ? "0" : string.Empty)}{minutes}");
+                builder.Replace("{minutes}", $"{(Current.Properties.LeadingZeros && minutes < 10 ? "0" : string.Empty)}{minutes}");
 
                 int seconds = (int)Math.Round((time.TotalSeconds + 15) % 60);
-                builder.Replace("{seconds}", $"{(TimerView.Properties.LeadingZeros && seconds < 10 ? "0" : string.Empty)}{seconds}");
+                builder.Replace("{seconds}", $"{(Current.Properties.LeadingZeros && seconds < 10 ? "0" : string.Empty)}{seconds}");
             }
 
             return builder;
@@ -65,11 +67,11 @@
                     return builder;
 
                 case SpawnableTeamType.NineTailedFox:
-                    builder.Replace("{team}", !UiuSpawnable ? TimerView.Properties.Ntf : TimerView.Properties.Uiu);
+                    builder.Replace("{team}", !UiuSpawnable ? Current.Properties.Ntf : Current.Properties.Uiu);
                     break;
 
                 case SpawnableTeamType.ChaosInsurgency:
-                    builder.Replace("{team}", !SerpentsHandSpawnable ? TimerView.Properties.Ci : TimerView.Properties.Sh);
+                    builder.Replace("{team}", !SerpentsHandSpawnable ? Current.Properties.Ci : Current.Properties.Sh);
                     break;
             }
 
@@ -88,7 +90,7 @@
         private static StringBuilder SetWarheadStatus(this StringBuilder builder)
         {
             WarheadStatus warheadStatus = Warhead.Status;
-            builder.Replace("{warhead_status}", TimerView.Properties.WarheadStatus[warheadStatus]);
+            builder.Replace("{warhead_status}", Current.Properties.WarheadStatus[warheadStatus]);
             builder.Replace("{detonation_time}", warheadStatus == WarheadStatus.InProgress ? Mathf.Round(Warhead.DetonationTimer).ToString(CultureInfo.InvariantCulture) : string.Empty);
 
             return builder;
@@ -101,7 +103,7 @@
 
             foreach (Generator generator in Generator.List)
             {
-                if (generator.State == GeneratorState.Engaged)
+                if (generator.State.HasFlag(GeneratorState.Engaged))
                     generatorEngaged++;
 
                 generatorCount++;
@@ -117,6 +119,16 @@
         {
             builder.Replace("{tps}", Server.Tps.ToString(CultureInfo.InvariantCulture));
             builder.Replace("{tickrate}", ServerStatic.ServerTickrate.ToString());
+
+            return builder;
+        }
+
+        private static StringBuilder SetHint(this StringBuilder builder)
+        {
+            if (!Current.Hints.Any())
+                return builder;
+
+            builder.Replace("{hint}", Current.Hints[Current.HintIndex]);
 
             return builder;
         }

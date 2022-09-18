@@ -68,6 +68,9 @@
   <ItemGroup>
     <Compile Include="API\API.cs" />
     <Compile Include="API\Extensions\StringBuilderExtensions.cs" />
+    <Compile Include="API\Features\ExternalTeams\ExternalTeamChecker.cs" />
+    <Compile Include="API\Features\ExternalTeams\SerpentsHandTeam.cs" />
+    <Compile Include="API\Features\ExternalTeams\UiuTeam.cs" />
     <Compile Include="API\Features\TimerView.cs" />
     <Compile Include="Commands\Timer.cs" />
     <Compile Include="Configs\Config.cs" />

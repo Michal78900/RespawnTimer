@@ -1,13 +1,15 @@
-﻿namespace RespawnTimer
+﻿namespace RespawnTimer.Configs
 {
-    using Exiled.API.Enums;
     using System.Collections.Generic;
+    using Exiled.API.Enums;
 
     public sealed class Properties
     {
         public bool LeadingZeros { get; private set; } = true;
         
         public bool TimerOffset { get; private set; } = true;
+
+        public int HintInterval { get; private set; } = 10;
         
         public string Ntf { get; private set; } = "<color=blue>Nine-Tailed Fox</color>";
         
