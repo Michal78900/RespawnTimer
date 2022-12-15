@@ -14,8 +14,8 @@
         public static TimerView Current { get; private set; }
 
         public int HintIndex { get; private set; }
-        
-        public int HintInterval { get; private set; }
+
+        private int HintInterval { get; set; }
 
         public static void GetNew(string name)
         {
@@ -55,7 +55,7 @@
             Current = new(
                 File.ReadAllText(timerBeforePath),
                 File.ReadAllText(timerDuringPath),
-                Loader.Deserializer.Deserialize<Properties>(File.ReadAllText(propertiesPath)),
+                new Properties(),
                 hints);
 
             Log.Debug($"{name} has been successfully loaded!", RespawnTimer.Singleton.Config.Debug);
@@ -64,8 +64,9 @@
         public string GetText(int? spectatorCount = null)
         {
             StringBuilder.Clear();
-            StringBuilder.Append(!Respawn.IsSpawning ? BeforeRespawnString : DuringRespawnString);
-            StringBuilder.SetAllProperties(spectatorCount);
+            // StringBuilder.Append(!Respawn.IsSpawning ? BeforeRespawnString : DuringRespawnString);
+            StringBuilder.Append(BeforeRespawnString.Replace('{', '[').Replace('}', ']'));
+            // StringBuilder.SetAllProperties(spectatorCount);
 
             HintInterval++;
             if (HintInterval == Properties.HintInterval)

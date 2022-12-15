@@ -6,6 +6,7 @@
     using Exiled.API.Features;
     using System.Linq;
     using System.Text;
+    using PlayerRoles;
     using Respawning;
     using UnityEngine;
     
@@ -80,7 +81,7 @@
 
         private static StringBuilder SetSpectatorCountAndTickets(this StringBuilder builder, int? spectatorCount = null)
         {
-            builder.Replace("{spectators_num}", spectatorCount?.ToString() ?? Player.List.Count(x => x.Role.Team == Team.RIP && !x.IsOverwatchEnabled).ToString());
+            builder.Replace("{spectators_num}", spectatorCount?.ToString() ?? Player.List.Count(x => x.Role.Team == Team.Dead && !x.IsOverwatchEnabled).ToString());
             builder.Replace("{ntf_tickets_num}", Respawn.NtfTickets.ToString());
             builder.Replace("{ci_tickets_num}", Respawn.ChaosTickets.ToString());
 
@@ -89,9 +90,11 @@
 
         private static StringBuilder SetWarheadStatus(this StringBuilder builder)
         {
+            /*
             WarheadStatus warheadStatus = Warhead.Status;
             builder.Replace("{warhead_status}", Current.Properties.WarheadStatus[warheadStatus]);
             builder.Replace("{detonation_time}", warheadStatus == WarheadStatus.InProgress ? Mathf.Round(Warhead.DetonationTimer).ToString(CultureInfo.InvariantCulture) : string.Empty);
+            */
 
             return builder;
         }

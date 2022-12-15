@@ -7,7 +7,7 @@
     using Exiled.API.Features;
     using Exiled.API.Interfaces;
     using Exiled.Loader;
-    using Config = global::RespawnTimer.Configs.Config;
+    using Config = Configs.Config;
     using Random = UnityEngine.Random;
     using ServerEvent = Exiled.Events.Handlers.Server;
 
@@ -30,7 +30,7 @@
 
                 File.Create(Path.Combine(templateDirectory, "TimerBeforeSpawn.txt"));
                 File.Create(Path.Combine(templateDirectory, "TimerDuringSpawn.txt"));
-                File.WriteAllText(Path.Combine(templateDirectory, "Properties.yml"), Loader.Serializer.Serialize(new Properties()));
+                // File.WriteAllText(Path.Combine(templateDirectory, "Properties.yml"), Loader.Serializer.Serialize(new Properties()));
 
                 string hintsDirectory = Path.Combine(templateDirectory, "Hints");
                 Directory.CreateDirectory(hintsDirectory);
@@ -40,7 +40,7 @@
             ServerEvent.WaitingForPlayers += EventHandler.OnWaitingForPlayers;
             ServerEvent.RoundStarted += EventHandler.OnRoundStart;
             ServerEvent.ReloadedConfigs += OnReloaded;
-
+            
             foreach (IPlugin<IConfig> plugin in Loader.Plugins)
             {
                 switch (plugin.Name)
