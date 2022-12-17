@@ -30,7 +30,7 @@
 
                 File.Create(Path.Combine(templateDirectory, "TimerBeforeSpawn.txt"));
                 File.Create(Path.Combine(templateDirectory, "TimerDuringSpawn.txt"));
-                // File.WriteAllText(Path.Combine(templateDirectory, "Properties.yml"), Loader.Serializer.Serialize(new Properties()));
+                File.WriteAllText(Path.Combine(templateDirectory, "Properties.yml"), Loader.Serializer.Serialize(new Properties()));
 
                 string hintsDirectory = Path.Combine(templateDirectory, "Hints");
                 Directory.CreateDirectory(hintsDirectory);

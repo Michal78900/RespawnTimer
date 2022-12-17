@@ -55,7 +55,7 @@
             Current = new(
                 File.ReadAllText(timerBeforePath),
                 File.ReadAllText(timerDuringPath),
-                new Properties(),
+                Loader.Deserializer.Deserialize<Properties>(File.ReadAllText(propertiesPath)),
                 hints);
 
             Log.Debug($"{name} has been successfully loaded!", RespawnTimer.Singleton.Config.Debug);
@@ -64,9 +64,10 @@
         public string GetText(int? spectatorCount = null)
         {
             StringBuilder.Clear();
-            // StringBuilder.Append(!Respawn.IsSpawning ? BeforeRespawnString : DuringRespawnString);
-            StringBuilder.Append(BeforeRespawnString.Replace('{', '[').Replace('}', ']'));
-            // StringBuilder.SetAllProperties(spectatorCount);
+            StringBuilder.Append(!Respawn.IsSpawning ? BeforeRespawnString : DuringRespawnString);
+            // StringBuilder.Append(BeforeRespawnString.Replace('{', '[').Replace('}', ']'));
+            StringBuilder.SetAllProperties(spectatorCount);
+            StringBuilder.Replace('{', '[').Replace('}', ']');
 
             HintInterval++;
             if (HintInterval == Properties.HintInterval)

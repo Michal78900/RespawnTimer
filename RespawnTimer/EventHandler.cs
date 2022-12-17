@@ -36,14 +36,13 @@
                 List<Player> spectators = ListPool<Player>.Shared.Rent(Player.Get(x => x.Role.Team == Team.Dead));
                 string text = TimerView.Current.GetText(spectators.Count);
                 
-                Player player = Player.Get(2);
-                //foreach (Player player in spectators)
-                // {
+                foreach (Player player in spectators)
+                {
                     if ((player.IsOverwatchEnabled && RespawnTimer.Singleton.Config.HideTimerForOverwatch) || API.API.TimerHidden.Contains(player.UserId))
                         continue;
 
                     player.ShowHint(text, 1.25f);
-                // }
+                }
 
                 ListPool<Player>.Shared.Return(spectators);
             }

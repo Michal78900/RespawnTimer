@@ -16,7 +16,7 @@
     public static class StringBuilderExtensions
     {
         public static StringBuilder SetAllProperties(this StringBuilder builder, int? spectatorCount = null) => builder
-            .SetRoundTime()   
+            .SetRoundTime()
             .SetMinutesAndSeconds()
             .SetSpawnableTeam()
             .SetSpectatorCountAndTickets(spectatorCount)
@@ -82,19 +82,17 @@
         private static StringBuilder SetSpectatorCountAndTickets(this StringBuilder builder, int? spectatorCount = null)
         {
             builder.Replace("{spectators_num}", spectatorCount?.ToString() ?? Player.List.Count(x => x.Role.Team == Team.Dead && !x.IsOverwatchEnabled).ToString());
-            builder.Replace("{ntf_tickets_num}", Respawn.NtfTickets.ToString());
-            builder.Replace("{ci_tickets_num}", Respawn.ChaosTickets.ToString());
+            builder.Replace("{ntf_tickets_num}", Mathf.Round(Respawn.NtfTickets).ToString());
+            builder.Replace("{ci_tickets_num}", Mathf.Round(Respawn.ChaosTickets).ToString());
 
             return builder;
         }
 
         private static StringBuilder SetWarheadStatus(this StringBuilder builder)
         {
-            /*
             WarheadStatus warheadStatus = Warhead.Status;
             builder.Replace("{warhead_status}", Current.Properties.WarheadStatus[warheadStatus]);
             builder.Replace("{detonation_time}", warheadStatus == WarheadStatus.InProgress ? Mathf.Round(Warhead.DetonationTimer).ToString(CultureInfo.InvariantCulture) : string.Empty);
-            */
 
             return builder;
         }
@@ -121,7 +119,7 @@
         private static StringBuilder SetTpsAndTickrate(this StringBuilder builder)
         {
             builder.Replace("{tps}", Server.Tps.ToString(CultureInfo.InvariantCulture));
-            builder.Replace("{tickrate}", ServerStatic.ServerTickrate.ToString());
+            builder.Replace("{tickrate}", Application.targetFrameRate.ToString());
 
             return builder;
         }
