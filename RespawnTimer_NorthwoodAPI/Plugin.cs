@@ -21,6 +21,9 @@ namespace RespawnTimer_NorthwoodAPI
         [PluginEntryPoint("RespawnTimer", "1.0.0", "RespawnTimer", "Michal78900")]
         void LoadPlugin()
         {
+            if (!Config.IsEnabled)
+                return;
+
             Singleton = this;
             RespawnTimerDirectoryPath = PluginHandler.Get(this).PluginDirectoryPath;
             EventManager.RegisterEvents<EventHandler>(this);
