@@ -1,7 +1,6 @@
 ﻿namespace RespawnTimer.API
 {
     using System.Collections.Generic;
-    using Features;
     using Features.ExternalTeams;
 
     public static class API

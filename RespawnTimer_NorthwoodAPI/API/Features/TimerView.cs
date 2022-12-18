@@ -1,13 +1,14 @@
-﻿namespace RespawnTimer.API.Features
+﻿namespace RespawnTimer_NorthwoodAPI.API.Features
 {
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Text;
-    using Configs;
-    using Exiled.API.Features;
-    using Exiled.Loader;
     using Extensions;
+    using PluginAPI.Core;
+    using Configs;
+    using Respawning;
+    using Serialization;
 
     public class TimerView
     {
@@ -51,11 +52,11 @@
             List<string> hints = new();
             if (File.Exists(hintsPath))
                 hints.AddRange(File.ReadAllLines(hintsPath));
-            
+
             Current = new(
                 File.ReadAllText(timerBeforePath),
                 File.ReadAllText(timerDuringPath),
-                Loader.Deserializer.Deserialize<Properties>(File.ReadAllText(propertiesPath)),
+                YamlParser.Deserializer.Deserialize<Properties>(File.ReadAllText(propertiesPath)),
                 hints);
 
             Log.Debug($"{name} has been successfully loaded!", RespawnTimer.Singleton.Config.Debug);
@@ -64,7 +65,11 @@
         public string GetText(int? spectatorCount = null)
         {
             StringBuilder.Clear();
-            StringBuilder.Append(!Respawn.IsSpawning ? BeforeRespawnString : DuringRespawnString);
+            StringBuilder.Append(
+                RespawnManager.Singleton._curSequence is not RespawnManager.RespawnSequencePhase.PlayingEntryAnimations or RespawnManager.RespawnSequencePhase.SpawningSelectedTeam
+                    ? BeforeRespawnString
+                    : DuringRespawnString);
+
             // StringBuilder.Append(BeforeRespawnString.Replace('{', '[').Replace('}', ']'));
             StringBuilder.SetAllProperties(spectatorCount);
             StringBuilder.Replace('{', '[').Replace('}', ']');
@@ -85,7 +90,7 @@
             if (Hints.Count == HintIndex)
                 HintIndex = 0;
         }
-        
+
         private TimerView(string beforeRespawnString, string duringRespawnString, Properties properties, List<string> hints)
         {
             BeforeRespawnString = beforeRespawnString;
@@ -93,13 +98,13 @@
             Properties = properties;
             Hints = hints;
         }
-        
+
         public string BeforeRespawnString { get; }
-        
+
         public string DuringRespawnString { get; }
-        
+
         public Properties Properties { get; }
-        
+
         public List<string> Hints { get; }
 
         private static readonly StringBuilder StringBuilder = new(1024);

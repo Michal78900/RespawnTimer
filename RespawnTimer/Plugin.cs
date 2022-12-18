@@ -24,17 +24,19 @@
             {
                 Log.Warn("RespawnTimer directory does not exist. Creating...");
                 Directory.CreateDirectory(RespawnTimerDirectoryPath);
-
-                string templateDirectory = Path.Combine(RespawnTimerDirectoryPath, "Template");
+            }
+            
+            string templateDirectory = Path.Combine(RespawnTimerDirectoryPath, "Template");
+            if (!Directory.Exists(templateDirectory))
+            {
                 Directory.CreateDirectory(templateDirectory);
 
                 File.Create(Path.Combine(templateDirectory, "TimerBeforeSpawn.txt"));
                 File.Create(Path.Combine(templateDirectory, "TimerDuringSpawn.txt"));
                 File.WriteAllText(Path.Combine(templateDirectory, "Properties.yml"), Loader.Serializer.Serialize(new Properties()));
 
-                string hintsDirectory = Path.Combine(templateDirectory, "Hints");
-                Directory.CreateDirectory(hintsDirectory);
-                File.WriteAllText(Path.Combine(hintsDirectory, "ExampleHint"), "This is an example hint. You can add as much as you want.");
+                string hintsPath = Path.Combine(templateDirectory, "Hints.txt");
+                File.WriteAllText(hintsPath, "This is an example hint. You can add as much as you want.");
             }
 
             ServerEvent.WaitingForPlayers += EventHandler.OnWaitingForPlayers;
