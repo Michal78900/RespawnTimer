@@ -10,7 +10,7 @@
         public bool IsEnabled { get; set; } = true;
 
         [Description("Whether debug messages shoul be shown in a server console.")]
-        public bool Debug { get; private set; } = false;
+        public bool Debug { get; set; } = false;
 
         [Description("List of timer names that will be used:")]
         public List<string> Timers { get; private set; } = new()

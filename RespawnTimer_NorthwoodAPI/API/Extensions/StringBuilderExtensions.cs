@@ -7,10 +7,8 @@
     using UnityEngine;
     using PluginAPI.Core;
     using GameCore;
-    using MapGeneration.Distributors;
     using PlayerRoles;
     using PlayerRoles.PlayableScps.Scp079;
-    using PlayerRoles.PlayableScps.Scp079.GUI;
     using Respawning;
     
     using static Features.TimerView;

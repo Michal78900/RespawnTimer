@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Text;
     using Configs;
     using Exiled.API.Features;
@@ -58,7 +57,7 @@
                 Loader.Deserializer.Deserialize<Properties>(File.ReadAllText(propertiesPath)),
                 hints);
 
-            Log.Debug($"{name} has been successfully loaded!", RespawnTimer.Singleton.Config.Debug);
+            Log.Debug($"{name} has been successfully loaded!");
         }
 
         public string GetText(int? spectatorCount = null)

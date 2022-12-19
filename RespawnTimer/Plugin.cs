@@ -49,12 +49,12 @@
                 {
                     case "SerpentsHand" when plugin.Config.IsEnabled:
                         API.API.SerpentsHandTeam.Init(plugin.Assembly);
-                        Log.Debug("SerpentsHand plugin detected!", Config.Debug);
+                        Log.Debug("SerpentsHand plugin detected!");
                         break;
 
                     case "UIURescueSquad" when plugin.Config.IsEnabled:
                         API.API.UiuTeam.Init(plugin.Assembly);
-                        Log.Debug("UIURescueSquad plugin detected!", Config.Debug);
+                        Log.Debug("UIURescueSquad plugin detected!");
                         break;
                 }
             }

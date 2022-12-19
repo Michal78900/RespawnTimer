@@ -1,6 +1,5 @@
 ﻿namespace RespawnTimer_NorthwoodAPI
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using API.Features;
@@ -49,7 +48,7 @@
         
         private IEnumerator<float> TimerCoroutine()
         {
-            while (true)
+            while (ReferenceHub.LocalHub.characterClassManager.RoundStarted)
             {
                 yield return Timing.WaitForSeconds(1f);
 

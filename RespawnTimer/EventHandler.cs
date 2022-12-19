@@ -24,7 +24,7 @@
 
             _timerCoroutine = Timing.RunCoroutine(TimerCoroutine());
 
-            Log.Debug($"RespawnTimer coroutine started successfully!", RespawnTimer.Singleton.Config.Debug);
+            Log.Debug($"RespawnTimer coroutine started successfully!");
         }
 
         private static IEnumerator<float> TimerCoroutine()
