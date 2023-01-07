@@ -1,5 +1,6 @@
 ﻿namespace RespawnTimer_NorthwoodAPI
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using API.Features;
@@ -23,7 +24,7 @@
             if (RespawnTimer.Singleton.Config.ReloadTimerEachRound)
                 RespawnTimer.Singleton.OnReloaded();
                 */
-            
+
             if (RespawnTimer.Singleton.Config.Timers.IsEmpty())
             {
                 Log.Error("Timer list is empty!");
@@ -32,7 +33,6 @@
 
             string chosenTimerName = RespawnTimer.Singleton.Config.Timers[Random.Range(0, RespawnTimer.Singleton.Config.Timers.Count)];
             TimerView.GetNew(chosenTimerName);
-            
         }
 
         [PluginEvent(ServerEventType.RoundStart)]
@@ -45,10 +45,10 @@
 
             Log.Debug($"RespawnTimer coroutine started successfully!", RespawnTimer.Singleton.Config.Debug);
         }
-        
+
         private IEnumerator<float> TimerCoroutine()
         {
-            while (ReferenceHub.LocalHub.characterClassManager.RoundStarted)
+            do
             {
                 yield return Timing.WaitForSeconds(1f);
 
@@ -57,19 +57,23 @@
 
                 foreach (Player player in spectators)
                 {
-                    if (player.IsOverwatchEnabled && RespawnTimer.Singleton.Config.HideTimerForOverwatch || API.API.TimerHidden.Contains(player.UserId))
+                    if (player.Role == RoleTypeId.Overwatch && RespawnTimer.Singleton.Config.HideTimerForOverwatch || API.API.TimerHidden.Contains(player.UserId))
                         continue;
 
                     ShowHint(player, text, 1.25f);
                 }
 
                 ListPool<Player>.Shared.Return(spectators);
-            }
+            } while (!RoundSummary.singleton._roundEnded);
         }
-        
+
         public void ShowHint(Player player, string message, float duration = 3f)
         {
-            HintParameter[] parameters = { new StringHintParameter(message) };
+            HintParameter[] parameters =
+            {
+                new StringHintParameter(message)
+            };
+
             player.ReferenceHub.networkIdentity.connectionToClient.Send(new HintMessage(new TextHint(message, parameters, durationScalar: duration)));
         }
     }

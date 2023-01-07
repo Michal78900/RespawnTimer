@@ -29,13 +29,13 @@
 
         private static IEnumerator<float> TimerCoroutine()
         {
-            while (Round.IsStarted)
+            do
             {
                 yield return Timing.WaitForSeconds(1f);
 
                 List<Player> spectators = ListPool<Player>.Shared.Rent(Player.Get(x => x.Role.Team == Team.Dead));
                 string text = TimerView.Current.GetText(spectators.Count);
-                
+
                 foreach (Player player in spectators)
                 {
                     if ((player.IsOverwatchEnabled && RespawnTimer.Singleton.Config.HideTimerForOverwatch) || API.API.TimerHidden.Contains(player.UserId))
@@ -45,7 +45,7 @@
                 }
 
                 ListPool<Player>.Shared.Return(spectators);
-            }
+            } while (!RoundSummary.singleton._roundEnded);
         }
     }
 }

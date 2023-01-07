@@ -26,11 +26,11 @@
     <Reference Include="Mirror">
       <HintPath>$(EXILED_REFERENCES)\Mirror.dll</HintPath>
     </Reference>
+      <Reference Include="YamlDotNet" HintPath="$(EXILED_REFERENCES)\YamlDotNet.dll" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="EXILED" Version="6.0.0-beta.7" />
-    <PackageReference Include="YamlDotNet" Version="12.2.1" />
+    <PackageReference Include="EXILED" Version="6.0.0-beta.20" />
   </ItemGroup>
   
 </Project>
