@@ -3,18 +3,17 @@ namespace RespawnTimer_Base
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using API.Features;
     using Hints;
     using MEC;
     using PlayerRoles;
     using Random = UnityEngine.Random;
-    using static API.API;
+    using static API;
 
-    internal static class EventHandler
+    public static class EventHandler
     {
         private static CoroutineHandle _timerCoroutine;
 
-        internal static void OnWaitingForPlayers()
+        public static void OnWaitingForPlayers()
         {
             /*
             if (RespawnTimer.Singleton.Config.ReloadTimerEachRound)
@@ -33,7 +32,7 @@ namespace RespawnTimer_Base
             TimerView.GetNew(chosenTimerName);
         }
 
-        internal static void OnRoundStart()
+        public static void OnRoundStart()
         {
             /*
             if (_timerCoroutine.IsRunning)
@@ -57,7 +56,7 @@ namespace RespawnTimer_Base
 
                 foreach (ReferenceHub referenceHub in Spectators)
                 {
-                    if (referenceHub.roleManager.CurrentRole.RoleTypeId == RoleTypeId.Overwatch && true || API.API.TimerHidden.Contains(referenceHub.characterClassManager.UserId))
+                    if (referenceHub.roleManager.CurrentRole.RoleTypeId == RoleTypeId.Overwatch && true || TimerHidden.Contains(referenceHub.characterClassManager.UserId))
                         continue;
 
                     /*

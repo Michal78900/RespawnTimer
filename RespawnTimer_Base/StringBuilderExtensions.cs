@@ -1,4 +1,4 @@
-﻿namespace RespawnTimer_Base.API.Extensions
+﻿namespace RespawnTimer_Base
 {
     using System;
     using System.Globalization;
@@ -10,7 +10,7 @@
     using PluginAPI.Core;
     using Respawning;
     using UnityEngine;
-    using static Features.TimerView;
+    using static TimerView;
 
     public static class StringBuilderExtensions
     {

@@ -1,4 +1,4 @@
-﻿namespace RespawnTimer_Base.Configs
+﻿namespace RespawnTimer_Base
 {
     using System.ComponentModel;
 

@@ -1,10 +1,8 @@
-﻿namespace RespawnTimer_Base.API.Features
+﻿namespace RespawnTimer_Base
 {
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
-    using Configs;
-    using Extensions;
     using PluginAPI.Core;
     using Respawning;
     using Serialization;

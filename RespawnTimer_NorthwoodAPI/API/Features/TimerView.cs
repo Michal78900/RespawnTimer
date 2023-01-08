@@ -3,11 +3,11 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
-    using Extensions;
     using PluginAPI.Core;
-    using Configs;
     using Respawning;
+    using RespawnTimer_Base;
     using Serialization;
+    using static RespawnTimer_Base.API;
 
     public class TimerView
     {
@@ -19,7 +19,7 @@
 
         public static void GetNew(string name)
         {
-            string directoryPath = Path.Combine(RespawnTimer.RespawnTimerDirectoryPath, name);
+            string directoryPath = Path.Combine(DirectoryPath, name);
             if (!Directory.Exists(directoryPath))
             {
                 Log.Error($"{name} directory does not exist!");
@@ -58,7 +58,7 @@
                 YamlParser.Deserializer.Deserialize<Properties>(File.ReadAllText(propertiesPath)),
                 hints);
 
-            Log.Debug($"{name} has been successfully loaded!", RespawnTimer.Singleton.Config.Debug);
+            // Log.Debug($"{name} has been successfully loaded!", RespawnTimer.Singleton.Config.Debug);
         }
 
         public string GetText(int? spectatorCount = null)
@@ -70,7 +70,7 @@
                     : DuringRespawnString);
 
             // StringBuilder.Append(BeforeRespawnString.Replace('{', '[').Replace('}', ']'));
-            StringBuilder.SetAllProperties(spectatorCount);
+            StringBuilderExtensions.SetAllProperties(StringBuilder, spectatorCount);
             StringBuilder.Replace('{', '[').Replace('}', ']');
 
             HintInterval++;
