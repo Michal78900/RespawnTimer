@@ -13,7 +13,7 @@ namespace RespawnTimer_NorthwoodAPI
         // public static string RespawnTimerDirectoryPath { get; private set; }
 
         [PluginConfig]
-        public BaseConfig Config;
+        public Config Config;
 
         [PluginPriority(LoadPriority.Medium)]
         [PluginEntryPoint("RespawnTimer", "1.0.0", "RespawnTimer", "Michal78900")]
@@ -21,7 +21,7 @@ namespace RespawnTimer_NorthwoodAPI
         {
             // Singleton = this;
             EventManager.RegisterEvents<EventHandler>(this);
-            RespawnTimer_Base.API.Init(Config, PluginHandler.Get(this).PluginDirectoryPath);
+            API.Init(null, PluginHandler.Get(this).PluginDirectoryPath);
         }
     }
 }
