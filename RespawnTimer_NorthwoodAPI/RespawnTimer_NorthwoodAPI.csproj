@@ -24,7 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Northwood.PluginAPI" Version="12.0.0-rc.6" />
+        <PackageReference Include="Northwood.PluginAPI" Version="12.0.0" />
     </ItemGroup>
 
 </Project>

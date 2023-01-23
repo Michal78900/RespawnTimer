@@ -5,7 +5,6 @@
     using API.Features;
     using Hints;
     using MEC;
-    using NorthwoodLib.Pools;
     using PlayerRoles;
     using PluginAPI.Core;
     using PluginAPI.Core.Attributes;
@@ -51,10 +50,11 @@
             {
                 yield return Timing.WaitForSeconds(1f);
 
-                List<Player> spectators = ListPool<Player>.Shared.Rent(ReferenceHub.AllHubs.Select(Player.Get).Where(x => !x.IsServer && x.Role == RoleTypeId.Spectator));
-                string text = TimerView.Current.GetText(spectators.Count);
+                Spectators.Clear();
+                Spectators.AddRange(ReferenceHub.AllHubs.Select(Player.Get).Where(x => !x.IsServer && !x.IsAlive));
+                string text = TimerView.Current.GetText(Spectators.Count);
 
-                foreach (Player player in spectators)
+                foreach (Player player in Spectators)
                 {
                     if (player.Role == RoleTypeId.Overwatch && RespawnTimer.Singleton.Config.HideTimerForOverwatch || API.API.TimerHidden.Contains(player.UserId))
                         continue;
@@ -62,7 +62,6 @@
                     ShowHint(player, text, 1.25f);
                 }
 
-                ListPool<Player>.Shared.Return(spectators);
             } while (!RoundSummary.singleton._roundEnded);
         }
 
@@ -75,5 +74,7 @@
 
             player.ReferenceHub.networkIdentity.connectionToClient.Send(new HintMessage(new TextHint(message, parameters, durationScalar: duration)));
         }
+
+        private static readonly List<Player> Spectators = new(25);
     }
 }
