@@ -8,6 +8,7 @@
     using Configs;
     using Respawning;
     using Serialization;
+    using UnityEngine;
 
     public class TimerView
     {
@@ -71,6 +72,7 @@
 
             // StringBuilder.Append(BeforeRespawnString.Replace('{', '[').Replace('}', ']'));
             StringBuilder.SetAllProperties(spectatorCount);
+            StringBuilder.Replace("{RANDOM_COLOR}", $"#{Random.Range(0x0, 0xFFFFFF):X6}");
             StringBuilder.Replace('{', '[').Replace('}', ']');
 
             HintInterval++;

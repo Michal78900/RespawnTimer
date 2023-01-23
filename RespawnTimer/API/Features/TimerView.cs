@@ -7,6 +7,7 @@
     using Exiled.API.Features;
     using Exiled.Loader;
     using Extensions;
+    using UnityEngine;
 
     public class TimerView
     {
@@ -66,6 +67,7 @@
             StringBuilder.Append(!Respawn.IsSpawning ? BeforeRespawnString : DuringRespawnString);
             // StringBuilder.Append(BeforeRespawnString.Replace('{', '[').Replace('}', ']'));
             StringBuilder.SetAllProperties(spectatorCount);
+            StringBuilder.Replace("{RANDOM_COLOR}", $"#{Random.Range(0x0, 0xFFFFFF):X6}");
             StringBuilder.Replace('{', '[').Replace('}', ']');
 
             HintInterval++;
