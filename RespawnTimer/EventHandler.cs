@@ -14,13 +14,13 @@
         {
             if (RespawnTimer.Singleton.Config.ReloadTimerEachRound)
                 RespawnTimer.Singleton.OnReloaded();
+            
+            if (_timerCoroutine.IsRunning)
+                Timing.KillCoroutines(_timerCoroutine);
         }
 
         internal static void OnRoundStart()
         {
-            if (_timerCoroutine.IsRunning)
-                Timing.KillCoroutines(_timerCoroutine);
-
             try
             {
                 _timerCoroutine = Timing.RunCoroutine(TimerCoroutine());

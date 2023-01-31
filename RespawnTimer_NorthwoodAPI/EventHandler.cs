@@ -29,6 +29,9 @@
                 return;
             }
 
+            if (_timerCoroutine.IsRunning)
+                Timing.KillCoroutines(_timerCoroutine);
+            
             string chosenTimerName = RespawnTimer.Singleton.Config.Timers[Random.Range(0, RespawnTimer.Singleton.Config.Timers.Count)];
             TimerView.GetNew(chosenTimerName);
         }
@@ -36,9 +39,6 @@
         [PluginEvent(ServerEventType.RoundStart)]
         internal void OnRoundStart()
         {
-            if (_timerCoroutine.IsRunning)
-                Timing.KillCoroutines(_timerCoroutine);
-
             _timerCoroutine = Timing.RunCoroutine(TimerCoroutine());
 
             Log.Debug($"RespawnTimer coroutine started successfully!", RespawnTimer.Singleton.Config.Debug);
