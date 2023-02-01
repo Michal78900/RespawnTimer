@@ -1,10 +1,8 @@
-﻿namespace RespawnTimer.Commands
+﻿namespace RespawnTimer_NorthwoodAPI.Commands
 {
-    using CommandSystem;
-    using Exiled.API.Features;
     using System;
-
-    using static API.API;
+    using CommandSystem;
+    using API;
 
     [CommandHandler(typeof(ClientCommandHandler))]
     public class Timer : ICommand
@@ -17,11 +15,11 @@
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            string userId = Player.Get(sender).UserId;
+            string userId = ((CommandSender)sender).SenderId;
 
-            if (!TimerHidden.Remove(userId))
+            if (!API.TimerHidden.Remove(userId))
             {
-                TimerHidden.Add(userId);
+                API.TimerHidden.Add(userId);
 
                 response = "<color=red>Respawn Timer has been hidden!</color>";
                 return true;
