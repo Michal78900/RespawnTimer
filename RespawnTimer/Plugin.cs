@@ -10,6 +10,7 @@
     using Config = Configs.Config;
     using Random = UnityEngine.Random;
     using ServerEvent = Exiled.Events.Handlers.Server;
+    using PlayerEvent = Exiled.Events.Handlers.Player;
 
     public class RespawnTimer : Plugin<Config>
     {
@@ -42,7 +43,8 @@
             ServerEvent.WaitingForPlayers += EventHandler.OnWaitingForPlayers;
             ServerEvent.RoundStarted += EventHandler.OnRoundStart;
             ServerEvent.ReloadedConfigs += OnReloaded;
-            
+            PlayerEvent.Dying += EventHandler.OnDying;
+
             foreach (IPlugin<IConfig> plugin in Loader.Plugins)
             {
                 switch (plugin.Name)
@@ -70,6 +72,8 @@
             ServerEvent.WaitingForPlayers -= EventHandler.OnWaitingForPlayers;
             ServerEvent.RoundStarted -= EventHandler.OnRoundStart;
             ServerEvent.ReloadedConfigs -= OnReloaded;
+            PlayerEvent.Dying -= EventHandler.OnDying;
+            
             Singleton = null;
 
             base.OnDisabled();

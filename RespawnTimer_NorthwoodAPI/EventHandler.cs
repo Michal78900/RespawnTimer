@@ -46,6 +46,7 @@
         }
         
         
+        [PluginEvent(ServerEventType.PlayerDeath)]
         internal void OnDying(Player victim, Player _, DamageHandlerBase __)
         {
             if (List.ContainsKey(victim))
