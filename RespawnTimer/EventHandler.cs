@@ -3,8 +3,10 @@
     using System;
     using Exiled.API.Features;
     using System.Collections.Generic;
+    using System.Linq;
     using MEC;
     using API.Features;
+    using Exiled.Events.EventArgs.Player;
 
     public static class EventHandler
     {
@@ -14,7 +16,7 @@
         {
             if (RespawnTimer.Singleton.Config.ReloadTimerEachRound)
                 RespawnTimer.Singleton.OnReloaded();
-            
+
             if (_timerCoroutine.IsRunning)
                 Timing.KillCoroutines(_timerCoroutine);
         }
@@ -32,6 +34,17 @@
             }
 
             Log.Debug($"RespawnTimer coroutine started successfully!");
+        }
+
+        internal static void OnDying(DyingEventArgs ev)
+        {
+            if (List.ContainsKey(ev.Player))
+            {
+                Timing.KillCoroutines(List[ev.Player]);
+                List.Remove(ev.Player);
+            }
+            
+            List.Add(ev.Player, Timing.CallDelayed(RespawnTimer.Singleton.Config.TimerDelay, () => List.Remove(ev.Player)));
         }
 
         private static IEnumerator<float> TimerCoroutine()
@@ -52,7 +65,13 @@
 
                 foreach (Player player in Spectators)
                 {
-                    if ((player.IsOverwatchEnabled && RespawnTimer.Singleton.Config.HideTimerForOverwatch) || API.API.TimerHidden.Contains(player.UserId))
+                    if (player.IsOverwatchEnabled && RespawnTimer.Singleton.Config.HideTimerForOverwatch)
+                        continue;
+
+                    if (API.API.TimerHidden.Contains(player.UserId))
+                        continue;
+
+                    if (List.ContainsKey(player))
                         continue;
 
                     player.ShowHint(text, 1.25f);
@@ -64,5 +83,6 @@
         }
 
         private static readonly List<Player> Spectators = new(25);
+        private static readonly Dictionary<Player, CoroutineHandle> List = new(25);
     }
 }

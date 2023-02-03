@@ -22,5 +22,7 @@
 
         [Description("Whether the timer should be hidden for players in overwatch.")]
         public bool HideTimerForOverwatch { get; private set; } = true;
+        
+        public float TimerDelay { get; private set; } = -1;
     }
 }

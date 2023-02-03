@@ -6,6 +6,7 @@
     using Hints;
     using MEC;
     using PlayerRoles;
+    using PlayerStatsSystem;
     using PluginAPI.Core;
     using PluginAPI.Core.Attributes;
     using PluginAPI.Enums;
@@ -43,6 +44,18 @@
 
             Log.Debug($"RespawnTimer coroutine started successfully!", RespawnTimer.Singleton.Config.Debug);
         }
+        
+        
+        internal void OnDying(Player victim, Player _, DamageHandlerBase __)
+        {
+            if (List.ContainsKey(victim))
+            {
+                Timing.KillCoroutines(List[victim]);
+                List.Remove(victim);
+            }
+            
+            List.Add(victim, Timing.CallDelayed(RespawnTimer.Singleton.Config.TimerDelay, () => List.Remove(victim)));
+        }
 
         private IEnumerator<float> TimerCoroutine()
         {
@@ -56,7 +69,13 @@
 
                 foreach (Player player in Spectators)
                 {
-                    if (player.Role == RoleTypeId.Overwatch && RespawnTimer.Singleton.Config.HideTimerForOverwatch || API.API.TimerHidden.Contains(player.UserId))
+                    if (player.Role == RoleTypeId.Overwatch && RespawnTimer.Singleton.Config.HideTimerForOverwatch)
+                        continue;
+                    
+                    if (API.API.TimerHidden.Contains(player.UserId))
+                        continue;
+                    
+                    if (List.ContainsKey(player))
                         continue;
 
                     ShowHint(player, text, 1.25f);
@@ -76,5 +95,6 @@
         }
 
         private static readonly List<Player> Spectators = new(25);
+        private static readonly Dictionary<Player, CoroutineHandle> List = new(25);
     }
 }
