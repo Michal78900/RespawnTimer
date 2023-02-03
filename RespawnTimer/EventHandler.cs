@@ -60,7 +60,7 @@
                 Log.Debug("Tick");
 
                 Spectators.Clear();
-                Spectators.AddRange(Player.Get(x => !x.IsAlive));
+                Spectators.AddRange(Player.Get(x => !x.IsAlive || x.SessionVariables.ContainsKey("IsGhost")));
                 string text = TimerView.Current.GetText(Spectators.Count);
 
                 foreach (Player player in Spectators)
