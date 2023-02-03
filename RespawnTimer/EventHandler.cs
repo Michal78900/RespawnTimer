@@ -38,13 +38,16 @@
 
         internal static void OnDying(DyingEventArgs ev)
         {
-            if (List.ContainsKey(ev.Player))
+            if (RespawnTimer.Singleton.Config.TimerDelay < 0)
+                return;
+            
+            if (PlayerDeathDictionary.ContainsKey(ev.Player))
             {
-                Timing.KillCoroutines(List[ev.Player]);
-                List.Remove(ev.Player);
+                Timing.KillCoroutines(PlayerDeathDictionary[ev.Player]);
+                PlayerDeathDictionary.Remove(ev.Player);
             }
             
-            List.Add(ev.Player, Timing.CallDelayed(RespawnTimer.Singleton.Config.TimerDelay, () => List.Remove(ev.Player)));
+            PlayerDeathDictionary.Add(ev.Player, Timing.CallDelayed(RespawnTimer.Singleton.Config.TimerDelay, () => PlayerDeathDictionary.Remove(ev.Player)));
         }
 
         private static IEnumerator<float> TimerCoroutine()
@@ -71,7 +74,7 @@
                     if (API.API.TimerHidden.Contains(player.UserId))
                         continue;
 
-                    if (List.ContainsKey(player))
+                    if (PlayerDeathDictionary.ContainsKey(player))
                         continue;
 
                     player.ShowHint(text, 1.25f);
@@ -83,6 +86,6 @@
         }
 
         private static readonly List<Player> Spectators = new(25);
-        private static readonly Dictionary<Player, CoroutineHandle> List = new(25);
+        private static readonly Dictionary<Player, CoroutineHandle> PlayerDeathDictionary = new(25);
     }
 }

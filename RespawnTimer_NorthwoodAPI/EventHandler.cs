@@ -32,7 +32,7 @@
 
             if (_timerCoroutine.IsRunning)
                 Timing.KillCoroutines(_timerCoroutine);
-            
+
             string chosenTimerName = RespawnTimer.Singleton.Config.Timers[Random.Range(0, RespawnTimer.Singleton.Config.Timers.Count)];
             TimerView.GetNew(chosenTimerName);
         }
@@ -44,18 +44,21 @@
 
             Log.Debug($"RespawnTimer coroutine started successfully!", RespawnTimer.Singleton.Config.Debug);
         }
-        
-        
+
+
         [PluginEvent(ServerEventType.PlayerDeath)]
         internal void OnDying(Player victim, Player _, DamageHandlerBase __)
         {
-            if (List.ContainsKey(victim))
+            if (RespawnTimer.Singleton.Config.TimerDelay < 0)
+                return;
+
+            if (PlayerDeathDictionary.ContainsKey(victim))
             {
-                Timing.KillCoroutines(List[victim]);
-                List.Remove(victim);
+                Timing.KillCoroutines(PlayerDeathDictionary[victim]);
+                PlayerDeathDictionary.Remove(victim);
             }
-            
-            List.Add(victim, Timing.CallDelayed(RespawnTimer.Singleton.Config.TimerDelay, () => List.Remove(victim)));
+
+            PlayerDeathDictionary.Add(victim, Timing.CallDelayed(RespawnTimer.Singleton.Config.TimerDelay, () => PlayerDeathDictionary.Remove(victim)));
         }
 
         private IEnumerator<float> TimerCoroutine()
@@ -72,16 +75,15 @@
                 {
                     if (player.Role == RoleTypeId.Overwatch && RespawnTimer.Singleton.Config.HideTimerForOverwatch)
                         continue;
-                    
+
                     if (API.API.TimerHidden.Contains(player.UserId))
                         continue;
-                    
-                    if (List.ContainsKey(player))
+
+                    if (PlayerDeathDictionary.ContainsKey(player))
                         continue;
 
                     ShowHint(player, text, 1.25f);
                 }
-
             } while (!RoundSummary.singleton._roundEnded);
         }
 
@@ -96,6 +98,6 @@
         }
 
         private static readonly List<Player> Spectators = new(25);
-        private static readonly Dictionary<Player, CoroutineHandle> List = new(25);
+        private static readonly Dictionary<Player, CoroutineHandle> PlayerDeathDictionary = new(25);
     }
 }
