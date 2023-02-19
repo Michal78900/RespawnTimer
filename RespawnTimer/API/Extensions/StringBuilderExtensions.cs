@@ -1,4 +1,5 @@
-﻿namespace RespawnTimer.API.Extensions
+﻿/*
+namespace RespawnTimer.API.Extensions
 {
     using System;
     using System.Globalization;
@@ -6,6 +7,7 @@
     using Exiled.API.Features;
     using System.Linq;
     using System.Text;
+    using Features;
     using PlayerRoles;
     using Respawning;
     using UnityEngine;
@@ -15,54 +17,54 @@
 
     public static class StringBuilderExtensions
     {
-        public static StringBuilder SetAllProperties(this StringBuilder builder, int? spectatorCount = null) => builder
-            .SetRoundTime()
-            .SetMinutesAndSeconds()
-            .SetSpawnableTeam()
+        public static StringBuilder SetAllProperties(this StringBuilder builder, TimerView timerView, int? spectatorCount = null) => builder
+            .SetRoundTime(timerView)
+            .SetMinutesAndSeconds(timerView)
+            .SetSpawnableTeam(timerView)
             .SetSpectatorCountAndTickets(spectatorCount)
-            .SetWarheadStatus()
+            .SetWarheadStatus(timerView)
             .SetGeneratorCount()
             .SetTpsAndTickrate()
-            .SetHint();
+            .SetHint(timerView);
 
-        private static StringBuilder SetRoundTime(this StringBuilder builder)
+        private static StringBuilder SetRoundTime(this StringBuilder builder, TimerView timerView)
         {
             int minutes = Round.ElapsedTime.Minutes;
-            builder.Replace("{round_minutes}", $"{(Current.Properties.LeadingZeros && minutes < 10 ? "0" : string.Empty)}{minutes}");
+            builder.Replace("{round_minutes}", $"{(timerView.Properties.LeadingZeros && minutes < 10 ? "0" : string.Empty)}{minutes}");
 
             int seconds = Round.ElapsedTime.Seconds;
-            builder.Replace("{round_seconds}", $"{(Current.Properties.LeadingZeros && seconds < 10 ? "0" : string.Empty)}{seconds}");
+            builder.Replace("{round_seconds}", $"{(timerView.Properties.LeadingZeros && seconds < 10 ? "0" : string.Empty)}{seconds}");
             
             return builder;
         }
 
-        private static StringBuilder SetMinutesAndSeconds(this StringBuilder builder)
+        private static StringBuilder SetMinutesAndSeconds(this StringBuilder builder, TimerView timerView)
         {
             TimeSpan time = Respawn.TimeUntilSpawnWave;
             
-            if (Respawn.IsSpawning || !Current.Properties.TimerOffset)
+            if (Respawn.IsSpawning || !timerView.Properties.TimerOffset)
             {
                 int minutes = (int)time.TotalSeconds / 60;
-                builder.Replace("{minutes}", $"{(Current.Properties.LeadingZeros && minutes < 10 ? "0" : string.Empty)}{minutes}");
+                builder.Replace("{minutes}", $"{(timerView.Properties.LeadingZeros && minutes < 10 ? "0" : string.Empty)}{minutes}");
 
                 int seconds = (int)Math.Round(time.TotalSeconds % 60);
-                builder.Replace("{seconds}", $"{(Current.Properties.LeadingZeros && seconds < 10 ? "0" : string.Empty)}{seconds}");
+                builder.Replace("{seconds}", $"{(timerView.Properties.LeadingZeros && seconds < 10 ? "0" : string.Empty)}{seconds}");
             }
             else
             {
                 int offset = RespawnTokensManager.GetTeamDominance(SpawnableTeamType.NineTailedFox) == 1 ? 18 : 14;
                 
                 int minutes = (int)(time.TotalSeconds + offset) / 60;
-                builder.Replace("{minutes}", $"{(Current.Properties.LeadingZeros && minutes < 10 ? "0" : string.Empty)}{minutes}");
+                builder.Replace("{minutes}", $"{(timerView.Properties.LeadingZeros && minutes < 10 ? "0" : string.Empty)}{minutes}");
 
                 int seconds = (int)Math.Round((time.TotalSeconds + offset) % 60);
-                builder.Replace("{seconds}", $"{(Current.Properties.LeadingZeros && seconds < 10 ? "0" : string.Empty)}{seconds}");
+                builder.Replace("{seconds}", $"{(timerView.Properties.LeadingZeros && seconds < 10 ? "0" : string.Empty)}{seconds}");
             }
 
             return builder;
         }
 
-        private static StringBuilder SetSpawnableTeam(this StringBuilder builder)
+        private static StringBuilder SetSpawnableTeam(this StringBuilder builder, TimerView timerView)
         {
             switch (Respawn.NextKnownTeam)
             {
@@ -70,11 +72,11 @@
                     return builder;
 
                 case SpawnableTeamType.NineTailedFox:
-                    builder.Replace("{team}", !UiuSpawnable ? Current.Properties.Ntf : Current.Properties.Uiu);
+                    builder.Replace("{team}", !UiuSpawnable ? timerView.Properties.Ntf : timerView.Properties.Uiu);
                     break;
 
                 case SpawnableTeamType.ChaosInsurgency:
-                    builder.Replace("{team}", !SerpentsHandSpawnable ? Current.Properties.Ci : Current.Properties.Sh);
+                    builder.Replace("{team}", !SerpentsHandSpawnable ? timerView.Properties.Ci : timerView.Properties.Sh);
                     break;
             }
 
@@ -90,10 +92,10 @@
             return builder;
         }
 
-        private static StringBuilder SetWarheadStatus(this StringBuilder builder)
+        private static StringBuilder SetWarheadStatus(this StringBuilder builder, TimerView timerView)
         {
             WarheadStatus warheadStatus = Warhead.Status;
-            builder.Replace("{warhead_status}", Current.Properties.WarheadStatus[warheadStatus]);
+            builder.Replace("{warhead_status}", timerView.Properties.WarheadStatus[warheadStatus]);
             builder.Replace("{detonation_time}", warheadStatus == WarheadStatus.InProgress ? Mathf.Round(Warhead.DetonationTimer).ToString(CultureInfo.InvariantCulture) : string.Empty);
 
             return builder;
@@ -126,14 +128,15 @@
             return builder;
         }
 
-        private static StringBuilder SetHint(this StringBuilder builder)
+        private static StringBuilder SetHint(this StringBuilder builder, TimerView timerView)
         {
-            if (!Current.Hints.Any())
+            if (!timerView.Hints.Any())
                 return builder;
 
-            builder.Replace("{hint}", Current.Hints[Current.HintIndex]);
+            builder.Replace("{hint}", timerView.Hints[timerView.HintIndex]);
 
             return builder;
         }
     }
 }
+*/

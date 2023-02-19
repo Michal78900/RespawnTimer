@@ -6,18 +6,20 @@
     using Configs;
     using Exiled.API.Features;
     using Exiled.Loader;
-    using Extensions;
+    // using Extensions;
     using UnityEngine;
 
-    public class TimerView
+    public partial class TimerView
     {
-        public static TimerView Current { get; private set; }
+        public static readonly Dictionary<string, TimerView> CachedTimers = new();
+        
+        // public static TimerView Current { get; private set; }
 
         public int HintIndex { get; private set; }
 
         private int HintInterval { get; set; }
 
-        public static void GetNew(string name)
+        public static void AddTimer(string name)
         {
             string directoryPath = Path.Combine(RespawnTimer.RespawnTimerDirectoryPath, name);
             if (!Directory.Exists(directoryPath))
@@ -52,21 +54,49 @@
             if (File.Exists(hintsPath))
                 hints.AddRange(File.ReadAllLines(hintsPath));
             
-            Current = new(
+            TimerView timerView = new(
                 File.ReadAllText(timerBeforePath),
                 File.ReadAllText(timerDuringPath),
                 Loader.Deserializer.Deserialize<Properties>(File.ReadAllText(propertiesPath)),
                 hints);
-
-            Log.Debug($"{name} has been successfully loaded!");
+            
+            CachedTimers.Add(name, timerView);
         }
 
+        public static bool TryGetTimerForPlayer(Player player, out TimerView timerView)
+        {
+            // Check by group name
+            if (RespawnTimer.Singleton.Config.Timers.TryGetValue(player.GroupName, out string timerName))
+            {
+                timerView = CachedTimers[timerName];
+                return true;
+            }
+
+            // Check by user id
+            if (RespawnTimer.Singleton.Config.Timers.TryGetValue(player.UserId, out timerName))
+            {
+                timerView = CachedTimers[timerName];
+                return true;
+            }
+
+            // Use fallback default timer
+            if (RespawnTimer.Singleton.Config.Timers.TryGetValue("default", out timerName))
+            {
+                timerView = CachedTimers[timerName];
+                return true;
+            }
+
+            
+            // Default fallback does not exist
+            timerView = null!;
+            return false;
+        }
+        
         public string GetText(int? spectatorCount = null)
         {
             StringBuilder.Clear();
             StringBuilder.Append(!Respawn.IsSpawning ? BeforeRespawnString : DuringRespawnString);
-            // StringBuilder.Append(BeforeRespawnString.Replace('{', '[').Replace('}', ']'));
-            StringBuilder.SetAllProperties(spectatorCount);
+            SetAllProperties(spectatorCount);
             StringBuilder.Replace("{RANDOM_COLOR}", $"#{Random.Range(0x0, 0xFFFFFF):X6}");
             StringBuilder.Replace('{', '[').Replace('}', ']');
 
@@ -103,6 +133,6 @@
         
         public List<string> Hints { get; }
 
-        private static readonly StringBuilder StringBuilder = new(1024);
+        private readonly StringBuilder StringBuilder = new(1024);
     }
 }

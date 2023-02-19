@@ -3,7 +3,6 @@
     using System;
     using Exiled.API.Features;
     using System.Collections.Generic;
-    using System.Linq;
     using MEC;
     using API.Features;
     using Exiled.Events.EventArgs.Player;
@@ -40,13 +39,13 @@
         {
             if (RespawnTimer.Singleton.Config.TimerDelay < 0)
                 return;
-            
+
             if (PlayerDeathDictionary.ContainsKey(ev.Player))
             {
                 Timing.KillCoroutines(PlayerDeathDictionary[ev.Player]);
                 PlayerDeathDictionary.Remove(ev.Player);
             }
-            
+
             PlayerDeathDictionary.Add(ev.Player, Timing.CallDelayed(RespawnTimer.Singleton.Config.TimerDelay, () => PlayerDeathDictionary.Remove(ev.Player)));
         }
 
@@ -64,7 +63,6 @@
 
                 Spectators.Clear();
                 Spectators.AddRange(Player.Get(x => !x.IsAlive || x.SessionVariables.ContainsKey("IsGhost")));
-                string text = TimerView.Current.GetText(Spectators.Count);
 
                 foreach (Player player in Spectators)
                 {
@@ -76,6 +74,11 @@
 
                     if (PlayerDeathDictionary.ContainsKey(player))
                         continue;
+
+                    if (!TimerView.TryGetTimerForPlayer(player, out TimerView timerView))
+                        continue;
+
+                    string text = timerView.GetText(Spectators.Count);
 
                     player.ShowHint(text, 1.25f);
                 }

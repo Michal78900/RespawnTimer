@@ -8,7 +8,6 @@
     using Exiled.API.Interfaces;
     using Exiled.Loader;
     using Config = Configs.Config;
-    using Random = UnityEngine.Random;
     using ServerEvent = Exiled.Events.Handlers.Server;
     using PlayerEvent = Exiled.Events.Handlers.Player;
 
@@ -26,7 +25,7 @@
                 Log.Warn("RespawnTimer directory does not exist. Creating...");
                 Directory.CreateDirectory(RespawnTimerDirectoryPath);
             }
-            
+
             string templateDirectory = Path.Combine(RespawnTimerDirectoryPath, "Template");
             if (!Directory.Exists(templateDirectory))
             {
@@ -73,7 +72,7 @@
             ServerEvent.RoundStarted -= EventHandler.OnRoundStart;
             ServerEvent.ReloadedConfigs -= OnReloaded;
             PlayerEvent.Dying -= EventHandler.OnDying;
-            
+
             Singleton = null;
 
             base.OnDisabled();
@@ -87,8 +86,13 @@
                 return;
             }
 
-            string chosenTimerName = Config.Timers[Random.Range(0, Config.Timers.Count)];
-            TimerView.GetNew(chosenTimerName);
+            TimerView.CachedTimers.Clear();
+
+            foreach (string name in Config.Timers.Values)
+                TimerView.AddTimer(name);
+            
+            // string chosenTimerName = Config.Timers[Random.Range(0, Config.Timers.Count)];
+            // TimerView.GetNew(chosenTimerName);
         }
 
         public override string Name => "RespawnTimer";
