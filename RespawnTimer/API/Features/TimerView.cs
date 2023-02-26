@@ -12,7 +12,7 @@
     public partial class TimerView
     {
         public static readonly Dictionary<string, TimerView> CachedTimers = new();
-        
+
         // public static TimerView Current { get; private set; }
 
         public int HintIndex { get; private set; }
@@ -21,6 +21,9 @@
 
         public static void AddTimer(string name)
         {
+            if (CachedTimers.ContainsKey(name))
+                return;
+
             string directoryPath = Path.Combine(RespawnTimer.RespawnTimerDirectoryPath, name);
             if (!Directory.Exists(directoryPath))
             {
@@ -53,13 +56,13 @@
             List<string> hints = new();
             if (File.Exists(hintsPath))
                 hints.AddRange(File.ReadAllLines(hintsPath));
-            
+
             TimerView timerView = new(
                 File.ReadAllText(timerBeforePath),
                 File.ReadAllText(timerDuringPath),
                 Loader.Deserializer.Deserialize<Properties>(File.ReadAllText(propertiesPath)),
                 hints);
-            
+
             CachedTimers.Add(name, timerView);
         }
 
@@ -86,12 +89,12 @@
                 return true;
             }
 
-            
+
             // Default fallback does not exist
             timerView = null!;
             return false;
         }
-        
+
         public string GetText(int? spectatorCount = null)
         {
             StringBuilder.Clear();
@@ -116,7 +119,7 @@
             if (Hints.Count == HintIndex)
                 HintIndex = 0;
         }
-        
+
         private TimerView(string beforeRespawnString, string duringRespawnString, Properties properties, List<string> hints)
         {
             BeforeRespawnString = beforeRespawnString;
@@ -124,13 +127,13 @@
             Properties = properties;
             Hints = hints;
         }
-        
+
         public string BeforeRespawnString { get; }
-        
+
         public string DuringRespawnString { get; }
-        
+
         public Properties Properties { get; }
-        
+
         public List<string> Hints { get; }
 
         private readonly StringBuilder StringBuilder = new(1024);
