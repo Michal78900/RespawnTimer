@@ -3,6 +3,7 @@
     using System;
     using Exiled.API.Features;
     using System.Collections.Generic;
+    using System.Linq;
     using MEC;
     using API.Features;
     using Exiled.Events.EventArgs.Player;
@@ -11,11 +12,11 @@
     {
         private static CoroutineHandle _timerCoroutine;
 
-        internal static void OnWaitingForPlayers()
+        internal static void OnGenerated()
         {
             if (RespawnTimer.Singleton.Config.ReloadTimerEachRound)
                 RespawnTimer.Singleton.OnReloaded();
-
+            
             if (_timerCoroutine.IsRunning)
                 Timing.KillCoroutines(_timerCoroutine);
         }
@@ -48,7 +49,7 @@
 
             PlayerDeathDictionary.Add(ev.Player, Timing.CallDelayed(RespawnTimer.Singleton.Config.TimerDelay, () => PlayerDeathDictionary.Remove(ev.Player)));
         }
-
+        
         private static IEnumerator<float> TimerCoroutine()
         {
             yield return Timing.WaitForSeconds(1f);
@@ -61,34 +62,44 @@
 
                 Log.Debug("Tick");
 
-                Spectators.Clear();
-                Spectators.AddRange(Player.Get(x => !x.IsAlive || x.SessionVariables.ContainsKey("IsGhost")));
-
-                foreach (Player player in Spectators)
+                int specNum = Player.List.Count(x => !x.IsAlive || x.SessionVariables.ContainsKey("IsGhost"));
+                foreach (Player player in Player.List)
                 {
-                    if (player.IsOverwatchEnabled && RespawnTimer.Singleton.Config.HideTimerForOverwatch)
-                        continue;
+                    try
+                    {
+                        if (player.IsAlive)
+                            continue;
 
-                    if (API.API.TimerHidden.Contains(player.UserId))
-                        continue;
+                        if (player.SessionVariables.ContainsKey("IsGhost"))
+                            continue;
 
-                    if (PlayerDeathDictionary.ContainsKey(player))
-                        continue;
+                        if (player.IsOverwatchEnabled && RespawnTimer.Singleton.Config.HideTimerForOverwatch)
+                            continue;
 
-                    if (!TimerView.TryGetTimerForPlayer(player, out TimerView timerView))
-                        continue;
+                        if (API.API.TimerHidden.Contains(player.UserId))
+                            continue;
 
-                    string text = timerView.GetText(Spectators.Count);
+                        if (PlayerDeathDictionary.ContainsKey(player))
+                            continue;
 
-                    player.ShowHint(text, 1.25f);
+                        if (!TimerView.TryGetTimerForPlayer(player, out TimerView timerView))
+                            continue;
+
+                        string text = timerView.GetText(specNum);
+
+                        player.ShowHint(text, 1.25f);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
+                    }
                 }
 
                 if (Round.IsEnded)
                     break;
             }
         }
-
-        private static readonly List<Player> Spectators = new(25);
+        
         private static readonly Dictionary<Player, CoroutineHandle> PlayerDeathDictionary = new(25);
     }
 }

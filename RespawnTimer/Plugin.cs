@@ -8,6 +8,7 @@
     using Exiled.API.Interfaces;
     using Exiled.Loader;
     using Config = Configs.Config;
+    using MapEvent = Exiled.Events.Handlers.Map;
     using ServerEvent = Exiled.Events.Handlers.Server;
     using PlayerEvent = Exiled.Events.Handlers.Player;
 
@@ -39,7 +40,7 @@
                 File.WriteAllText(hintsPath, "This is an example hint. You can add as much as you want.");
             }
 
-            ServerEvent.WaitingForPlayers += EventHandler.OnWaitingForPlayers;
+            MapEvent.Generated += EventHandler.OnGenerated;
             ServerEvent.RoundStarted += EventHandler.OnRoundStart;
             ServerEvent.ReloadedConfigs += OnReloaded;
             PlayerEvent.Dying += EventHandler.OnDying;
@@ -68,7 +69,7 @@
 
         public override void OnDisabled()
         {
-            ServerEvent.WaitingForPlayers -= EventHandler.OnWaitingForPlayers;
+            MapEvent.Generated -= EventHandler.OnGenerated;
             ServerEvent.RoundStarted -= EventHandler.OnRoundStart;
             ServerEvent.ReloadedConfigs -= OnReloaded;
             PlayerEvent.Dying -= EventHandler.OnDying;
@@ -90,9 +91,6 @@
 
             foreach (string name in Config.Timers.Values)
                 TimerView.AddTimer(name);
-            
-            // string chosenTimerName = Config.Timers[Random.Range(0, Config.Timers.Count)];
-            // TimerView.GetNew(chosenTimerName);
         }
 
         public override string Name => "RespawnTimer";

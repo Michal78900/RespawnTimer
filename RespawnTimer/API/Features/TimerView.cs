@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Text;
     using Configs;
     using Exiled.API.Features;
@@ -13,6 +14,12 @@
     {
         public static readonly Dictionary<string, TimerView> CachedTimers = new();
 
+        public static void UnCacheAllTimers()
+        {
+            for (int i = 0; i < CachedTimers.Values.Count; i++)
+                CachedTimers.Values.ElementAt(i).CachedText = null;
+        }
+        
         // public static TimerView Current { get; private set; }
 
         public int HintIndex { get; private set; }
@@ -69,7 +76,7 @@
         public static bool TryGetTimerForPlayer(Player player, out TimerView timerView)
         {
             // Check by group name
-            if (RespawnTimer.Singleton.Config.Timers.TryGetValue(player.GroupName, out string timerName))
+            if (player.GroupName is not null && RespawnTimer.Singleton.Config.Timers.TryGetValue(player.GroupName, out string timerName))
             {
                 timerView = CachedTimers[timerName];
                 return true;
@@ -97,6 +104,9 @@
 
         public string GetText(int? spectatorCount = null)
         {
+            // if (CachedText is not null)
+               //  return CachedText;
+            
             StringBuilder.Clear();
             StringBuilder.Append(!Respawn.IsSpawning ? BeforeRespawnString : DuringRespawnString);
             SetAllProperties(spectatorCount);
@@ -110,8 +120,12 @@
                 IncrementHintIndex();
             }
 
+            // CachedText = StringBuilder.ToString();
+            // return CachedText;
             return StringBuilder.ToString();
         }
+        
+        public string? CachedText { get; set; }
 
         private void IncrementHintIndex()
         {
