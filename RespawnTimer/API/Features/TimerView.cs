@@ -14,14 +14,6 @@
     {
         public static readonly Dictionary<string, TimerView> CachedTimers = new();
 
-        public static void UnCacheAllTimers()
-        {
-            for (int i = 0; i < CachedTimers.Values.Count; i++)
-                CachedTimers.Values.ElementAt(i).CachedText = null;
-        }
-        
-        // public static TimerView Current { get; private set; }
-
         public int HintIndex { get; private set; }
 
         private int HintInterval { get; set; }
@@ -104,9 +96,6 @@
 
         public string GetText(int? spectatorCount = null)
         {
-            // if (CachedText is not null)
-               //  return CachedText;
-            
             StringBuilder.Clear();
             StringBuilder.Append(!Respawn.IsSpawning ? BeforeRespawnString : DuringRespawnString);
             SetAllProperties(spectatorCount);
@@ -119,13 +108,9 @@
                 HintInterval = 0;
                 IncrementHintIndex();
             }
-
-            // CachedText = StringBuilder.ToString();
-            // return CachedText;
+            
             return StringBuilder.ToString();
         }
-        
-        public string? CachedText { get; set; }
 
         private void IncrementHintIndex()
         {
