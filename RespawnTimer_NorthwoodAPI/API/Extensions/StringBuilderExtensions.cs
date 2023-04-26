@@ -92,11 +92,7 @@
 
         private static StringBuilder SetWarheadStatus(this StringBuilder builder)
         {
-            /*
-            WarheadStatus warheadStatus = Warhead.Status;
-            builder.Replace("{warhead_status}", Current.Properties.WarheadStatus[warheadStatus]);
-            builder.Replace("{detonation_time}", warheadStatus == WarheadStatus.InProgress ? Mathf.Round(Warhead.DetonationTimer).ToString(CultureInfo.InvariantCulture) : string.Empty);
-            */
+            builder.Replace("{warhead_status}", Warhead.IsDetonated ? "Detonated" : Warhead.IsDetonationInProgress ? "Detonating" : "Not detonated");
 
             return builder;
         }
