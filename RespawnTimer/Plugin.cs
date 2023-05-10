@@ -49,9 +49,9 @@
             {
                 switch (plugin.Name)
                 {
-                    case "SerpentsHand" when plugin.Config.IsEnabled:
+                    case "Serpents Hand" when plugin.Config.IsEnabled:
                         API.API.SerpentsHandTeam.Init(plugin.Assembly);
-                        Log.Debug("SerpentsHand plugin detected!");
+                        Log.Debug("Serpents Hand plugin detected!");
                         break;
 
                     case "UIURescueSquad" when plugin.Config.IsEnabled:
