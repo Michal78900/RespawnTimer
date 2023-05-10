@@ -16,7 +16,7 @@
         {
             if (RespawnTimer.Singleton.Config.ReloadTimerEachRound)
                 RespawnTimer.Singleton.OnReloaded();
-            
+
             if (_timerCoroutine.IsRunning)
                 Timing.KillCoroutines(_timerCoroutine);
         }
@@ -49,7 +49,7 @@
 
             PlayerDeathDictionary.Add(ev.Player, Timing.CallDelayed(RespawnTimer.Singleton.Config.TimerDelay, () => PlayerDeathDictionary.Remove(ev.Player)));
         }
-        
+
         private static IEnumerator<float> TimerCoroutine()
         {
             yield return Timing.WaitForSeconds(1f);
@@ -67,12 +67,9 @@
                 {
                     try
                     {
-                        if (player.IsAlive)
+                        if (player.IsAlive && !player.SessionVariables.ContainsKey("IsGhost"))
                             continue;
-
-                        if (player.SessionVariables.ContainsKey("IsGhost"))
-                            continue;
-
+                        
                         if (player.IsOverwatchEnabled && RespawnTimer.Singleton.Config.HideTimerForOverwatch)
                             continue;
 
@@ -99,7 +96,7 @@
                     break;
             }
         }
-        
+
         private static readonly Dictionary<Player, CoroutineHandle> PlayerDeathDictionary = new(25);
     }
 }
