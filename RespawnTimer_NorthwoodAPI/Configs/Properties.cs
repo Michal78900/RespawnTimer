@@ -1,5 +1,6 @@
 ﻿namespace RespawnTimer_NorthwoodAPI.Configs
 {
+    using System.Collections.Generic;
     using System.ComponentModel;
 
     public sealed class Properties
@@ -24,15 +25,13 @@
         
         public string Uiu { get; private set; } = "<color=yellow>Unusual Incidents Unit</color>";
         */
-
-        /*
-        public Dictionary<WarheadStatus, string> WarheadStatus { get; private set; } = new()
+        
+        public Dictionary<string, string> WarheadStatus { get; private set; } = new()
         {
-            { Exiled.API.Enums.WarheadStatus.NotArmed, "<color=green>Unarmed</color>" },
-            { Exiled.API.Enums.WarheadStatus.Armed, "<color=orange>Armed</color>" },
-            { Exiled.API.Enums.WarheadStatus.InProgress, "<color=red>In Progress - </color> {detonation_time} s" },
-            { Exiled.API.Enums.WarheadStatus.Detonated, "<color=#640000>Detonated</color>" },
+            { "NotArmed", "<color=green>Unarmed</color>" },
+            { "Armed", "<color=orange>Armed</color>" },
+            { "InProgress", "<color=red>In Progress - </color> {detonation_time} s" },
+            { "Detonated", "<color=#640000>Detonated</color>" },
         };
-        */
     }
 }

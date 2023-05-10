@@ -4,6 +4,7 @@
     using System.Globalization;
     using System.Linq;
     using System.Text;
+    using Configs;
     using UnityEngine;
     using PluginAPI.Core;
     using GameCore;
@@ -92,7 +93,12 @@
 
         private static StringBuilder SetWarheadStatus(this StringBuilder builder)
         {
-            builder.Replace("{warhead_status}", Warhead.IsDetonated ? "Detonated" : Warhead.IsDetonationInProgress ? "Detonating" : "Not detonated");
+                                        // IsInProgress           ? IsDetonated         ? WarheadStatus.Detonated : WarheadStatus.InProgress : LeverStatus ? WarheadStatus.Armed : WarheadStatus.NotArmed;
+            string warheadStatus = Warhead.IsDetonationInProgress ? Warhead.IsDetonated ? "Detonated" : "InProgress" : Warhead.LeverStatus ? "Armed" : "NotArmed";
+            builder.Replace("{warhead_status}", Current.Properties.WarheadStatus[warheadStatus]);
+            builder.Replace("{detonation_time}", warheadStatus == "InProgress" ? Mathf.Round(Warhead.DetonationTime).ToString(CultureInfo.InvariantCulture) : string.Empty);
+
+            // builder.Replace("{warhead_status}", Warhead.IsDetonated ? "Detonated" : Warhead.IsDetonationInProgress ? "Detonating" : "Not detonated");
 
             return builder;
         }
