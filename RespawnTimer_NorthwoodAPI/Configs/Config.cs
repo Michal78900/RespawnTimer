@@ -11,10 +11,9 @@
         [Description("Whether debug messages shoul be shown in a server console.")]
         public bool Debug { get; private set; } = false;
 
-        [Description("List of timer names that will be used:")]
-        public List<string> Timers { get; private set; } = new()
+        public Dictionary<string, string> Timers { get; private set; } = new()
         {
-            "ExampleTimer"
+            { "default", "ExampleTimer" },
         };
 
         [Description("Whether the timer should be reloaded each round. Useful if you have many different timers designed.")]

@@ -2,12 +2,10 @@
 {
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Text;
     using Configs;
     using Exiled.API.Features;
     using Exiled.Loader;
-    // using Extensions;
     using UnityEngine;
 
     public partial class TimerView

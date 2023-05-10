@@ -30,7 +30,6 @@
             catch (Exception e)
             {
                 Log.Error(e);
-                throw;
             }
 
             Log.Debug($"RespawnTimer coroutine started successfully!");

@@ -1,4 +1,5 @@
-﻿namespace RespawnTimer_NorthwoodAPI.API.Extensions
+﻿/*
+namespace RespawnTimer_NorthwoodAPI.API.Extensions
 {
     using System;
     using System.Globalization;
@@ -105,7 +106,6 @@
 
         private static StringBuilder SetGeneratorCount(this StringBuilder builder)
         {
-            /*
             int generatorEngaged = 0;
             int generatorCount = 0;
 
@@ -116,7 +116,6 @@
 
                 generatorCount++;
             }
-            */
 
             builder.Replace("{generator_engaged}", Scp079Recontainer.AllGenerators.Count(x => x.Engaged).ToString());
             builder.Replace("{generator_count}", "3");
@@ -142,3 +141,4 @@
         }
     }
 }
+*/
