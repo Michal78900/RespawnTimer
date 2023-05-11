@@ -11,6 +11,7 @@
     public static class EventHandler
     {
         private static CoroutineHandle _timerCoroutine;
+        private static CoroutineHandle _hintsCoroutine;
 
         internal static void OnGenerated()
         {
@@ -19,6 +20,9 @@
 
             if (_timerCoroutine.IsRunning)
                 Timing.KillCoroutines(_timerCoroutine);
+
+            if (_hintsCoroutine.IsRunning)
+                Timing.KillCoroutines(_hintsCoroutine);
         }
 
         internal static void OnRoundStart()
@@ -26,6 +30,7 @@
             try
             {
                 _timerCoroutine = Timing.RunCoroutine(TimerCoroutine());
+                _hintsCoroutine = Timing.RunCoroutine(HintsCoroutine());
             }
             catch (Exception e)
             {
@@ -68,7 +73,7 @@
                     {
                         if (player.IsAlive && !player.SessionVariables.ContainsKey("IsGhost"))
                             continue;
-                        
+
                         if (player.IsOverwatchEnabled && RespawnTimer.Singleton.Config.HideTimerForOverwatch)
                             continue;
 
@@ -90,6 +95,20 @@
                         Log.Error(e);
                     }
                 }
+
+                if (Round.IsEnded)
+                    break;
+            }
+        }
+
+        private static IEnumerator<float> HintsCoroutine()
+        {
+            while (true)
+            {
+                yield return Timing.WaitForSeconds(1f);
+
+                foreach (TimerView timerView in TimerView.CachedTimers.Values)
+                    timerView.IncrementHintInterval();
 
                 if (Round.IsEnded)
                     break;

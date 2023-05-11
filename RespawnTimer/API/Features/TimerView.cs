@@ -100,16 +100,28 @@
             StringBuilder.Replace("{RANDOM_COLOR}", $"#{Random.Range(0x0, 0xFFFFFF):X6}");
             StringBuilder.Replace('{', '[').Replace('}', ']');
 
+            /*
             HintInterval++;
             if (HintInterval == Properties.HintInterval)
             {
                 HintInterval = 0;
                 IncrementHintIndex();
             }
+            */
             
             return StringBuilder.ToString();
         }
 
+        internal void IncrementHintInterval()
+        {
+            HintInterval++;
+            if (HintInterval != Properties.HintInterval)
+                return;
+
+            HintInterval = 0;
+            IncrementHintIndex();
+        }
+        
         private void IncrementHintIndex()
         {
             HintIndex++;

@@ -4,6 +4,7 @@
     using System.IO;
     using API.Features;
     using Configs;
+    using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.API.Interfaces;
     using Exiled.Loader;
@@ -97,5 +98,6 @@
         public override string Author => "Michal78900";
         public override Version Version => new(4, 0, 0);
         public override Version RequiredExiledVersion => new(7, 0, 0);
+        public override PluginPriority Priority => PluginPriority.Last;
     }
 }
