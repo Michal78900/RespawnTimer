@@ -17,6 +17,7 @@
     public class EventHandler
     {
         private CoroutineHandle _timerCoroutine;
+        private static CoroutineHandle _hintsCoroutine;
 
         [PluginEvent(ServerEventType.MapGenerated)]
         internal void OnGenerated()
@@ -39,6 +40,9 @@
 
             if (_timerCoroutine.IsRunning)
                 Timing.KillCoroutines(_timerCoroutine);
+            
+            if (_hintsCoroutine.IsRunning)
+                Timing.KillCoroutines(_hintsCoroutine);
 
             // string chosenTimerName = RespawnTimer.Singleton.Config.Timers[Random.Range(0, RespawnTimer.Singleton.Config.Timers.Count)];
             // TimerView.GetNew(chosenTimerName);
@@ -50,6 +54,7 @@
             try
             {
                 _timerCoroutine = Timing.RunCoroutine(TimerCoroutine());
+                _hintsCoroutine = Timing.RunCoroutine(HintsCoroutine());
             }
             catch (Exception e)
             {
@@ -118,6 +123,18 @@
 
                     ShowHint(player, text, 1.25f);
                 }
+            } while (!RoundSummary.singleton._roundEnded);
+        }
+        
+        private static IEnumerator<float> HintsCoroutine()
+        {
+            do
+            {
+                yield return Timing.WaitForSeconds(1f);
+
+                foreach (TimerView timerView in TimerView.CachedTimers.Values)
+                    timerView.IncrementHintInterval();
+                
             } while (!RoundSummary.singleton._roundEnded);
         }
 
