@@ -43,9 +43,6 @@
             
             if (_hintsCoroutine.IsRunning)
                 Timing.KillCoroutines(_hintsCoroutine);
-
-            // string chosenTimerName = RespawnTimer.Singleton.Config.Timers[Random.Range(0, RespawnTimer.Singleton.Config.Timers.Count)];
-            // TimerView.GetNew(chosenTimerName);
         }
 
         [PluginEvent(ServerEventType.RoundStart)]
@@ -85,11 +82,7 @@
             do
             {
                 yield return Timing.WaitForSeconds(1f);
-
-                // Spectators.Clear();
-                // Spectators.AddRange(ReferenceHub.AllHubs.Select(Player.Get).Where(x => !x.IsServer && !x.IsAlive));
                 int specNum = Player.GetPlayers().Count(x => !x.IsAlive);
-                // string text = TimerView.Current.GetText(Spectators.Count);
 
                 foreach (Player player in Player.GetPlayers())
                 {
@@ -109,14 +102,6 @@
                         continue;
 
                     string text = timerView.GetText(specNum);
-
-                    /*
-                    if (player.Role == RoleTypeId.Overwatch && RespawnTimer.Singleton.Config.HideTimerForOverwatch)
-                        continue;
-
-                    if (API.API.TimerHidden.Contains(player.UserId))
-                        continue;
-                    */
 
                     if (PlayerDeathDictionary.ContainsKey(player))
                         continue;
@@ -147,8 +132,7 @@
 
             player.ReferenceHub.networkIdentity.connectionToClient.Send(new HintMessage(new TextHint(message, parameters, durationScalar: duration)));
         }
-
-        // private static readonly List<Player> Spectators = new(25);
+        
         private static readonly Dictionary<Player, CoroutineHandle> PlayerDeathDictionary = new(25);
     }
 }

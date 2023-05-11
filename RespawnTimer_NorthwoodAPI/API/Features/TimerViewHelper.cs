@@ -84,12 +84,9 @@ public partial class TimerView
 
     private void SetWarheadStatus()
     {
-        // IsInProgress           ? IsDetonated         ? WarheadStatus.Detonated : WarheadStatus.InProgress : LeverStatus ? WarheadStatus.Armed : WarheadStatus.NotArmed;
         string warheadStatus = Warhead.IsDetonationInProgress ? Warhead.IsDetonated ? "Detonated" : "InProgress" : Warhead.LeverStatus ? "Armed" : "NotArmed";
         StringBuilder.Replace("{warhead_status}", Properties.WarheadStatus[warheadStatus]);
         StringBuilder.Replace("{detonation_time}", warheadStatus == "InProgress" ? Mathf.Round(Warhead.DetonationTime).ToString(CultureInfo.InvariantCulture) : string.Empty);
-
-        // builder.Replace("{warhead_status}", Warhead.IsDetonated ? "Detonated" : Warhead.IsDetonationInProgress ? "Detonating" : "Not detonated");
     }
 
     private void SetGeneratorCount()
