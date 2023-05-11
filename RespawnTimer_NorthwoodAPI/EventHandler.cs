@@ -17,7 +17,7 @@
     public class EventHandler
     {
         private CoroutineHandle _timerCoroutine;
-        private static CoroutineHandle _hintsCoroutine;
+        private CoroutineHandle _hintsCoroutine;
 
         [PluginEvent(ServerEventType.MapGenerated)]
         internal void OnGenerated()
