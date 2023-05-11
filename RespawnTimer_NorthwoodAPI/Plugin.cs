@@ -18,7 +18,7 @@ namespace RespawnTimer_NorthwoodAPI
         public Config Config;
 
         [PluginPriority(LoadPriority.Medium)]
-        [PluginEntryPoint("RespawnTimer", "4.0.0", "RespawnTimer", "Michal78900")]
+        [PluginEntryPoint("RespawnTimer", "4.0.1", "RespawnTimer", "Michal78900")]
         void LoadPlugin()
         {
             if (!Config.IsEnabled)
