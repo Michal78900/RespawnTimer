@@ -1,6 +1,8 @@
 namespace RespawnTimer_NorthwoodAPI
 {
     using System.IO;
+    using System.IO.Compression;
+    using System.Net;
     using PluginAPI.Core.Attributes;
     using PluginAPI.Enums;
     using PluginAPI.Events;
@@ -34,6 +36,12 @@ namespace RespawnTimer_NorthwoodAPI
                 Directory.CreateDirectory(RespawnTimerDirectoryPath);
             }
 
+            
+            string exampleTimerDirectory = Path.Combine(RespawnTimerDirectoryPath, "ExampleTimer");
+            if (!Directory.Exists(exampleTimerDirectory))
+                DownloadExampleTimer(exampleTimerDirectory);
+            
+            /*
             string templateDirectory = Path.Combine(RespawnTimerDirectoryPath, "Template");
             if (!Directory.Exists(templateDirectory))
             {
@@ -46,6 +54,30 @@ namespace RespawnTimer_NorthwoodAPI
                 string hintsPath = Path.Combine(templateDirectory, "Hints.txt");
                 File.WriteAllText(hintsPath, "This is an example hint. You can add as much as you want.");
             }
+            */
+        }
+        
+        private void DownloadExampleTimer(string exampleTimerDirectory)
+        {
+            string exampleTimerZip = exampleTimerDirectory + ".zip";
+            string exampleTimerTemp = exampleTimerDirectory + "_Temp";
+
+            using WebClient client = new();
+
+            Log.Warning("Downloading ExampleTimer.zip...");
+            client.DownloadFile(
+                $"https://github.com/Michal78900/RespawnTimer/releases/download/v{PluginHandler.Get(this).PluginVersion}/ExampleTimer.zip", exampleTimerZip);
+
+            Log.Info("ExampleTimer.zip has been downloaded!");
+
+            Log.Warning("Extracting...");
+            ZipFile.ExtractToDirectory(exampleTimerZip, exampleTimerTemp);
+            Directory.Move(Path.Combine(exampleTimerTemp, "ExampleTimer"), exampleTimerDirectory);
+
+            Directory.Delete(exampleTimerTemp);
+            File.Delete(exampleTimerZip);
+
+            Log.Info("Done!");
         }
     }
 }

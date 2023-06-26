@@ -110,7 +110,8 @@
 
             Log.Warn("Downloading ExampleTimer.zip...");
             client.DownloadFile(
-                $"https://github.com/Michal78900/RespawnTimer/releases/download/v{Version}/ExampleTimer.zip", exampleTimerZip);
+                $"https://github.com/Michal78900/RespawnTimer/releases/download/v{Version}/ExampleTimer.zip",
+                exampleTimerZip);
 
             Log.Info("ExampleTimer.zip has been downloaded!");
 
