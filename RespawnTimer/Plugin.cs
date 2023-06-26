@@ -127,8 +127,8 @@
 
         public override string Name => "RespawnTimer";
         public override string Author => "Michal78900";
-        public override Version Version => new(4, 0, 1);
-        public override Version RequiredExiledVersion => new(7, 0, 0);
+        public override Version Version => new(4, 0, 2);
+        public override Version RequiredExiledVersion => new(7, 0, 5);
         public override PluginPriority Priority => PluginPriority.Last;
     }
 }
