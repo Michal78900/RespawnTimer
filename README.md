@@ -9,6 +9,4 @@ A SCP: Secret Laboratory plugin that shows when the next respawn wave will happe
 - Support for [Serpent's Hand](https://github.com/Exiled-Team/SerpentsHand) and [UIURescueSquad](https://github.com/Marco15453/UIURescueSquad) custom teams.
 
 # Configuration
-When you first install the plugin, the `RespawnTimer` folder will be created. In it you will find a folder named `Template`. The `Template` is a template timer interface that isn't used by the plugin itself, but allows you to see how the structure of a config looks like.
-You can copy that folder and rename it to something else and then desing your own look of the interface.<br>
-An example timer interface called `ExamapleTimer` can be found in releases. It will contain an example timer interface that has all of the possible properties the plugin can show. However, it is recommended to design your own interface, so your server has its own unique look.
+When you first install the plugin, the `ExampleTimer` folder will be automatically downloaded. You are free to edit the config files inside this directory as you see fit. You can change how the timer looks like, hints etc. Removing `ExampleTimer` folder will redownload it once again after server restart.
