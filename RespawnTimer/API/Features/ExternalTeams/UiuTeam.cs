@@ -9,7 +9,7 @@ namespace RespawnTimer.API.Features.ExternalTeams
             PluginEnabled = true;
 
             Singleton = null;
-            FieldInfo = assembly.GetType("UIURescueSquad.EventHandlers").GetField("IsSpawnable");
+            FieldInfo = assembly.GetType("UIURescueSquad.UIURescueSquad").GetField("IsSpawnable");
         }
     }
 }
