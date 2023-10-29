@@ -115,9 +115,17 @@
         
         private void IncrementHintIndex()
         {
-            HintIndex++;
-            if (Hints.Count == HintIndex)
-                HintIndex = 0;
+            if (Properties.HintRandomize != true)
+            {
+                HintIndex++;
+                if (Hints.Count == HintIndex)
+                    HintIndex = 0;
+            }
+            else
+            {
+                var RandomHint = Random.Range(0, Hints.Count);
+                HintIndex = RandomHint;
+            }
         }
 
         private TimerView(string beforeRespawnString, string duringRespawnString, Properties properties, List<string> hints)

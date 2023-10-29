@@ -13,7 +13,10 @@
 
         [Description("How often custom hints should be changed (in seconds).")]
         public int HintInterval { get; private set; } = 10;
-        
+
+        [Description("Whether the order hints are displayed in are random or not.")]
+        public bool HintRandomize { get; private set; } = false;
+
         [Description("The Nine-Tailed Fox display name.")]
         public string Ntf { get; private set; } = "<color=blue>Nine-Tailed Fox</color>";
         
