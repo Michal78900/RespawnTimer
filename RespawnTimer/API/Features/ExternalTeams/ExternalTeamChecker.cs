@@ -1,3 +1,4 @@
+#if EXILED
 namespace RespawnTimer.API.Features.ExternalTeams
 {
     using System.Reflection;
@@ -22,3 +23,4 @@ namespace RespawnTimer.API.Features.ExternalTeams
         protected object Singleton { get; set; }
     }
 }
+#endif

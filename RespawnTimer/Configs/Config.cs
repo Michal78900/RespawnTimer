@@ -2,9 +2,12 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel;
-    using Exiled.API.Interfaces;
 
-    public sealed class Config : IConfig
+#if EXILED
+    public sealed class Config : Exiled.API.Interfaces.IConfig
+#else
+    public sealed class Config
+#endif
     {
         [Description("Whether the plugin is enabled.")]
         public bool IsEnabled { get; set; } = true;
@@ -14,9 +17,11 @@
 
         public Dictionary<string, string> Timers { get; private set; } = new()
         {
-            { "default", "ExampleTimer" },
+            {
+                "default", "ExampleTimer"
+            },
         };
-        
+
         [Description("Whether the timer should be reloaded each round. Useful if you have many different timers designed.")]
         public bool ReloadTimerEachRound { get; private set; } = true;
 

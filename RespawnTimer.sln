@@ -5,22 +5,16 @@ VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RespawnTimer", "RespawnTimer\RespawnTimer.csproj", "{8A5C7D97-95AE-4008-B32E-B365B30DBA30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RespawnTimer_NorthwoodAPI", "RespawnTimer_NorthwoodAPI\RespawnTimer_NorthwoodAPI.csproj", "{8CACDDE7-6B9D-4FC1-89E4-3BAF66D781E5}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
+		EXILED|Any CPU = EXILED|Any CPU
+		NWAPI|Any CPU = NWAPI|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8A5C7D97-95AE-4008-B32E-B365B30DBA30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8A5C7D97-95AE-4008-B32E-B365B30DBA30}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8A5C7D97-95AE-4008-B32E-B365B30DBA30}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8A5C7D97-95AE-4008-B32E-B365B30DBA30}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8CACDDE7-6B9D-4FC1-89E4-3BAF66D781E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8CACDDE7-6B9D-4FC1-89E4-3BAF66D781E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8CACDDE7-6B9D-4FC1-89E4-3BAF66D781E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8CACDDE7-6B9D-4FC1-89E4-3BAF66D781E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A5C7D97-95AE-4008-B32E-B365B30DBA30}.EXILED|Any CPU.ActiveCfg = EXILED|Any CPU
+		{8A5C7D97-95AE-4008-B32E-B365B30DBA30}.EXILED|Any CPU.Build.0 = EXILED|Any CPU
+		{8A5C7D97-95AE-4008-B32E-B365B30DBA30}.NWAPI|Any CPU.ActiveCfg = NWAPI|Any CPU
+		{8A5C7D97-95AE-4008-B32E-B365B30DBA30}.NWAPI|Any CPU.Build.0 = NWAPI|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

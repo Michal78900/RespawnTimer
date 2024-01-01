@@ -5,27 +5,61 @@
     using System.IO.Compression;
     using System.Net;
     using API.Features;
+#if EXILED
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.API.Interfaces;
     using Exiled.Loader;
-    using Config = Configs.Config;
-    using MapEvent = Exiled.Events.Handlers.Map;
-    using ServerEvent = Exiled.Events.Handlers.Server;
-    using PlayerEvent = Exiled.Events.Handlers.Player;
+#else
+    using PluginAPI.Core;
+    using PluginAPI.Core.Attributes;
+    using PluginAPI.Enums;
+    using PluginAPI.Events;
+#endif
 
-    public class RespawnTimer : Plugin<Config>
+#if EXILED
+    public class RespawnTimer : Plugin<Configs.Config>
+#else
+    public class RespawnTimer
+#endif
     {
         public static RespawnTimer Singleton;
-        public static string RespawnTimerDirectoryPath { get; } = Path.Combine(Paths.Configs, "RespawnTimer");
+        public static string RespawnTimerDirectoryPath { get; private set; }
 
+#if !EXILED
+        [PluginConfig]
+        public Configs.Config Config;
+#else
+        public EventHandler EventHandler;
+#endif
+
+
+#if EXILED
         public override void OnEnabled()
+#else
+        [PluginAPI.Core.Attributes.PluginPriority(LoadPriority.Medium)]
+        [PluginEntryPoint("RespawnTimer", "4.0.3", "RespawnTimer", "Michal78900")]
+        private void LoadPlugin()
+#endif
         {
+#if !EXILED
+            if (!Config.IsEnabled)
+                return;
+#endif
+
             Singleton = this;
+#if EXILED
+            RespawnTimerDirectoryPath = Path.Combine(Paths.Configs, "RespawnTimer");
+            EventHandler = new EventHandler();
+#else
+            RespawnTimerDirectoryPath = PluginHandler.Get(this).PluginDirectoryPath;
+            EventManager.RegisterEvents<EventHandler>(this);
+#endif
 
             if (!Directory.Exists(RespawnTimerDirectoryPath))
             {
-                Log.Warn("RespawnTimer directory does not exist. Creating...");
+                // Log.Warn("RespawnTimer directory does not exist. Creating...");
+                Log.Info("RespawnTimer directory does not exist. Creating...");
                 Directory.CreateDirectory(RespawnTimerDirectoryPath);
             }
 
@@ -33,25 +67,11 @@
             if (!Directory.Exists(exampleTimerDirectory))
                 DownloadExampleTimer(exampleTimerDirectory);
 
-            /*
-            string templateDirectory = Path.Combine(RespawnTimerDirectoryPath, "Template");
-            if (!Directory.Exists(templateDirectory))
-            {
-                Directory.CreateDirectory(templateDirectory);
-
-                File.Create(Path.Combine(templateDirectory, "TimerBeforeSpawn.txt"));
-                File.Create(Path.Combine(templateDirectory, "TimerDuringSpawn.txt"));
-                File.WriteAllText(Path.Combine(templateDirectory, "Properties.yml"), Loader.Serializer.Serialize(new Properties()));
-
-                string hintsPath = Path.Combine(templateDirectory, "Hints.txt");
-                File.WriteAllText(hintsPath, "This is an example hint. You can add as much as you want.");
-            }
-            */
-
-            MapEvent.Generated += EventHandler.OnGenerated;
-            ServerEvent.RoundStarted += EventHandler.OnRoundStart;
-            ServerEvent.ReloadedConfigs += OnReloaded;
-            PlayerEvent.Dying += EventHandler.OnDying;
+#if EXILED
+            Exiled.Events.Handlers.Map.Generated += EventHandler.OnGenerated;
+            Exiled.Events.Handlers.Server.RoundStarted += EventHandler.OnRoundStart;
+            Exiled.Events.Handlers.Player.Dying += EventHandler.OnDying;
+            Exiled.Events.Handlers.Server.ReloadedConfigs += OnReloaded;
 
             foreach (IPlugin<IConfig> plugin in Loader.Plugins)
             {
@@ -73,15 +93,48 @@
                 OnReloaded();
 
             base.OnEnabled();
+#endif
         }
 
+        private void DownloadExampleTimer(string exampleTimerDirectory)
+        {
+            string exampleTimerZip = exampleTimerDirectory + ".zip";
+            string exampleTimerTemp = exampleTimerDirectory + "_Temp";
+
+            using WebClient client = new();
+
+            // Log.Warn("Downloading ExampleTimer.zip...");
+            Log.Info("Downloading ExampleTimer.zip...");
+#if EXILED
+            string url = $"https://github.com/Michal78900/RespawnTimer/releases/download/v{Version}/ExampleTimer.zip";
+#else
+            string url = $"https://github.com/Michal78900/RespawnTimer/releases/download/v{PluginHandler.Get(this).PluginVersion}/ExampleTimer.zip";
+#endif
+
+            client.DownloadFile(url, exampleTimerZip);
+
+            Log.Info("ExampleTimer.zip has been downloaded!");
+
+            // Log.Warn("Extracting...");
+            Log.Info("Extracting...");
+            ZipFile.ExtractToDirectory(exampleTimerZip, exampleTimerTemp);
+            Directory.Move(Path.Combine(exampleTimerTemp, "ExampleTimer"), exampleTimerDirectory);
+
+            Directory.Delete(exampleTimerTemp);
+            File.Delete(exampleTimerZip);
+
+            Log.Info("Done!");
+        }
+
+#if EXILED
         public override void OnDisabled()
         {
-            MapEvent.Generated -= EventHandler.OnGenerated;
-            ServerEvent.RoundStarted -= EventHandler.OnRoundStart;
-            ServerEvent.ReloadedConfigs -= OnReloaded;
-            PlayerEvent.Dying -= EventHandler.OnDying;
+            Exiled.Events.Handlers.Map.Generated -= EventHandler.OnGenerated;
+            Exiled.Events.Handlers.Server.RoundStarted -= EventHandler.OnRoundStart;
+            Exiled.Events.Handlers.Player.Dying -= EventHandler.OnDying;
+            Exiled.Events.Handlers.Server.ReloadedConfigs -= OnReloaded;
 
+            EventHandler = null;
             Singleton = null;
 
             base.OnDisabled();
@@ -101,34 +154,11 @@
                 TimerView.AddTimer(name);
         }
 
-        private void DownloadExampleTimer(string exampleTimerDirectory)
-        {
-            string exampleTimerZip = exampleTimerDirectory + ".zip";
-            string exampleTimerTemp = exampleTimerDirectory + "_Temp";
-
-            using WebClient client = new();
-
-            Log.Warn("Downloading ExampleTimer.zip...");
-            client.DownloadFile(
-                $"https://github.com/Michal78900/RespawnTimer/releases/download/v{Version}/ExampleTimer.zip",
-                exampleTimerZip);
-
-            Log.Info("ExampleTimer.zip has been downloaded!");
-
-            Log.Warn("Extracting...");
-            ZipFile.ExtractToDirectory(exampleTimerZip, exampleTimerTemp);
-            Directory.Move(Path.Combine(exampleTimerTemp, "ExampleTimer"), exampleTimerDirectory);
-
-            Directory.Delete(exampleTimerTemp);
-            File.Delete(exampleTimerZip);
-
-            Log.Info("Done!");
-        }
-
         public override string Name => "RespawnTimer";
         public override string Author => "Michal78900";
-        public override Version Version => new(4, 0, 2);
-        public override Version RequiredExiledVersion => new(7, 0, 5);
+        public override Version Version => new(4, 0, 3);
+        public override Version RequiredExiledVersion => new(8, 6, 0);
         public override PluginPriority Priority => PluginPriority.Last;
+#endif
     }
 }

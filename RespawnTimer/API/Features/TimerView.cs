@@ -4,9 +4,15 @@
     using System.IO;
     using System.Text;
     using Configs;
+    using Respawning;
+    using Serialization;
+    using UnityEngine;
+#if EXILED
     using Exiled.API.Features;
     using Exiled.Loader;
-    using UnityEngine;
+#else
+    using PluginAPI.Core;
+#endif
 
     public partial class TimerView
     {
@@ -57,7 +63,7 @@
             TimerView timerView = new(
                 File.ReadAllText(timerBeforePath),
                 File.ReadAllText(timerDuringPath),
-                Loader.Deserializer.Deserialize<Properties>(File.ReadAllText(propertiesPath)),
+                YamlParser.Deserializer.Deserialize<Properties>(File.ReadAllText(propertiesPath)),
                 hints);
 
             CachedTimers.Add(name, timerView);
@@ -65,8 +71,10 @@
 
         public static bool TryGetTimerForPlayer(Player player, out TimerView timerView)
         {
+            string groupName = !ServerStatic.PermissionsHandler._members.TryGetValue(player.UserId, out string str) ? null : str;
+
             // Check by group name
-            if (player.GroupName is not null && RespawnTimer.Singleton.Config.Timers.TryGetValue(player.GroupName, out string timerName))
+            if (groupName is not null && RespawnTimer.Singleton.Config.Timers.TryGetValue(groupName, out string timerName))
             {
                 timerView = CachedTimers[timerName];
                 return true;
@@ -95,7 +103,11 @@
         public string GetText(int? spectatorCount = null)
         {
             StringBuilder.Clear();
-            StringBuilder.Append(!Respawn.IsSpawning ? BeforeRespawnString : DuringRespawnString);
+            StringBuilder.Append(
+                RespawnManager.Singleton._curSequence is not RespawnManager.RespawnSequencePhase.PlayingEntryAnimations or RespawnManager.RespawnSequencePhase.SpawningSelectedTeam
+                    ? BeforeRespawnString
+                    : DuringRespawnString);
+
             SetAllProperties(spectatorCount);
             StringBuilder.Replace("{RANDOM_COLOR}", $"#{Random.Range(0x0, 0xFFFFFF):X6}");
             StringBuilder.Replace('{', '[').Replace('}', ']');
@@ -112,7 +124,7 @@
             HintInterval = 0;
             IncrementHintIndex();
         }
-        
+
         private void IncrementHintIndex()
         {
             HintIndex++;

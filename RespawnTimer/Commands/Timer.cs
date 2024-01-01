@@ -1,8 +1,12 @@
 ﻿namespace RespawnTimer.Commands
 {
     using CommandSystem;
-    using Exiled.API.Features;
     using System;
+#if EXILED
+    using Exiled.API.Features;
+#else
+    using PluginAPI.Core;
+#endif
 
     using static API.API;
 

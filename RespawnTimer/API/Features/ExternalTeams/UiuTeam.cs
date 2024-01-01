@@ -1,3 +1,4 @@
+#if EXILED
 namespace RespawnTimer.API.Features.ExternalTeams
 {
     using System.Reflection;
@@ -13,3 +14,4 @@ namespace RespawnTimer.API.Features.ExternalTeams
         }
     }
 }
+#endif

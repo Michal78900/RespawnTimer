@@ -1,3 +1,4 @@
+#if EXILED
 namespace RespawnTimer.API.Features.ExternalTeams
 {
     using System;
@@ -9,10 +10,11 @@ namespace RespawnTimer.API.Features.ExternalTeams
         public override void Init(Assembly assembly)
         {
             PluginEnabled = true;
-            
+
             Type mainClass = assembly.GetType("SerpentsHand.SerpentsHand");
             Singleton = mainClass.GetField("Singleton").GetValue(null);
             FieldInfo = mainClass.GetField("IsSpawnable");
         }
     }
 }
+#endif
