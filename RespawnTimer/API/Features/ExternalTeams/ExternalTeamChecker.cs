@@ -14,13 +14,13 @@ namespace RespawnTimer.API.Features.ExternalTeams
                 if (!PluginEnabled)
                     return false;
 
-                return (bool)FieldInfo.GetValue(Singleton);
+                return (bool)FieldInfo.GetValue(Instance);
             }
         }
 
         protected bool PluginEnabled { get; set; }
         protected FieldInfo FieldInfo { get; set; }
-        protected object Singleton { get; set; }
+        protected object Instance { get; set; }
     }
 }
 #endif
