@@ -110,8 +110,17 @@
 #else
             string url = $"https://github.com/Michal78900/RespawnTimer/releases/download/v{PluginHandler.Get(this).PluginVersion}/ExampleTimer.zip";
 #endif
-
-            client.DownloadFile(url, exampleTimerZip);
+            try
+            {
+                client.DownloadFile(url, exampleTimerZip);
+            }
+            catch (WebException e)
+            {
+                if (e.Response is HttpWebResponse response)
+                    Log.Error($"Error while downloading ExampleTimer.zip: {(int)response.StatusCode} {response.StatusCode}");
+                
+                return;
+            }
 
             Log.Info("ExampleTimer.zip has been downloaded!");
 
