@@ -17,7 +17,6 @@
 
         public static bool IsActive { get; private set; } = false;
 
-
         public static void Show(ReferenceHub hub, string content, TimeSpan span)
         {
             shower(hub, content, 0, span);
