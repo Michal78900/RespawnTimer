@@ -1,11 +1,9 @@
 ﻿namespace RespawnTimer.API.Features
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-    using UnityEngine;
 
     public static class RueiHelper
     {
@@ -15,16 +13,14 @@
         private const string REFLECTIONHELPERS = "RueI.Extensions.ReflectionHelpers";
         private const string GETELEMENTSHOWER = "GetElementShower";
 
-        public static bool IsActive { get; private set; } = false;
+        public static bool IsActive { get; private set; }
 
-        public static void Show(ReferenceHub hub, string content, TimeSpan span)
-        {
-            shower(hub, content, 0, span);
-        }
+        public static void Show(ReferenceHub hub, string content, TimeSpan span) => 
+            _shower(hub, content, 0, span);
 
         internal static void Refresh()
         {
-            shower = null;
+            _shower = null;
             IsActive = false;
 
             IEnumerable<Assembly> assemblies =
@@ -36,28 +32,22 @@
 
             Assembly assembly = assemblies.FirstOrDefault(x => x.GetName().Name == RUEINAME);
             if (assembly == null)
-            {
                 return;
-            }
 
             MethodInfo elementShower = assembly.GetType(REFLECTIONHELPERS)?.GetMethod(GETELEMENTSHOWER);
-            var result = elementShower?.Invoke(null, new object[] { });
+            object result = elementShower?.Invoke(null, new object[] { });
             if (result is not Action<ReferenceHub, string, float, TimeSpan> elemShower)
-            {
                 return;
-            }
 
             MethodInfo init = assembly.GetType(RUEIMAIN)?.GetMethod(ENSUREINIT);
             if (init == null)
-            {
                 return;
-            }
 
             init.Invoke(null, new object[] { });
-            shower = elemShower;
+            _shower = elemShower;
             IsActive = true;
         }
 
-        private static Action<ReferenceHub, string, float, TimeSpan> shower;
+        private static Action<ReferenceHub, string, float, TimeSpan> _shower;
     }
 }

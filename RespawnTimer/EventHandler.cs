@@ -142,7 +142,7 @@
 
                         if (RueiHelper.IsActive)
                         {
-                            RueiHelper.Show(player.ReferenceHub, text, TimeSpan.FromSeconds(1.25));
+                            RueiHelper.Show(player.ReferenceHub, text, TimeSpan.FromSeconds(1.25f));
                         }
                         else
                         {
