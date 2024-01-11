@@ -140,11 +140,18 @@
 
                         string text = timerView.GetText(specNum);
 
+                        if (RueiHelper.IsActive)
+                        {
+                            RueiHelper.Show(player.ReferenceHub, text, TimeSpan.FromSeconds(1.25));
+                        }
+                        else
+                        {
 #if EXILED
-                        player.ShowHint(text, 1.25f);
+                            player.ShowHint(text, 1.25f);
 #else
-                        ShowHint(player, text, 1.25f);
+                            ShowHint(player, text, 1.25f);
 #endif
+                        }
                     }
                     catch (Exception e)
                     {

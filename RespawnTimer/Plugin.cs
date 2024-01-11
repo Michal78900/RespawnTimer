@@ -67,6 +67,8 @@
             if (!Directory.Exists(exampleTimerDirectory))
                 DownloadExampleTimer(exampleTimerDirectory);
 
+            RueiHelper.Refresh();
+
 #if EXILED
             Exiled.Events.Handlers.Map.Generated += EventHandler.OnGenerated;
             Exiled.Events.Handlers.Server.RoundStarted += EventHandler.OnRoundStart;
