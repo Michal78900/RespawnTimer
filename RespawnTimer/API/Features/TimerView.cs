@@ -109,12 +109,12 @@
                     ? BeforeRespawnString
                     : DuringRespawnString);
 
-            SetAllProperties(spectatorCount);
-            
             foreach (KeyValuePair<string, Func<Player, string>> data in ReplaceHelper)
             {
                 StringBuilder.Replace("{" + data.Key + "}", data.Value(player));
             }
+
+            SetAllProperties(spectatorCount);
 
             StringBuilder.Replace("{RANDOM_COLOR}", $"#{UnityEngine.Random.Range(0x0, 0xFFFFFF):X6}");
             StringBuilder.Replace('{', '[').Replace('}', ']');
