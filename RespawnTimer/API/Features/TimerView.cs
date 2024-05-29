@@ -10,6 +10,7 @@
 #if EXILED
     using Exiled.API.Features;
     using Exiled.Loader;
+    using System;
 #else
     using PluginAPI.Core;
 #endif
@@ -100,7 +101,7 @@
             return false;
         }
 
-        public string GetText(int? spectatorCount = null)
+        public string GetText(Player player, int? spectatorCount = null)
         {
             StringBuilder.Clear();
             StringBuilder.Append(
@@ -109,7 +110,13 @@
                     : DuringRespawnString);
 
             SetAllProperties(spectatorCount);
-            StringBuilder.Replace("{RANDOM_COLOR}", $"#{Random.Range(0x0, 0xFFFFFF):X6}");
+            
+            foreach (KeyValuePair<string, Func<Player, string>> data in ReplaceHelper)
+            {
+                StringBuilder.Replace($"%{data.Key}%", data.Value(player));
+            }
+
+            StringBuilder.Replace("{RANDOM_COLOR}", $"#{UnityEngine.Random.Range(0x0, 0xFFFFFF):X6}");
             StringBuilder.Replace('{', '[').Replace('}', ']');
 
             return StringBuilder.ToString();
@@ -149,5 +156,7 @@
         public List<string> Hints { get; }
 
         private readonly StringBuilder StringBuilder = new(1024);
+
+        public static Dictionary<string, Func<Player, string>> ReplaceHelper { get; } = new();
     }
 }

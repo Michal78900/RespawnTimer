@@ -138,7 +138,7 @@
                         if (!TimerView.TryGetTimerForPlayer(player, out TimerView timerView))
                             continue;
 
-                        string text = timerView.GetText(specNum);
+                        string text = timerView.GetText(player, specNum);
 
 #if EXILED
                         player.ShowHint(text, 1.25f);
