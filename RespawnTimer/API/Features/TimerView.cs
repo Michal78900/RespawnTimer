@@ -113,7 +113,7 @@
             
             foreach (KeyValuePair<string, Func<Player, string>> data in ReplaceHelper)
             {
-                StringBuilder.Replace($"%{data.Key}%", data.Value(player));
+                StringBuilder.Replace("{" + data.Key + "}", data.Value(player));
             }
 
             StringBuilder.Replace("{RANDOM_COLOR}", $"#{UnityEngine.Random.Range(0x0, 0xFFFFFF):X6}");
