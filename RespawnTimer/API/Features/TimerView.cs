@@ -70,6 +70,19 @@
             CachedTimers.Add(name, timerView);
         }
 
+        public static void AddReplaceHelper(string name, Func<Player, string> action)
+        {
+            ReplaceHelper.Add(name, action);
+        }
+
+        public static void RemoveReplaceHelper(string name)
+        {
+            if (!ReplaceHelper.ContainsKey(name))
+                return;
+
+            ReplaceHelper.Remove(name);
+        }
+
         public static bool TryGetTimerForPlayer(Player player, out TimerView timerView)
         {
             string groupName = !ServerStatic.PermissionsHandler._members.TryGetValue(player.UserId, out string str) ? null : str;
