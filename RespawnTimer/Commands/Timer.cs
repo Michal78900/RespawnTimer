@@ -19,6 +19,8 @@
 
         public string Description => "Shows / hides RespawnTimer.";
 
+        public bool SanitizeResponse => false;
+
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             string userId = Player.Get(sender).UserId;
