@@ -9,10 +9,9 @@
         <ImplicitUsings>disable</ImplicitUsings>
         <Optimize>true</Optimize>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <Configurations>EXILED;NWAPI</Configurations>
         <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
-    
+
     <PropertyGroup Condition=" '$(Configuration)' == 'NWAPI' ">
         <TargetName>RespawnTimer-NW</TargetName>
     </PropertyGroup>

@@ -51,7 +51,8 @@
             string propertiesPath = Path.Combine(directoryPath, "Properties.yml");
             if (!File.Exists(propertiesPath))
             {
-                Log.Error($"{Path.GetFileName(propertiesPath)} file does not exist!");
+                Log.Error($"{Path.GetFileName(propertiesPath)} file does not exist! Creating...");
+                File.WriteAllText(propertiesPath, YamlParser.Serializer.Serialize(new Properties()));
                 return;
             }
 
@@ -93,7 +94,6 @@
                 timerView = CachedTimers[timerName];
                 return true;
             }
-
 
             // Default fallback does not exist
             timerView = null!;
