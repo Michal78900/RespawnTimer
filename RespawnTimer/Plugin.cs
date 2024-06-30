@@ -38,7 +38,7 @@
         public override void OnEnabled()
 #else
         [PluginAPI.Core.Attributes.PluginPriority(LoadPriority.Medium)]
-        [PluginEntryPoint("RespawnTimer", "4.0.3", "RespawnTimer", "Michal78900")]
+        [PluginEntryPoint("RespawnTimer", "4.0.4", "RespawnTimer", "Michal78900")]
         private void LoadPlugin()
 #endif
         {
@@ -167,8 +167,8 @@
 
         public override string Name => "RespawnTimer";
         public override string Author => "Michal78900";
-        public override Version Version => new(4, 0, 3);
-        public override Version RequiredExiledVersion => new(8, 6, 0);
+        public override Version Version => new(4, 0, 4);
+        public override Version RequiredExiledVersion => new(8, 9, 6);
         public override PluginPriority Priority => PluginPriority.Last;
 #endif
     }

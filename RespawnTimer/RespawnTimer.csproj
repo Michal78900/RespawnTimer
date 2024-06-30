@@ -32,7 +32,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Condition=" '$(Configuration)' == 'EXILED' " Include="EXILED" Version="8.6.0" />
+        <PackageReference Condition=" '$(Configuration)' == 'EXILED' " Include="EXILED" Version="8.9.6" />
         <PackageReference Condition=" '$(Configuration)' == 'NWAPI' " Include="Northwood.PluginAPI" Version="13.1.2" />
     </ItemGroup>
 
