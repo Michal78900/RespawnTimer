@@ -53,7 +53,6 @@
             {
                 Log.Error($"{Path.GetFileName(propertiesPath)} file does not exist! Creating...");
                 File.WriteAllText(propertiesPath, YamlParser.Serializer.Serialize(new Properties()));
-                return;
             }
 
             string hintsPath = Path.Combine(directoryPath, "Hints.txt");
