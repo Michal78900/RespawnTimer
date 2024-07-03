@@ -10,6 +10,7 @@
 #if EXILED
     using Exiled.API.Features;
     using Exiled.Loader;
+    using System;
 #else
     using PluginAPI.Core;
 #endif
@@ -69,6 +70,19 @@
             CachedTimers.Add(name, timerView);
         }
 
+        public static void AddReplaceHelper(string name, Func<Player, string> action)
+        {
+            ReplaceHelper.Add(name, action);
+        }
+
+        public static void RemoveReplaceHelper(string name)
+        {
+            if (!ReplaceHelper.ContainsKey(name))
+                return;
+
+            ReplaceHelper.Remove(name);
+        }
+
         public static bool TryGetTimerForPlayer(Player player, out TimerView timerView)
         {
             string groupName = !ServerStatic.PermissionsHandler._members.TryGetValue(player.UserId, out string str) ? null : str;
@@ -99,7 +113,7 @@
             return false;
         }
 
-        public string GetText(int? spectatorCount = null)
+        public string GetText(Player player, int? spectatorCount = null)
         {
             StringBuilder.Clear();
             StringBuilder.Append(
@@ -107,8 +121,14 @@
                     ? BeforeRespawnString
                     : DuringRespawnString);
 
+            foreach (KeyValuePair<string, Func<Player, string>> data in ReplaceHelper)
+            {
+                StringBuilder.Replace("{" + data.Key + "}", data.Value(player));
+            }
+
             SetAllProperties(spectatorCount);
-            StringBuilder.Replace("{RANDOM_COLOR}", $"#{Random.Range(0x0, 0xFFFFFF):X6}");
+
+            StringBuilder.Replace("{RANDOM_COLOR}", $"#{UnityEngine.Random.Range(0x0, 0xFFFFFF):X6}");
             StringBuilder.Replace('{', '[').Replace('}', ']');
 
             return StringBuilder.ToString();
@@ -148,5 +168,7 @@
         public List<string> Hints { get; }
 
         private readonly StringBuilder StringBuilder = new(1024);
+
+        public static Dictionary<string, Func<Player, string>> ReplaceHelper { get; } = new();
     }
 }
